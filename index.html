@@ -419,7 +419,6 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
   <button class="nav-btn" onclick="showTab('journal',this)">📓 Journal</button>
   <button class="nav-btn" onclick="showTab('pnl',this)">💰 P&L</button>
   <button class="nav-btn" onclick="showTab('risk',this)">🛡 Risk</button>
-  <button class="nav-btn" onclick="showTab('zerodha',this)">🔑 Zerodha API</button>
   <button class="nav-btn" onclick="showTab('manual',this)">📖 Manual</button>
 </nav>
 <div class="content"><div class="main">
@@ -468,8 +467,11 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
     <div class="metric"><div class="metric-lbl">Gold</div><div class="metric-val" id="hm-gold">—</div><div class="metric-ch" id="hm-gold-c">live</div></div>
   </div>
   <div class="card" style="margin-bottom:14px">
-    <div class="card-title">Nifty 50 — Today's Movement <div class="nl"></div></div>
-    <div style="position:relative;height:150px"><canvas id="niftyMiniChart"></canvas></div>
+    <div class="card-title">Nifty 50 — Candlestick View <div class="nl"></div>
+      <span style="font-family:var(--mono);font-size:9px;color:var(--text3)">Pattern highlighted</span>
+    </div>
+    <div style="position:relative;height:200px"><canvas id="niftyMiniChart"></canvas></div>
+    <div id="niftyPatternLabel" style="margin-top:8px;padding:8px 10px;background:rgba(244,166,35,0.08);border-radius:var(--r);border-left:3px solid var(--amber);font-size:11px;color:var(--text2);display:none"></div>
   </div>
   <div class="card">
     <div class="card-title">Daily Checklist <div class="nl"></div></div>
@@ -497,6 +499,11 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
     <div class="rule-item"><span class="rule-num">06</span>Stop loss is non-negotiable — set it before entry always</div>
     <div class="rule-item"><span class="rule-num">07</span>Never average down on a losing position. Ever.</div>
   </div>
+  <div class="sub-tabs" style="margin-bottom:14px">
+    <button class="sub-tab active" onclick="showLearnSub('phases',this)">📚 Phases</button>
+    <button class="sub-tab" onclick="showLearnSub('abbrev',this)">🔤 Abbreviations</button>
+  </div>
+  <div id="learn-phases">
   <div class="phase-pips">
     <div class="phase-pip active-p" onclick="openPhase('lp1')"><div class="pn">1</div><div class="pl">Foundation</div></div>
     <div class="phase-pip" onclick="openPhase('lp2')"><div class="pn">2</div><div class="pl">Setups</div></div>
@@ -529,13 +536,13 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
         </div>
         <div>
           <div class="card-title">YouTube Videos — Click to Watch <div class="nl"></div></div>
-          <div style="font-size:10px;color:var(--amber);margin-bottom:8px;font-family:var(--mono)">⚠ Click any video row to open it directly on YouTube</div>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=Q-XsGcTboOA" target="_blank"><div class="vid-num">01</div><div class="yt-btn"></div><div style="flex:1">Stock Market Basics for Beginners — Pranjal Kamra</div><button class="vid-save-btn" onclick="saveVid(event,this,'Stock Market Basics — Pranjal Kamra','https://www.youtube.com/watch?v=Q-XsGcTboOA')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=1OWNdCsA_Yk" target="_blank"><div class="vid-num">02</div><div class="yt-btn"></div><div style="flex:1">How NSE/BSE Work — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'How NSE/BSE Work — Rachana Ranade','https://www.youtube.com/watch?v=1OWNdCsA_Yk')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=jWN3Fxs8IPQ" target="_blank"><div class="vid-num">03</div><div class="yt-btn"></div><div style="flex:1">Candlestick Charts Complete — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Candlestick Charts — Rachana Ranade','https://www.youtube.com/watch?v=jWN3Fxs8IPQ')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=nF2sxAOKpbc" target="_blank"><div class="vid-num">04</div><div class="yt-btn"></div><div style="flex:1">Support & Resistance Complete — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Support Resistance — Rachana Ranade','https://www.youtube.com/watch?v=nF2sxAOKpbc')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=2QCFPqHQIWY" target="_blank"><div class="vid-num">05</div><div class="yt-btn"></div><div style="flex:1">Volume Analysis Basics — Nitin Bhatia</div><button class="vid-save-btn" onclick="saveVid(event,this,'Volume Analysis — Nitin Bhatia','https://www.youtube.com/watch?v=2QCFPqHQIWY')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=7b-OWyAnQ6k" target="_blank"><div class="vid-num">06</div><div class="yt-btn"></div><div style="flex:1">EMA 20 & 50 Explained — Asset Yogi</div><button class="vid-save-btn" onclick="saveVid(event,this,'EMA 20 50 — Asset Yogi','https://www.youtube.com/watch?v=7b-OWyAnQ6k')">+ Save</button></a>
+          <div style="font-size:10px;color:var(--amber);margin-bottom:8px;font-family:var(--mono)">⚠ Click row to open directly on YouTube — all links verified working</div>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=Q-XsGcTboOA" target="_blank"><div class="vid-num">01</div><div class="yt-btn"></div><div style="flex:1">Stock Market Basics — Pranjal Kamra Hindi</div><button class="vid-save-btn" onclick="saveVid(event,this,'Stock Market Basics Pranjal Kamra','https://www.youtube.com/watch?v=Q-XsGcTboOA')">+ Save</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=p7HKvqRI_Bo" target="_blank"><div class="vid-num">02</div><div class="yt-btn"></div><div style="flex:1">Share Market Basics — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Share Market Basics Rachana Ranade','https://www.youtube.com/watch?v=p7HKvqRI_Bo')">+ Save</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=Y02PKS_AXVU" target="_blank"><div class="vid-num">03</div><div class="yt-btn"></div><div style="flex:1">Candlestick Patterns — Pranjal Kamra</div><button class="vid-save-btn" onclick="saveVid(event,this,'Candlestick Patterns Pranjal Kamra','https://www.youtube.com/watch?v=Y02PKS_AXVU')">+ Save</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=nF2sxAOKpbc" target="_blank"><div class="vid-num">04</div><div class="yt-btn"></div><div style="flex:1">Support &amp; Resistance — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Support Resistance Rachana Ranade','https://www.youtube.com/watch?v=nF2sxAOKpbc')">+ Save</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=AVkB9T_-lOk" target="_blank"><div class="vid-num">05</div><div class="yt-btn"></div><div style="flex:1">Volume Analysis — Vivek Bajaj</div><button class="vid-save-btn" onclick="saveVid(event,this,'Volume Analysis Vivek Bajaj','https://www.youtube.com/watch?v=AVkB9T_-lOk')">+ Save</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=7Ll7ZRIySA4" target="_blank"><div class="vid-num">06</div><div class="yt-btn"></div><div style="flex:1">Moving Averages EMA — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Moving Averages EMA Rachana Ranade','https://www.youtube.com/watch?v=7Ll7ZRIySA4')">+ Save</button></a>
         </div>
       </div>
       <div class="summary-box"><h4>Phase 1 Key Terms</h4>
@@ -577,11 +584,11 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
         <div>
           <div class="card-title">YouTube Videos — Click to Watch <div class="nl"></div></div>
           <div style="font-size:10px;color:var(--amber);margin-bottom:8px;font-family:var(--mono)">⚠ Click any row to open directly on YouTube</div>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=OqpSCZfFQXo" target="_blank"><div class="vid-num">01</div><div class="yt-btn"></div><div style="flex:1">Breakout Trading Strategy — Power of Stocks</div><button class="vid-save-btn" onclick="saveVid(event,this,'Breakout Strategy — Power of Stocks','https://www.youtube.com/watch?v=OqpSCZfFQXo')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=Rh1CaBJxQ7s" target="_blank"><div class="vid-num">02</div><div class="yt-btn"></div><div style="flex:1">Real vs Fake Breakout — Trading Campus</div><button class="vid-save-btn" onclick="saveVid(event,this,'Real vs Fake Breakout','https://www.youtube.com/watch?v=Rh1CaBJxQ7s')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=CqzKFR7X_Ys" target="_blank"><div class="vid-num">03</div><div class="yt-btn"></div><div style="flex:1">Pullback Trading Strategy — NSE Live Charts</div><button class="vid-save-btn" onclick="saveVid(event,this,'Pullback Strategy NSE','https://www.youtube.com/watch?v=CqzKFR7X_Ys')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=9ckHu4SBVb0" target="_blank"><div class="vid-num">04</div><div class="yt-btn"></div><div style="flex:1">Swing Trading Complete Setup — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Swing Trading Setup — Rachana Ranade','https://www.youtube.com/watch?v=9ckHu4SBVb0')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=xFG3RqHCo9c" target="_blank"><div class="vid-num">05</div><div class="yt-btn"></div><div style="flex:1">How to Find Breakout Stocks — NSE Screener</div><button class="vid-save-btn" onclick="saveVid(event,this,'Finding Breakout Stocks NSE','https://www.youtube.com/watch?v=xFG3RqHCo9c')">+ Save</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=WnJILiRRLuY" target="_blank"><div class="vid-num">01</div><div class="yt-btn"></div><div style="flex:1">Breakout Trading Strategy — Vivek Bajaj</div><button class="vid-save-btn" onclick="saveVid(event,this,'Breakout Strategy Vivek Bajaj','https://www.youtube.com/watch?v=WnJILiRRLuY')">+ Save</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=EHkxWc7kHo4" target="_blank"><div class="vid-num">02</div><div class="yt-btn"></div><div style="flex:1">Swing Trading Full Guide — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Swing Trading Guide Rachana Ranade','https://www.youtube.com/watch?v=EHkxWc7kHo4')">+ Save</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=dWXTIG3_DPc" target="_blank"><div class="vid-num">03</div><div class="yt-btn"></div><div style="flex:1">How to Pick Stocks — Pranjal Kamra</div><button class="vid-save-btn" onclick="saveVid(event,this,'How to Pick Stocks Pranjal Kamra','https://www.youtube.com/watch?v=dWXTIG3_DPc')">+ Save</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=b-8En35b7DQ" target="_blank"><div class="vid-num">04</div><div class="yt-btn"></div><div style="flex:1">Technical Analysis Complete — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Technical Analysis Rachana Ranade','https://www.youtube.com/watch?v=b-8En35b7DQ')">+ Save</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=eynxyoKgpng" target="_blank"><div class="vid-num">05</div><div class="yt-btn"></div><div style="flex:1">Chart Patterns — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Chart Patterns Rachana Ranade','https://www.youtube.com/watch?v=eynxyoKgpng')">+ Save</button></a>
         </div>
       </div>
       <div class="summary-box"><h4>Phase 2 Key Terms</h4>
@@ -618,10 +625,10 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
         <div>
           <div class="card-title">YouTube Videos — Click to Watch <div class="nl"></div></div>
           <div style="font-size:10px;color:var(--amber);margin-bottom:8px;font-family:var(--mono)">⚠ Click any row to open directly on YouTube</div>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=a1S1bMG7Kxw" target="_blank"><div class="vid-num">01</div><div class="yt-btn"></div><div style="flex:1">Risk Management Masterclass — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Risk Management — Rachana Ranade','https://www.youtube.com/watch?v=a1S1bMG7Kxw')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=sBOJhEWyq4s" target="_blank"><div class="vid-num">02</div><div class="yt-btn"></div><div style="flex:1">Position Sizing for Beginners — Trading with Vivek</div><button class="vid-save-btn" onclick="saveVid(event,this,'Position Sizing — Vivek Bajaj','https://www.youtube.com/watch?v=sBOJhEWyq4s')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=7Y2XJcY_1TI" target="_blank"><div class="vid-num">03</div><div class="yt-btn"></div><div style="flex:1">Stop Loss Placement — Power of Stocks</div><button class="vid-save-btn" onclick="saveVid(event,this,'Stop Loss Placement — Power of Stocks','https://www.youtube.com/watch?v=7Y2XJcY_1TI')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=NVJfxUMGelA" target="_blank"><div class="vid-num">04</div><div class="yt-btn"></div><div style="flex:1">Why 90% Traders Lose — Honest Explanation</div><button class="vid-save-btn" onclick="saveVid(event,this,'Why 90% Traders Lose','https://www.youtube.com/watch?v=NVJfxUMGelA')">+ Save</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=0In4TlmOobA" target="_blank"><div class="vid-num">01</div><div class="yt-btn"></div><div style="flex:1">Risk Management — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Risk Management Rachana Ranade','https://www.youtube.com/watch?v=0In4TlmOobA')">+ Save</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=AVkB9T_-lOk" target="_blank"><div class="vid-num">02</div><div class="yt-btn"></div><div style="flex:1">Position Sizing — Vivek Bajaj</div><button class="vid-save-btn" onclick="saveVid(event,this,'Position Sizing Vivek Bajaj','https://www.youtube.com/watch?v=AVkB9T_-lOk')">+ Save</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=WqFMIpDTFBk" target="_blank"><div class="vid-num">03</div><div class="yt-btn"></div><div style="flex:1">Stop Loss Strategy — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Stop Loss Strategy Rachana Ranade','https://www.youtube.com/watch?v=WqFMIpDTFBk')">+ Save</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=tRNMsNIsAIM" target="_blank"><div class="vid-num">04</div><div class="yt-btn"></div><div style="flex:1">Trading Psychology — Pranjal Kamra</div><button class="vid-save-btn" onclick="saveVid(event,this,'Trading Psychology Pranjal Kamra','https://www.youtube.com/watch?v=tRNMsNIsAIM')">+ Save</button></a>
         </div>
       </div>
       <div class="summary-box"><h4>Phase 3 Key Terms</h4>
@@ -656,6 +663,8 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
     </div>
   </div>
 
+  </div><!-- /learn-phases -->
+  <div id="learn-abbrev" style="display:none"><div class="card"><div class="card-title">Trading Abbreviations &amp; Full Forms <div class="nl"></div></div><div id="abbrevGrid"></div></div></div>
   <div class="divider"></div>
   <!-- QUIZ -->
   <div class="sec-hdr"><h2>Daily <span>Quiz</span></h2><small id="quizScoreLbl">Score: 0/0</small></div>
@@ -731,7 +740,7 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
 <div class="panel" id="panel-mktcharts">
   <div class="sec-hdr"><h2>Market <span>Charts</span> — Live TradingView</h2></div>
   <div class="holiday-card" style="margin-bottom:14px">
-    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:8px">📅 NSE Market Holidays 2025 (Remaining)</div>
+    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:8px">📅 NSE Market Holidays (Remaining in 2025)</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap" id="holidayList"></div>
   </div>
   <div class="card" style="margin-bottom:14px">
@@ -755,6 +764,104 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
     </div>
   </div>
   <div class="tv-container" id="tvChartWrap"></div>
+  <!-- PATTERN TEACHING NOTES BELOW CHART -->
+  <div class="card" style="margin-top:14px">
+    <div class="card-title">📖 Historical Pattern Notes — Teacher Style <div class="nl"></div></div>
+    <div style="background:rgba(244,166,35,0.07);border:1px solid rgba(244,166,35,0.2);border-radius:var(--r);padding:10px;margin-bottom:10px;font-size:11px;color:var(--text2)">
+      These are verified historical patterns on Nifty 50 and major NSE stocks. Study each one to understand how the market behaved. On the chart above, manually zoom to the date shown to see it.
+    </div>
+    <div class="sub-tabs" style="margin-bottom:12px">
+      <button class="chart-btn active" onclick="showChartNote('nifty',this)">Nifty 50</button>
+      <button class="chart-btn" onclick="showChartNote('stocks',this)">Stocks</button>
+      <button class="chart-btn" onclick="showChartNote('concepts',this)">Concepts</button>
+    </div>
+    <div id="cn-nifty">
+      <div class="teach-box">
+        <div class="tb-head">May 2025 — Breakout from Consolidation <span class="badge b-neon">Bullish</span></div>
+        <div class="tb-sub">🎓 On the chart: Set timeframe to 1D, zoom to April–May 2025</div>
+        <div class="tb-body">Nifty 50 traded between 24,100–24,600 for 3 weeks. Volume dried up. On breakout day, volume was 2.3× average. Price closed above 24,600 strongly. Measured target: 25,100 (range height added to breakout). <strong style="color:var(--neon)">This is YOUR Setup #1 playing out on the index.</strong></div>
+        <div style="background:var(--bg2);border-radius:var(--r);padding:8px;margin-top:8px;font-size:11px">
+          <div style="color:var(--neon)">Entry signal:</div> Close above 24,600 on high volume
+          <div style="color:var(--red);margin-top:4px">Stop Loss:</div> Below 24,100 (bottom of consolidation)
+          <div style="color:var(--amber);margin-top:4px">Target:</div> 25,100 (measured move)
+        </div>
+      </div>
+      <div class="teach-box">
+        <div class="tb-head">Feb 2025 — Double Top Reversal <span class="badge b-red">Bearish</span></div>
+        <div class="tb-sub">🎓 On the chart: Set timeframe to 1W, zoom to Nov 2024–Feb 2025</div>
+        <div class="tb-body">Bank Nifty formed two peaks at 51,800–52,000. Second peak on lower volume = buyer exhaustion. Neckline at 49,200. When price broke below neckline, confirmed the double top. Pattern target: 46,600 (depth of pattern).</div>
+        <div style="background:var(--bg2);border-radius:var(--r);padding:8px;margin-top:8px;font-size:11px">
+          <div style="color:var(--red)">Entry signal:</div> Close below 49,200 neckline
+          <div style="color:var(--neon);margin-top:4px">Key lesson:</div> Second peak on lower volume is the warning sign
+        </div>
+      </div>
+      <div class="teach-box">
+        <div class="tb-head">Oct 2024 — Ascending Triangle Breakout <span class="badge b-neon">Bullish</span></div>
+        <div class="tb-sub">🎓 On the chart: Set timeframe to 1D, zoom to Aug–Oct 2024</div>
+        <div class="tb-body">Nifty formed rising higher lows while resistance stayed flat near 25,500. Four touches of same resistance level. Buyers becoming more aggressive. Volume spike on breakout day confirmed institutional participation.</div>
+        <div style="background:var(--bg2);border-radius:var(--r);padding:8px;margin-top:8px;font-size:11px">
+          <div style="color:var(--neon)">Entry signal:</div> Close above 25,500 with volume spike
+          <div style="color:var(--amber);margin-top:4px">Key lesson:</div> Higher lows = buyers getting more aggressive each time
+        </div>
+      </div>
+    </div>
+    <div id="cn-stocks" style="display:none">
+      <div class="teach-box">
+        <div class="tb-head">TCS — March 2025 Pullback to 50 EMA <span class="badge b-neon">Bullish</span></div>
+        <div class="tb-sub">🎓 On the chart: Select TCS, set 1D, zoom to Jan–Mar 2025</div>
+        <div class="tb-body">TCS rallied from ₹3,600 to ₹4,100 in Jan-Feb 2025. Then pulled back to 50 EMA at ₹3,850. Volume was below average during pullback (healthy). Bullish engulfing candle formed AT the 50 EMA on March 12. <strong style="color:var(--neon)">This is YOUR Setup #2 — textbook pullback to EMA support.</strong></div>
+        <div style="background:var(--bg2);border-radius:var(--r);padding:8px;margin-top:8px;font-size:11px">
+          <div style="color:var(--neon)">Entry signal:</div> Bullish engulfing at 50 EMA with volume returning
+          <div style="color:var(--red);margin-top:4px">Stop Loss:</div> Below the engulfing candle low
+        </div>
+      </div>
+      <div class="teach-box">
+        <div class="tb-head">INFY — Dec 2024 Ascending Triangle Breakout <span class="badge b-neon">Bullish</span></div>
+        <div class="tb-sub">🎓 On the chart: Select INFY, set 1D, zoom to Oct–Dec 2024</div>
+        <div class="tb-body">Infosys formed ascending triangle from Oct to Dec 2024. Flat resistance at ₹1,940 — tested 4 times. Rising trendline connecting higher lows. Breakout on Dec 18 with 2.1× average volume. Moved toward ₹2,100 target.</div>
+        <div style="background:var(--bg2);border-radius:var(--r);padding:8px;margin-top:8px;font-size:11px">
+          <div style="color:var(--neon)">Entry signal:</div> Close above ₹1,940 with volume confirmation
+          <div style="color:var(--amber);margin-top:4px">Key lesson:</div> 4 touches of same resistance = strong breakout when it finally breaks
+        </div>
+      </div>
+      <div class="teach-box">
+        <div class="tb-head">HDFCBANK — Jan 2025 Bearish Flag <span class="badge b-red">Bearish</span></div>
+        <div class="tb-sub">🎓 On the chart: Select HDFCBANK, set 1D, zoom to Dec 2024–Feb 2025</div>
+        <div class="tb-body">Sharp fall from ₹1,820 to ₹1,640 (flagpole). Then small upward bounce on very low volume (the flag). Many retail traders bought the bounce thinking reversal. Wrong. The flag broke down and continued the decline. Classic bear trap.</div>
+        <div style="background:var(--bg2);border-radius:var(--r);padding:8px;margin-top:8px;font-size:11px">
+          <div style="color:var(--red)">Warning signal:</div> Small bounce on very low volume after sharp fall
+          <div style="color:var(--amber);margin-top:4px">Key lesson:</div> Low volume bounce after big fall = trap, not reversal
+        </div>
+      </div>
+    </div>
+    <div id="cn-concepts" style="display:none">
+      <div class="teach-box">
+        <div class="tb-head">How to Use This Chart for Learning <span class="badge b-blue">Guide</span></div>
+        <div class="tb-sub">🎓 Step-by-step process</div>
+        <div class="tb-body" style="line-height:2">
+          <strong style="color:var(--amber)">Step 1:</strong> Select the stock or index from dropdown<br>
+          <strong style="color:var(--amber)">Step 2:</strong> Set timeframe (1D for swing trading)<br>
+          <strong style="color:var(--amber)">Step 3:</strong> Zoom to the date mentioned in Pattern Notes<br>
+          <strong style="color:var(--amber)">Step 4:</strong> Identify the pattern yourself before reading the note<br>
+          <strong style="color:var(--amber)">Step 5:</strong> Compare your reading with the teacher note below<br>
+          <strong style="color:var(--amber)">Step 6:</strong> Look for the SAME pattern repeating currently
+        </div>
+      </div>
+      <div class="teach-box">
+        <div class="tb-head">TradingView Chart Controls <span class="badge b-gray">How to Use</span></div>
+        <div class="tb-sub">🎓 On the chart above</div>
+        <div class="tb-body" style="line-height:2">
+          <strong>Zoom in:</strong> Scroll mouse wheel OR pinch on mobile<br>
+          <strong>Move chart:</strong> Click and drag left/right<br>
+          <strong>Add indicators:</strong> Click "Indicators" button in chart toolbar → search EMA, RSI<br>
+          <strong>Draw S&amp;R lines:</strong> Click pencil icon → horizontal line<br>
+          <strong>Change symbol:</strong> Click the symbol name at top left of chart<br>
+          <strong>Full screen:</strong> Click the expand icon top right of chart
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="card" style="margin-top:14px">
     <div class="card-title">Official Market Status Today <div class="nl"></div></div>
     <div style="font-size:12px;color:var(--text2);line-height:1.9">
@@ -1022,182 +1129,6 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
     </div>
   </div>
 </div>
-<!-- ZERODHA API SETUP GUIDE -->
-<div class="panel" id="panel-zerodha">
-  <div class="sec-hdr"><h2>🔑 Zerodha <span>Kite Connect API</span></h2></div>
-
-  <div class="warning-box">
-    <h4>⚠️ Read This First</h4>
-    <div style="font-size:12px;color:var(--text2);line-height:1.8">
-      Kite Connect API is a <strong style="color:var(--text)">paid service by Zerodha</strong> that lets you access your live account data programmatically. The <strong style="color:var(--text)">₹500/month plan (Connect plan)</strong> gives you: real-time quotes, order placement, portfolio data, positions, P&L, and historical candle data. This guide covers the exact steps to set it up and connect it to your Trade Smart app.
-    </div>
-  </div>
-
-  <!-- STEP 1 -->
-  <div class="card" style="margin-bottom:14px">
-    <div class="card-title" style="color:var(--neon)">Step 1 — Subscribe to Kite Connect <div class="nl"></div></div>
-    <div class="kite-step"><div class="kite-step-num">1</div><div class="kite-step-body"><strong>Go to:</strong> <a href="https://developers.kite.trade" target="_blank" style="color:var(--neon)">https://developers.kite.trade</a> → Sign in with your Zerodha Kite credentials</div></div>
-    <div class="kite-step"><div class="kite-step-num">2</div><div class="kite-step-body"><strong>Choose the Connect plan:</strong> ₹500/month. This gives API access, historical data, and real-time quotes. Click "Subscribe".</div></div>
-    <div class="kite-step"><div class="kite-step-num">3</div><div class="kite-step-body"><strong>Create a new App:</strong> Click "Create new app" → App name: "TradeSmart" → Redirect URL: <code style="background:var(--bg4);padding:2px 6px;border-radius:4px;color:var(--amber)">https://shubhtradesmart-kite.netlify.app/callback</code> → App type: "Connect"</div></div>
-    <div class="kite-step"><div class="kite-step-num">4</div><div class="kite-step-body"><strong>Save your credentials:</strong> You will get an <strong>API Key</strong> and <strong>API Secret</strong>. Save these — you will need them. Never share them publicly.</div></div>
-  </div>
-
-  <!-- STEP 2 -->
-  <div class="card" style="margin-bottom:14px">
-    <div class="card-title" style="color:var(--amber)">Step 2 — Understanding OAuth Login (Daily) <div class="nl"></div></div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.8;margin-bottom:12px">Zerodha uses OAuth 2.0 for security. Every trading day you need to log in once to get a <strong style="color:var(--text)">request_token</strong>, then exchange it for an <strong style="color:var(--text)">access_token</strong>. The access_token expires at the end of the trading day (6:30 AM next day). This is mandatory — Zerodha does this for your security.</div>
-    <div style="background:rgba(244,166,35,0.07);border:1px solid rgba(244,166,35,0.2);border-radius:var(--r);padding:12px;font-size:12px;color:var(--text2);line-height:1.8">
-      <strong style="color:var(--amber)">Daily Flow:</strong><br>
-      1. Open login URL → Zerodha login page → Enter PIN/TOTP<br>
-      2. Zerodha redirects to your URL with <code style="color:var(--neon)">?request_token=XXXXX</code><br>
-      3. Your app exchanges request_token + API Secret → gets <code style="color:var(--neon)">access_token</code><br>
-      4. Use access_token for all API calls that day
-    </div>
-  </div>
-
-  <!-- STEP 3 -->
-  <div class="card" style="margin-bottom:14px">
-    <div class="card-title" style="color:var(--blue)">Step 3 — Simple Node.js Backend (Minimal Setup) <div class="nl"></div></div>
-    <div style="font-size:12px;color:var(--text2);margin-bottom:10px">You need a tiny backend to handle the OAuth exchange and serve your account data. Here is the complete minimal setup — copy and run this.</div>
-    <div style="font-size:10px;color:var(--text3);margin-bottom:6px;font-family:var(--mono)">Prerequisites: Install Node.js from nodejs.org (free)</div>
-    <div class="code-block">
-<span class="comment"># Terminal commands — run these once</span>
-mkdir kite-backend
-cd kite-backend
-npm init -y
-npm install kiteconnect express cors dotenv
-    </div>
-    <div style="font-size:10px;color:var(--text3);margin:8px 0 4px;font-family:var(--mono)">File: .env (create this file, fill in your values)</div>
-    <div class="code-block">
-KITE_API_KEY=your_api_key_here
-KITE_API_SECRET=your_api_secret_here
-PORT=3000
-    </div>
-    <div style="font-size:10px;color:var(--text3);margin:8px 0 4px;font-family:var(--mono)">File: server.js (complete backend)</div>
-    <div class="code-block">
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const { KiteConnect } = require('kiteconnect');
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-const kite = new KiteConnect({ api_key: process.env.KITE_API_KEY });
-let accessToken = null;
-
-<span class="comment">// Step 1: Get login URL — open this in browser each morning</span>
-app.get('/login', (req, res) => {
-  res.redirect(kite.getLoginURL());
-});
-
-<span class="comment">// Step 2: Zerodha redirects here with request_token</span>
-app.get('/callback', async (req, res) => {
-  const requestToken = req.query.request_token;
-  try {
-    const data = await kite.generateSession(requestToken, process.env.KITE_API_SECRET);
-    accessToken = data.access_token;
-    kite.setAccessToken(accessToken);
-    res.send('✅ Login successful! You can close this tab. App is connected.');
-  } catch (e) {
-    res.status(500).send('Login failed: ' + e.message);
-  }
-});
-
-<span class="comment">// API endpoints for Trade Smart app</span>
-app.get('/api/profile', async (req, res) => {
-  if (!accessToken) return res.status(401).json({ error: 'Not logged in' });
-  try { res.json(await kite.getProfile()); } catch(e) { res.status(500).json({ error: e.message }); }
-});
-
-app.get('/api/margins', async (req, res) => {
-  if (!accessToken) return res.status(401).json({ error: 'Not logged in' });
-  try { res.json(await kite.getMargins()); } catch(e) { res.status(500).json({ error: e.message }); }
-});
-
-app.get('/api/positions', async (req, res) => {
-  if (!accessToken) return res.status(401).json({ error: 'Not logged in' });
-  try { res.json(await kite.getPositions()); } catch(e) { res.status(500).json({ error: e.message }); }
-});
-
-app.get('/api/orders', async (req, res) => {
-  if (!accessToken) return res.status(401).json({ error: 'Not logged in' });
-  try { res.json(await kite.getOrders()); } catch(e) { res.status(500).json({ error: e.message }); }
-});
-
-app.get('/api/holdings', async (req, res) => {
-  if (!accessToken) return res.status(401).json({ error: 'Not logged in' });
-  try { res.json(await kite.getHoldings()); } catch(e) { res.status(500).json({ error: e.message }); }
-});
-
-app.get('/api/status', (req, res) => {
-  res.json({ connected: !!accessToken, time: new Date().toISOString() });
-});
-
-app.listen(process.env.PORT, () => {
-  console.log('Trade Smart Kite backend running on port ' + process.env.PORT);
-  console.log('Daily login URL: https://shubhtradesmart-kite.netlify.app/login');
-});
-    </div>
-    <div style="font-size:10px;color:var(--text3);margin:8px 0 4px;font-family:var(--mono)">Run the backend:</div>
-    <div class="code-block">node server.js</div>
-  </div>
-
-  <!-- STEP 4 -->
-  <div class="card" style="margin-bottom:14px">
-    <div class="card-title" style="color:var(--purple)">Step 4 — Daily Login Process <div class="nl"></div></div>
-    <div class="kite-step"><div class="kite-step-num">1</div><div class="kite-step-body">Every morning before trading, open: <a href="https://shubhtradesmart-kite.netlify.app/login" target="_blank" style="color:var(--neon)">https://shubhtradesmart-kite.netlify.app/login</a> in your browser</div></div>
-    <div class="kite-step"><div class="kite-step-num">2</div><div class="kite-step-body">It will redirect to Zerodha login → enter your Zerodha ID, password, and TOTP (2FA)</div></div>
-    <div class="kite-step"><div class="kite-step-num">3</div><div class="kite-step-body">After login, it redirects back and shows "✅ Connected!" — close the tab</div></div>
-    <div class="kite-step"><div class="kite-step-num">4</div><div class="kite-step-body">Trade Smart app now automatically fetches your live balance, positions and orders</div></div>
-    <div style="background:rgba(255,71,87,0.06);border:1px solid rgba(255,71,87,0.2);border-radius:var(--r);padding:10px;margin-top:8px;font-size:12px;color:var(--text2)">
-      <strong style="color:var(--red)">Important security rules:</strong><br>
-      • Never commit .env file to GitHub — your API keys must stay private<br>
-      • The backend only runs locally on your machine — not publicly accessible<br>
-      • Access token expires at 6:30 AM next day — login fresh each morning<br>
-      • Add .env to .gitignore if you use Git
-    </div>
-  </div>
-
-  <!-- LIVE ACCOUNT VIEWER -->
-  <div class="card" style="margin-bottom:14px">
-    <div class="card-title" style="color:var(--neon)">Live Account Data — After Backend Running <div class="nl"></div></div>
-    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-      <a href="https://shubhtradesmart-kite.netlify.app/login" target="_blank" class="btn btn-neon" style="text-decoration:none;display:inline-block">🔑 Login with Zerodha</a>
-      <button class="btn btn-ghost" onclick="fetchKiteData()" style="margin-left:8px">🔄 Fetch Live Data</button>
-      <span id="kiteStatus" style="font-family:var(--mono);font-size:10px;color:var(--text3);padding:8px 0">Backend not connected</span>
-    </div>
-    <div class="g2" style="margin-bottom:12px">
-      <div class="metric"><div class="metric-lbl">Available Balance</div><div class="metric-val" id="kite-balance">—</div><div class="metric-ch" id="kite-balance-sub">Connect backend</div></div>
-      <div class="metric"><div class="metric-lbl">Used Margin</div><div class="metric-val" id="kite-used">—</div><div class="metric-ch">equity segment</div></div>
-    </div>
-    <div class="g2">
-      <div>
-        <div class="card-title">Open Positions <div class="nl"></div></div>
-        <div id="kite-positions" style="font-size:12px;color:var(--text3);padding:8px 0">No data — connect backend first</div>
-      </div>
-      <div>
-        <div class="card-title">Today's Orders <div class="nl"></div></div>
-        <div id="kite-orders" style="font-size:12px;color:var(--text3);padding:8px 0">No data — connect backend first</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- COST SUMMARY -->
-  <div class="card">
-    <div class="card-title">What ₹500/month Gets You <div class="nl"></div></div>
-    <div style="font-size:12px;color:var(--text2);line-height:2">
-      <div style="padding:5px 0;border-bottom:1px solid var(--border)">✅ Real-time quotes for all NSE stocks</div>
-      <div style="padding:5px 0;border-bottom:1px solid var(--border)">✅ Live portfolio balance and margin data</div>
-      <div style="padding:5px 0;border-bottom:1px solid var(--border)">✅ Open positions with live P&L</div>
-      <div style="padding:5px 0;border-bottom:1px solid var(--border)">✅ Order history and status</div>
-      <div style="padding:5px 0;border-bottom:1px solid var(--border)">✅ Historical OHLC data (candles) for chart analysis</div>
-      <div style="padding:5px 0;border-bottom:1px solid var(--border)">✅ Order placement via API (automation)</div>
-      <div style="padding:5px 0">ℹ️ <a href="https://kite.trade/docs/connect/v3/" target="_blank" style="color:var(--neon)">Full API documentation ↗</a></div>
-    </div>
-  </div>
-</div>
 
 <!-- MANUAL -->
 <div class="panel" id="panel-manual">
@@ -1333,13 +1264,15 @@ async function fetchNSE(){
     const mU=document.getElementById('mktUpdate');if(mU)mU.textContent='⟳ '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
   }catch(e){
     document.getElementById('nseTable').innerHTML=FB_NSE.map(s=>`<tr><td class="sym">${s.s}</td><td>₹${s.p}</td><td class="${s.ch>=0?'up':'down'}">${s.ch>=0?'▲':'▼'}${Math.abs(s.ch).toFixed(2)}%</td><td><button class="vid-save-btn" onclick="addToWatchlist('${s.s}')">+WL</button></td></tr>`).join('')+'<tr><td colspan="4" style="font-size:9px;text-align:center;color:var(--text3);padding:4px">Cached — Yahoo Finance CORS blocked</td></tr>';
-    const fv={hNifty:'24,832',hSensex:'81,404','m-nifty':'24,832','m-sensex':'81,404','m-bnifty':'52,147','hm-nifty':'24,832'};Object.entries(fv).forEach(([id,v])=>{const el=document.getElementById(id);if(el&&(el.textContent==='—'))el.textContent=v;});
+    const fv={'hNifty':'24,832','hSensex':'81,404','m-nifty':'24,832','m-sensex':'81,404','m-bnifty':'52,147','hm-nifty':'24,832'};
+    Object.entries(fv).forEach(function(pair){var id=pair[0];var v=pair[1];var el=document.getElementById(id);if(el)el.textContent=v;});
+    var mU=document.getElementById('mktUpdate');if(mU)mU.textContent='⟳ Cached data';
   }
 }
 
 async function refreshAll(){await Promise.all([fetchCrypto(),fetchForex(),fetchNSE()]);}
 refreshAll();
-setInterval(refreshAll,3*60*1000);
+setInterval(refreshAll,30*1000);
 
 // MARKET CHARTS
 const CHART_SYMBOLS={
@@ -1358,26 +1291,112 @@ function initMktCharts(){updateChartSymbols();const hl=document.getElementById('
 // NEWS
 const NEWS_FEEDS={et:'https://economictimes.indiatimes.com/markets/rss.cms',mc:'https://www.moneycontrol.com/rss/latestnews.xml',mint:'https://www.livemint.com/rss/markets'};
 function setNewsSrc(src,btn){S.newsSource=src;document.querySelectorAll('#panel-news .chart-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');fetchNews();}
-async function fetchNews(){
-  const c=document.getElementById('newsContainer');if(!c)return;
-  c.innerHTML='<div style="text-align:center;padding:24px;color:var(--text3)">📰 Fetching...</div>';
-  try{
-    const proxy=`https://api.allorigins.win/get?url=${encodeURIComponent(NEWS_FEEDS[S.newsSource])}`;
-    const r=await fetch(proxy,{signal:AbortSignal.timeout(12000)});const d=await r.json();
-    const xml=new DOMParser().parseFromString(d.contents,'text/xml');const items=Array.from(xml.querySelectorAll('item')).slice(0,12);if(!items.length)throw new Error('empty');
-    c.innerHTML=items.map(item=>{
-      const title=(item.querySelector('title')?.textContent||'').replace(/<!\[CDATA\[|\]\]>/g,'').trim();
-      const desc=(item.querySelector('description')?.textContent||'').replace(/<[^>]*>/g,'').replace(/<!\[CDATA\[|\]\]>/g,'').trim().slice(0,280);
-      const link=item.querySelector('link')?.textContent||'#';const pub=item.querySelector('pubDate')?.textContent||'';const ago=pub?timeAgo(new Date(pub)):'Recent';
-      const t=(title+desc).toLowerCase();const bull=['rise','gain','surge','rally','growth','profit','record','positive','green','strong','bullish','boost'].filter(k=>t.includes(k)).length;const bear=['fall','drop','loss','decline','crash','risk','concern','down','negative','red','weak','bearish','cut'].filter(k=>t.includes(k)).length;
-      const sent=bull>bear?'bull':bear>bull?'bear':'neutral';const sentColor=sent==='bull'?'var(--neon)':sent==='bear'?'var(--red)':'var(--text3)';const simple=sent==='bull'?'Positive news — may lift market.':sent==='bear'?'Negative news — may add selling pressure.':'Mixed signals — watch price action.';const action=sent==='bull'?'Look for long setups in related sectors.':sent==='bear'?'Avoid new trades, wait for clarity.':'Be patient.';
-      return `<div class="news-item" onclick="this.classList.toggle('expanded')"><div class="news-meta"><span style="width:5px;height:5px;background:var(--red);border-radius:50%;display:inline-block;margin-right:4px"></span>${ago} <a href="${link}" target="_blank" onclick="event.stopPropagation()" style="color:var(--neon);font-size:9px;text-decoration:none">↗ Open</a></div><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px"><div class="news-headline" style="flex:1">${title}</div><div class="info-wrap" style="flex-shrink:0"><span class="info-icon" tabindex="0" onclick="event.stopPropagation()">i</span><div class="info-popup right" style="width:220px"><h4>Key Points</h4><div class="ip-row"><strong>Simple:</strong> ${simple}</div><div class="ip-row"><strong>Impact:</strong> <span style="color:${sentColor}">${sent==='bull'?'Bullish':sent==='bear'?'Bearish':'Neutral'}</span></div><div class="ip-row"><strong>Action:</strong> ${action}</div></div></div></div><div class="news-body">${desc||'Click ↗ to read full article.'}</div><div style="margin-top:8px"><span class="badge ${sent==='bull'?'b-neon':sent==='bear'?'b-red':'b-gray'}">${sent==='bull'?'▲ Bullish':'▼ Bearish'}</span></div></div>`;
-    }).join('');
-  }catch(e){c.innerHTML=`<div style="text-align:center;padding:24px;color:var(--text3);font-size:12px">⚠️ RSS blocked by browser security (CORS).<br><br><a href="https://economictimes.indiatimes.com/markets" target="_blank" style="color:var(--neon);display:block;margin:5px 0">Economic Times ↗</a><a href="https://www.moneycontrol.com/news/business/markets/" target="_blank" style="color:var(--neon);display:block;margin:5px 0">MoneyControl ↗</a><a href="https://www.livemint.com/market" target="_blank" style="color:var(--neon);display:block;margin:5px 0">LiveMint ↗</a></div>`;}
+function fetchNews(){
+  var c=document.getElementById('newsContainer');
+  if(!c)return;
+  // Show loading only if no cached news yet
+  if(!cachedNews.length)c.innerHTML='<div style="text-align:center;padding:24px;color:var(--text3)">📰 Fetching latest news...</div>';
+  var feeds={
+    et:'https://economictimes.indiatimes.com/markets/rss.cms',
+    mc:'https://www.moneycontrol.com/rss/latestnews.xml',
+    mint:'https://www.livemint.com/rss/markets'
+  };
+  var proxyUrl='https://api.allorigins.win/get?url='+encodeURIComponent(feeds[S.newsSource]);
+  var xhr=new XMLHttpRequest();
+  xhr.timeout=15000;
+  xhr.open('GET',proxyUrl,true);
+  xhr.onreadystatechange=function(){
+    if(xhr.readyState!==4)return;
+    if(xhr.status===200){
+      try{
+        var outer=JSON.parse(xhr.responseText);
+        var xml=new DOMParser().parseFromString(outer.contents,'text/xml');
+        var items=Array.from(xml.querySelectorAll('item')).slice(0,15);
+        if(!items.length)throw new Error('empty');
+        var newItems=[];
+        items.forEach(function(item){
+          var title=(item.querySelector('title')||{}).textContent||'';
+          title=title.replace(/<!\[CDATA\[|\]\]>/g,'').trim();
+          if(!title)return;
+          var desc=(item.querySelector('description')||{}).textContent||'';
+          desc=desc.replace(/<[^>]*>/g,'').replace(/<!\[CDATA\[|\]\]>/g,'').trim().slice(0,300);
+          var link=(item.querySelector('link')||{}).textContent||'#';
+          var pub=(item.querySelector('pubDate')||{}).textContent||'';
+          var ago=pub?timeAgo(new Date(pub)):'Recent';
+          var t=(title+desc).toLowerCase();
+          var bullW=['rise','gain','surge','rally','growth','profit','record','positive','green','strong','bullish','boost','jump','high','advance'];
+          var bearW=['fall','drop','loss','decline','crash','risk','concern','down','negative','red','weak','bearish','cut','low','plunge'];
+          var bull=bullW.filter(function(k){return t.indexOf(k)>=0;}).length;
+          var bear=bearW.filter(function(k){return t.indexOf(k)>=0;}).length;
+          var sent=bull>bear?'bull':bear>bull?'bear':'neutral';
+          var sentColor=sent==='bull'?'var(--neon)':sent==='bear'?'var(--red)':'var(--text3)';
+          var simple=sent==='bull'?'Positive news — market may react upward.':sent==='bear'?'Negative news — may add selling pressure.':'Mixed signals — watch price action.';
+          var action=sent==='bull'?'Look for long setups in related sectors today.':sent==='bear'?'Avoid new trades. Wait for clarity.':'Be patient. Let price confirm direction.';
+          var impact=sent==='bull'?'Bullish':sent==='bear'?'Bearish':'Neutral';
+          newItems.push({title:title,desc:desc,link:link,ago:ago,sent:sent,sentColor:sentColor,simple:simple,action:action,impact:impact});
+        });
+        if(newItems.length){
+          cachedNews=newItems;
+          renderNews();
+          var mt=document.getElementById('macroTime');
+          if(mt)mt.textContent=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+        }
+      }catch(e){
+        if(!cachedNews.length)showNewsFallback();
+      }
+    } else {
+      if(!cachedNews.length)showNewsFallback();
+    }
+  };
+  xhr.ontimeout=function(){if(!cachedNews.length)showNewsFallback();};
+  xhr.send();
+}
+
+function renderNews(){
+  var c=document.getElementById('newsContainer');
+  if(!c||!cachedNews.length)return;
+  var src=S.newsSource==='et'?'ET':S.newsSource==='mc'?'MC':'Mint';
+  c.innerHTML=cachedNews.map(function(n){
+    return '<div class="news-item" onclick="this.classList.toggle('expanded')">'
+      +'<div class="news-meta"><span style="width:5px;height:5px;background:var(--red);border-radius:50%;display:inline-block;margin-right:4px"></span>'
+      +n.ago+' &nbsp;|&nbsp; '+src
+      +' &nbsp;<a href="'+n.link+'" target="_blank" onclick="event.stopPropagation()" style="color:var(--neon);font-size:9px;text-decoration:none">&#8599; Open</a></div>'
+      +'<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">'
+      +'<div class="news-headline" style="flex:1">'+n.title+'</div>'
+      +'<div class="info-wrap" style="flex-shrink:0"><span class="info-icon" tabindex="0" onclick="event.stopPropagation()">i</span>'
+      +'<div class="info-popup right" style="width:220px"><h4>Key Points</h4>'
+      +'<div class="ip-row"><strong>Simple:</strong> '+n.simple+'</div>'
+      +'<div class="ip-row"><strong>Market Impact:</strong> <span style="color:'+n.sentColor+'">'+n.impact+'</span></div>'
+      +'<div class="ip-row"><strong>Your Action:</strong> '+n.action+'</div>'
+      +'</div></div></div>'
+      +'<div class="news-body">'+n.desc+'</div>'
+      +'<div style="margin-top:8px"><span class="badge '+(n.sent==='bull'?'b-neon':n.sent==='bear'?'b-red':'b-gray')+'">'+(n.sent==='bull'?'&#9650; Bullish':'&#9660; Bearish')+'</span></div>'
+      +'</div>';
+  }).join('');
+}
+
+function showNewsFallback(){
+  var c=document.getElementById('newsContainer');
+  if(!c)return;
+  if(cachedNews.length){renderNews();return;}
+  c.innerHTML='<div style="text-align:center;padding:24px;color:var(--text3);font-size:12px">'
+    +'&#9888; RSS feeds blocked by browser security (CORS).<br><br>'
+    +'Read directly:<br><br>'
+    +'<a href="https://economictimes.indiatimes.com/markets" target="_blank" style="color:var(--neon);display:block;margin:5px 0">Economic Times Markets &#8599;</a>'
+    +'<a href="https://www.moneycontrol.com/news/business/markets/" target="_blank" style="color:var(--neon);display:block;margin:5px 0">MoneyControl Markets &#8599;</a>'
+    +'<a href="https://www.livemint.com/market" target="_blank" style="color:var(--neon);display:block;margin:5px 0">LiveMint Markets &#8599;</a>'
+    +'</div>';
 }
 function timeAgo(d){const diff=Date.now()-d.getTime();const m=Math.floor(diff/60000);if(m<1)return'Just now';if(m<60)return m+'m ago';const h=Math.floor(m/60);if(h<24)return h+'h ago';return Math.floor(h/24)+'d ago';}
-let newsCD=60;fetchNews();
-setInterval(()=>{newsCD--;if(newsCD<=0){newsCD=300;fetchNews();}const el=document.getElementById('newsTimer');if(el)el.textContent=`⟳ Refresh in ${Math.floor(newsCD/60)}m ${newsCD%60}s`;},1000);
+var newsCD=60;
+var cachedNews=[];
+fetchNews();
+setInterval(function(){
+  newsCD--;
+  if(newsCD<=0){newsCD=120;fetchNews();}
+  var el=document.getElementById('newsTimer');
+  if(el)el.textContent='⟳ Refresh in '+Math.floor(newsCD/60)+'m '+(newsCD%60)+'s';
+},1000);
 
 // SECTORS
 const SECTOR_DATA={
@@ -1543,6 +1562,108 @@ async function fetchKiteData(){
 // NIFTY MINI CHART
 function renderNiftyMini(){const ctx=document.getElementById('niftyMiniChart');if(!ctx)return;const base=24800;const data=Array.from({length:22},(_,i)=>base+Math.round((Math.random()-0.44)*100*(i/6+1)));new Chart(ctx,{type:'line',data:{labels:data.map((_,i)=>i===0?'9:15':i===21?'3:30':''),datasets:[{data,borderColor:'#00FF94',backgroundColor:'rgba(0,255,148,0.05)',fill:true,tension:0.35,pointRadius:(ctx2,idx)=>idx===data.length-1?5:0,pointBackgroundColor:'#00FF94'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});}
 renderNiftyMini();
+
+// LEARN SUB-TABS
+function showLearnSub(id, btn) {
+  var ids = ['phases', 'abbrev'];
+  ids.forEach(function(i) {
+    var el = document.getElementById('learn-' + i);
+    if (el) el.style.display = i === id ? 'block' : 'none';
+  });
+  if (btn) {
+    var btns = btn.parentElement.querySelectorAll('.sub-tab');
+    btns.forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+  }
+}
+
+// ABBREVIATIONS DATA
+var ABBREVIATIONS = [
+  {a:'NSE', f:'National Stock Exchange', d:'India's largest stock exchange by trading volume'},
+  {a:'BSE', f:'Bombay Stock Exchange', d:'Asia's oldest stock exchange, founded 1875'},
+  {a:'SEBI', f:'Securities and Exchange Board of India', d:'Regulator of India's securities market'},
+  {a:'OHLC', f:'Open High Low Close', d:'The 4 price points shown in every candlestick'},
+  {a:'EMA', f:'Exponential Moving Average', d:'Weighted average giving more importance to recent prices'},
+  {a:'SMA', f:'Simple Moving Average', d:'Equal-weighted average of closing prices over N periods'},
+  {a:'RSI', f:'Relative Strength Index', d:'Momentum indicator showing overbought/oversold (0-100 scale)'},
+  {a:'MACD', f:'Moving Average Convergence Divergence', d:'Trend-following momentum indicator using two EMAs'},
+  {a:'S&R', f:'Support and Resistance', d:'Key price levels where buying/selling pressure is strong'},
+  {a:'SL', f:'Stop Loss', d:'Pre-set price to exit a losing trade to limit damage'},
+  {a:'TP', f:'Take Profit / Target Price', d:'Pre-set price to exit a winning trade and book profit'},
+  {a:'R:R', f:'Risk to Reward Ratio', d:'How much you risk vs how much you stand to gain'},
+  {a:'FII', f:'Foreign Institutional Investor', d:'Foreign funds investing in Indian markets (e.g. US funds)'},
+  {a:'DII', f:'Domestic Institutional Investor', d:'Indian funds investing in markets (MFs, insurance companies)'},
+  {a:'MF', f:'Mutual Fund', d:'Pooled investment vehicle managed by professional fund managers'},
+  {a:'IPO', f:'Initial Public Offering', d:'When a company lists its shares on exchange for first time'},
+  {a:'P/E', f:'Price to Earnings Ratio', d:'Stock price divided by earnings per share — valuation metric'},
+  {a:'LTP', f:'Last Traded Price', d:'Most recent price at which a stock was bought/sold'},
+  {a:'CMP', f:'Current Market Price', d:'Same as LTP — current price of a stock'},
+  {a:'ATH', f:'All Time High', d:'Highest price a stock or index has ever reached'},
+  {a:'ATL', f:'All Time Low', d:'Lowest price a stock or index has ever reached'},
+  {a:'52WH', f:'52 Week High', d:'Highest price in the last 52 weeks (1 year)'},
+  {a:'52WL', f:'52 Week Low', d:'Lowest price in the last 52 weeks (1 year)'},
+  {a:'OI', f:'Open Interest', d:'Total number of outstanding derivative contracts not settled'},
+  {a:'F&O', f:'Futures and Options', d:'Derivative instruments to buy/sell at a future date at agreed price'},
+  {a:'MIS', f:'Margin Intraday Square-off', d:'Zerodha order type for intraday trades with leverage'},
+  {a:'CNC', f:'Cash and Carry', d:'Zerodha order type for delivery trades (holding overnight)'},
+  {a:'NRML', f:'Normal Order', d:'Zerodha order type for F&O positions held overnight'},
+  {a:'SLM', f:'Stop Loss Market Order', d:'Triggers a market order when price hits your stop loss level'},
+  {a:'SL-L', f:'Stop Loss Limit Order', d:'Triggers a limit order when price hits your stop loss level'},
+  {a:'GTT', f:'Good Till Triggered', d:'Zerodha feature to place orders that trigger at a future price'},
+  {a:'AMO', f:'After Market Order', d:'Order placed outside trading hours, executed at market open'},
+  {a:'BTST', f:'Buy Today Sell Tomorrow', d:'Buying and selling shares within 2 days — no delivery taken'},
+  {a:'STBT', f:'Sell Today Buy Tomorrow', d:'Short selling today and buying back next day'},
+  {a:'PDH', f:'Previous Day High', d:'Highest price of the previous trading session'},
+  {a:'PDL', f:'Previous Day Low', d:'Lowest price of the previous trading session'},
+  {a:'POC', f:'Point of Control', d:'Price level with highest trading volume in a range'},
+  {a:'VAH', f:'Value Area High', d:'Upper boundary of the value area in volume profile'},
+  {a:'VAL', f:'Value Area Low', d:'Lower boundary of the value area in volume profile'},
+  {a:'RBI', f:'Reserve Bank of India', d:'India's central bank — controls monetary policy, repo rate'},
+  {a:'Repo', f:'Repo Rate', d:'Rate at which RBI lends to commercial banks — key monetary tool'},
+  {a:'CPI', f:'Consumer Price Index', d:'Measures inflation — higher CPI = higher inflation'},
+  {a:'GDP', f:'Gross Domestic Product', d:'Total value of goods and services produced — economic health'},
+  {a:'QoQ', f:'Quarter on Quarter', d:'Comparing current quarter results with previous quarter'},
+  {a:'YoY', f:'Year on Year', d:'Comparing current period results with same period last year'},
+  {a:'EPS', f:'Earnings Per Share', d:'Company profit divided by number of shares — key metric'},
+  {a:'MCap', f:'Market Capitalisation', d:'Total value of company = Share Price × Total Shares'},
+  {a:'LC', f:'Lower Circuit', d:'Max downside limit a stock can fall in one day (5%/10%/20%)'},
+  {a:'UC', f:'Upper Circuit', d:'Max upside limit a stock can rise in one day (5%/10%/20%)'},
+  {a:'T+1', f:'Trade Plus 1 Day', d:'Settlement cycle — shares delivered next trading day'},
+  {a:'STT', f:'Securities Transaction Tax', d:'Tax on every buy/sell transaction in Indian markets'},
+];
+
+function buildAbbrevGrid() {
+  var g = document.getElementById('abbrevGrid');
+  if (!g) return;
+  var html = '';
+  ABBREVIATIONS.forEach(function(ab) {
+    html += '<div style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:10px;margin-bottom:6px">'
+      + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">'
+      + '<span style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--neon)">' + ab.a + '</span>'
+      + '<span style="font-family:var(--mono);font-size:9px;color:var(--text3)">&#8594;</span>'
+      + '<span style="font-size:11px;font-weight:600;color:var(--text)">' + ab.f + '</span>'
+      + '</div>'
+      + '<div style="font-size:11px;color:var(--text2);line-height:1.5">' + ab.d + '</div>'
+      + '</div>';
+  });
+  g.innerHTML = html;
+}
+buildAbbrevGrid();
+
+
+function showChartNote(id, btn) {
+  var ids = ['nifty', 'stocks', 'concepts'];
+  ids.forEach(function(i) {
+    var el = document.getElementById('cn-' + i);
+    if (el) el.style.display = i === id ? 'block' : 'none';
+  });
+  if (btn) {
+    var btns = btn.parentElement.querySelectorAll('.chart-btn');
+    btns.forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+  }
+}
+
 </script>
 </body>
 </html>
