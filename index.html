@@ -1357,7 +1357,7 @@ function renderNews(){
   if(!c||!cachedNews.length)return;
   var src=S.newsSource==='et'?'ET':S.newsSource==='mc'?'MC':'Mint';
   c.innerHTML=cachedNews.map(function(n){
-    return '<div class="news-item" onclick="this.classList.toggle('expanded')">'
+    return '<div class="news-item" onclick="toggleNews(this)">'
       +'<div class="news-meta"><span style="width:5px;height:5px;background:var(--red);border-radius:50%;display:inline-block;margin-right:4px"></span>'
       +n.ago+' &nbsp;|&nbsp; '+src
       +' &nbsp;<a href="'+n.link+'" target="_blank" onclick="event.stopPropagation()" style="color:var(--neon);font-size:9px;text-decoration:none">&#8599; Open</a></div>'
@@ -1664,6 +1664,13 @@ function showChartNote(id, btn) {
   }
 }
 
+
+function toggleNews(el) {
+  el.classList.toggle('expanded');
+}
+
+
+unction toggleNews(el){el.classList.toggle('expanded');}
 </script>
 </body>
 </html>
