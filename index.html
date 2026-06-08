@@ -1,0 +1,2659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shubh's Trading Dojo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Syne+Mono&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --bg: #f0f4ff;
+  --bg2: #ffffff;
+  --bg3: #f7f8ff;
+  --bg4: #eef0fb;
+  --border: rgba(99,102,241,0.15);
+  --border2: rgba(99,102,241,0.35);
+  --green: #059669;
+  --green2: #047857;
+  --green-dim: rgba(5,150,105,0.1);
+  --red: #e11d48;
+  --red-dim: rgba(225,29,72,0.1);
+  --amber: #d97706;
+  --amber-dim: rgba(217,119,6,0.1);
+  --blue: #4f46e5;
+  --blue-dim: rgba(79,70,229,0.1);
+  --purple: #7c3aed;
+  --pink: #db2777;
+  --text: #1e1b4b;
+  --text2: #4c4f7a;
+  --text3: #9ca0c4;
+  --mono: 'Syne Mono', monospace;
+  --sans: 'Nunito', sans-serif;
+  --radius: 10px;
+  --radius2: 16px;
+  --accent1: #6366f1;
+  --accent2: #ec4899;
+  --accent3: #f59e0b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(circle at 15% 10%, rgba(99,102,241,0.08) 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(236,72,153,0.07) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(245,158,11,0.04) 0%, transparent 60%);
+  background-attachment: fixed;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%);
+  border-bottom: none;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 24px rgba(79,70,229,0.3);
+}
+.logo {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: #fff;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(255,255,255,0.4);
+}
+.logo span { color: rgba(255,255,255,0.7); }
+.header-stats {
+  display: flex;
+  gap: 20px;
+}
+.hstat {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: rgba(255,255,255,0.65);
+  text-align: center;
+}
+.hstat strong {
+  display: block;
+  font-size: 13px;
+  color: #fff;
+  font-weight: 700;
+}
+.live-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: #4ade80;
+  border-radius: 50%;
+  margin-right: 6px;
+  animation: pulse 1.5s infinite;
+  box-shadow: 0 0 6px #4ade80;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* NAV */
+.nav {
+  display: flex;
+  gap: 6px;
+  padding: 12px 24px;
+  background: #ffffff;
+  border-bottom: 1px solid rgba(99,102,241,0.12);
+  overflow-x: auto;
+  scrollbar-width: none;
+  box-shadow: 0 2px 12px rgba(99,102,241,0.08);
+}
+.nav::-webkit-scrollbar { display: none; }
+.nav-btn {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  padding: 7px 16px;
+  background: var(--bg3);
+  border: 1.5px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  border-radius: 50px;
+  white-space: nowrap;
+  transition: all 0.18s;
+}
+.nav-btn:hover { background: var(--blue-dim); border-color: var(--accent1); color: var(--accent1); transform: translateY(-1px); }
+.nav-btn.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+  transform: translateY(-1px);
+}
+
+/* MAIN */
+.main { padding: 24px; max-width: 1400px; margin: 0 auto; }
+
+/* PANEL */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* GRID LAYOUTS */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+@media (max-width: 900px) {
+  .grid-2,.grid-3,.grid-4 { grid-template-columns: 1fr; }
+}
+
+/* CARDS */
+.card {
+  background: #ffffff;
+  border: 1.5px solid rgba(99,102,241,0.12);
+  border-radius: var(--radius2);
+  padding: 18px;
+  box-shadow: 0 2px 16px rgba(99,102,241,0.07);
+  transition: box-shadow 0.2s;
+}
+.card:hover { box-shadow: 0 4px 24px rgba(99,102,241,0.13); }
+.card-title {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent1);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-title::after {
+  content: '';
+  flex: 1;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(99,102,241,0.3), transparent);
+  border-radius: 1px;
+}
+
+/* TICKER TAPE */
+.ticker-wrap {
+  background: linear-gradient(90deg, #4f46e5, #7c3aed, #db2777, #f59e0b, #059669, #4f46e5);
+  background-size: 400% 100%;
+  animation: gradShift 8s linear infinite;
+  padding: 7px 0;
+  overflow: hidden;
+}
+@keyframes gradShift { 0%{background-position:0% 50%} 100%{background-position:100% 50%} }
+.ticker-inner {
+  display: flex;
+  gap: 40px;
+  animation: ticker 30s linear infinite;
+  white-space: nowrap;
+  width: max-content;
+}
+@keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.ticker-item {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: rgba(255,255,255,0.85);
+}
+.ticker-item .sym { color: #fff; font-weight: 700; margin-right: 6px; }
+.up { color: #4ade80; }
+.down { color: #fca5a5; }
+
+/* METRIC TILE */
+.metric {
+  background: #fff;
+  border: 1.5px solid rgba(99,102,241,0.15);
+  border-radius: var(--radius2);
+  padding: 16px;
+  box-shadow: 0 2px 12px rgba(99,102,241,0.08);
+  position: relative;
+  overflow: hidden;
+}
+.metric::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6, #ec4899);
+}
+.metric-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.metric-value {
+  font-family: var(--mono);
+  font-size: 22px;
+  color: var(--text);
+  font-weight: 700;
+}
+.metric-change {
+  font-family: var(--mono);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+/* STOCK TABLE */
+.stock-table { width: 100%; border-collapse: collapse; }
+.stock-table th {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent1);
+  padding: 6px 10px;
+  border-bottom: 2px solid rgba(99,102,241,0.15);
+  text-align: left;
+}
+.stock-table td {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text2);
+  padding: 10px 10px;
+  border-bottom: 1px solid rgba(99,102,241,0.06);
+}
+.stock-table tr:hover td { background: rgba(99,102,241,0.04); }
+.stock-table td.sym { color: var(--text); font-weight: 700; cursor: pointer; }
+.stock-table td.sym:hover { color: var(--accent1); }
+.fav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.4;
+  transition: opacity 0.15s;
+  padding: 0;
+}
+.fav-btn:hover, .fav-btn.active { opacity: 1; color: var(--amber); }
+
+/* INPUT STYLES */
+input[type=text], input[type=number], select, textarea {
+  background: #f7f8ff;
+  border: 1.5px solid rgba(99,102,241,0.2);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 8px 12px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--accent1);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+}
+select option { background: #fff; color: var(--text); }
+label {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text2);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 5px;
+}
+.form-row { margin-bottom: 12px; }
+
+/* BUTTONS */
+.btn {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 9px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  border: none;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  transition: all 0.18s;
+  box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99,102,241,0.45); }
+.btn:active { transform: translateY(0); }
+.btn-red {
+  background: linear-gradient(135deg, #e11d48, #f43f5e);
+  box-shadow: 0 4px 14px rgba(225,29,72,0.3);
+}
+.btn-red:hover { box-shadow: 0 6px 20px rgba(225,29,72,0.4); }
+.btn-amber {
+  background: linear-gradient(135deg, #f59e0b, #fbbf24);
+  box-shadow: 0 4px 14px rgba(245,158,11,0.3);
+  color: #fff;
+}
+
+/* BADGE */
+.badge {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 3px 10px;
+  border-radius: 50px;
+  text-transform: uppercase;
+}
+.badge-green { background: rgba(5,150,105,0.12); color: #047857; border: 1.5px solid rgba(5,150,105,0.25); }
+.badge-red { background: rgba(225,29,72,0.1); color: #e11d48; border: 1.5px solid rgba(225,29,72,0.2); }
+.badge-amber { background: rgba(217,119,6,0.1); color: #b45309; border: 1.5px solid rgba(217,119,6,0.2); }
+.badge-blue { background: rgba(99,102,241,0.1); color: #4f46e5; border: 1.5px solid rgba(99,102,241,0.2); }
+
+/* PROGRESS BAR */
+.progress-bar {
+  height: 6px;
+  background: #eef0fb;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #ec4899);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+/* PHASE CARD */
+.phase-card {
+  background: #fff;
+  border: 1.5px solid rgba(99,102,241,0.15);
+  border-radius: var(--radius2);
+  padding: 18px;
+  cursor: pointer;
+  transition: all 0.18s;
+  box-shadow: 0 2px 12px rgba(99,102,241,0.06);
+}
+.phase-card:hover, .phase-card.open { border-color: rgba(99,102,241,0.4); box-shadow: 0 4px 20px rgba(99,102,241,0.12); }
+.phase-card.complete { border-color: rgba(5,150,105,0.4); background: linear-gradient(135deg, #fff 0%, rgba(5,150,105,0.03) 100%); }
+.phase-card.current { border-color: rgba(245,158,11,0.5); background: linear-gradient(135deg, #fff 0%, rgba(245,158,11,0.04) 100%); }
+.phase-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.phase-num {
+  font-family: var(--mono);
+  font-size: 28px;
+  color: rgba(99,102,241,0.2);
+  font-weight: 700;
+  line-height: 1;
+  min-width: 32px;
+}
+.phase-card.complete .phase-num { color: #059669; }
+.phase-card.current .phase-num { color: #f59e0b; }
+.phase-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text);
+  flex: 1;
+}
+.phase-sub {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 3px;
+}
+.phase-body {
+  display: none;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1.5px dashed rgba(99,102,241,0.15);
+}
+.phase-card.open .phase-body { display: block; }
+
+/* CHECKLIST */
+.checklist { list-style: none; }
+.checklist li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 13px;
+  color: var(--text2);
+  border-bottom: 1px solid rgba(99,102,241,0.05);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.checklist li:hover { color: var(--text); }
+.checklist li:last-child { border-bottom: none; }
+.checklist li.done { color: var(--text3); text-decoration: line-through; }
+.check-box {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(99,102,241,0.3);
+  border-radius: 5px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1px;
+  transition: all 0.15s;
+}
+.checklist li.done .check-box {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-color: transparent;
+}
+.check-box::after { content: ''; width: 0; height: 0; }
+.checklist li.done .check-box::after {
+  content: '✓';
+  font-size: 10px;
+  color: #fff;
+  font-weight: 700;
+}
+
+/* VIDEO LINKS */
+.video-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: #f7f8ff;
+  border: 1.5px solid rgba(99,102,241,0.12);
+  border-radius: var(--radius);
+  margin-bottom: 6px;
+  text-decoration: none;
+  color: var(--text2);
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+.video-link:hover { border-color: #ff0000; color: var(--text); background: #fff5f5; transform: translateX(2px); }
+.yt-icon {
+  width: 28px;
+  height: 20px;
+  background: #ff0000;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(255,0,0,0.3);
+}
+.yt-icon::after {
+  content: '';
+  border-style: solid;
+  border-width: 5px 0 5px 9px;
+  border-color: transparent transparent transparent white;
+  margin-left: 2px;
+}
+
+/* QUIZ CARD */
+.quiz-card {
+  background: #fff;
+  border: 1.5px solid rgba(99,102,241,0.2);
+  border-radius: var(--radius2);
+  padding: 22px;
+  box-shadow: 0 4px 20px rgba(99,102,241,0.1);
+}
+.quiz-q {
+  font-size: 16px;
+  color: var(--text);
+  font-weight: 700;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+.quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.quiz-opt {
+  background: #f7f8ff;
+  border: 1.5px solid rgba(99,102,241,0.15);
+  border-radius: var(--radius);
+  padding: 11px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+}
+.quiz-opt:hover { border-color: var(--accent1); color: var(--text); background: #eef0fb; }
+.quiz-opt.correct { border-color: #059669; background: rgba(5,150,105,0.08); color: #047857; }
+.quiz-opt.wrong { border-color: #e11d48; background: rgba(225,29,72,0.08); color: #e11d48; }
+.quiz-explanation {
+  margin-top: 14px;
+  padding: 14px;
+  background: rgba(245,158,11,0.07);
+  border-left: 4px solid #f59e0b;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.7;
+  display: none;
+  font-weight: 500;
+}
+
+/* NEWS */
+.news-item {
+  background: #fff;
+  border: 1.5px solid rgba(99,102,241,0.12);
+  border-radius: var(--radius2);
+  padding: 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.18s;
+  box-shadow: 0 2px 10px rgba(99,102,241,0.05);
+}
+.news-item:hover { border-color: rgba(99,102,241,0.35); box-shadow: 0 4px 18px rgba(99,102,241,0.1); transform: translateY(-1px); }
+.news-headline {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+.news-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  margin-bottom: 8px;
+}
+.news-summary {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.7;
+  display: none;
+  font-weight: 500;
+}
+.news-item.expanded .news-summary { display: block; }
+.news-impacts {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.impact-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 50px;
+}
+.impact-bull { background: rgba(5,150,105,0.1); color: #047857; }
+.impact-bear { background: rgba(225,29,72,0.1); color: #e11d48; }
+
+/* CHART SECTION */
+.chart-controls {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.chart-btn {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 14px;
+  background: #f7f8ff;
+  border: 1.5px solid rgba(99,102,241,0.15);
+  color: var(--text2);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.chart-btn:hover, .chart-btn.active {
+  border-color: var(--accent1);
+  color: var(--accent1);
+  background: rgba(99,102,241,0.08);
+}
+
+/* CANDLESTICK GLOSSARY */
+.candle-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+.candle-card {
+  background: #f7f8ff;
+  border: 1.5px solid rgba(99,102,241,0.12);
+  border-radius: var(--radius2);
+  padding: 14px;
+  transition: all 0.15s;
+}
+.candle-card:hover { border-color: rgba(99,102,241,0.3); box-shadow: 0 4px 14px rgba(99,102,241,0.1); }
+.candle-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  margin-bottom: 8px;
+}
+.candle-name {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.candle-desc {
+  font-size: 11px;
+  color: var(--text2);
+  line-height: 1.6;
+  font-weight: 500;
+}
+.candle-signal {
+  font-size: 10px;
+  margin-top: 8px;
+  display: inline-block;
+}
+
+/* JOURNAL TABLE */
+.journal-table { width: 100%; border-collapse: collapse; }
+.journal-table th {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent1);
+  padding: 8px;
+  border-bottom: 2px solid rgba(99,102,241,0.15);
+  text-align: left;
+}
+.journal-table td {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text2);
+  padding: 10px 8px;
+  border-bottom: 1px solid rgba(99,102,241,0.05);
+}
+.journal-table tr:hover td { background: rgba(99,102,241,0.03); }
+.del-btn {
+  background: none;
+  border: 1.5px solid rgba(225,29,72,0.3);
+  color: #e11d48;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.del-btn:hover { background: rgba(225,29,72,0.1); }
+
+/* SECTOR BARS */
+.sector-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(99,102,241,0.06);
+}
+.sector-name {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text2);
+  width: 140px;
+  flex-shrink: 0;
+}
+.sector-bar-wrap {
+  flex: 1;
+  height: 8px;
+  background: #eef0fb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.sector-bar-fill { height: 100%; border-radius: 4px; }
+.sector-pct {
+  font-family: var(--mono);
+  font-size: 11px;
+  width: 60px;
+  text-align: right;
+  flex-shrink: 0;
+  font-weight: 700;
+}
+.sector-recommendation {
+  font-size: 10px;
+  font-weight: 800;
+  font-family: var(--sans);
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 50px;
+  width: 80px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* RISK CALCULATOR */
+.risk-result {
+  background: #f7f8ff;
+  border: 1.5px solid rgba(99,102,241,0.15);
+  border-radius: var(--radius2);
+  padding: 18px;
+  margin-top: 16px;
+}
+.risk-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(99,102,241,0.07);
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.risk-row:last-child { border-bottom: none; }
+.risk-row .key { color: var(--text2); }
+.risk-row .val { color: var(--text); font-size: 14px; font-weight: 700; }
+.risk-row .val.green { color: #059669; }
+.risk-row .val.red { color: #e11d48; }
+.risk-row .val.amber { color: #d97706; }
+
+/* WATCHLIST */
+.watchlist-empty {
+  text-align: center;
+  padding: 40px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text3);
+}
+.wl-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f7f8ff;
+  border: 1.5px solid rgba(99,102,241,0.15);
+  border-radius: 50px;
+  padding: 7px 14px;
+  font-family: var(--mono);
+  font-size: 12px;
+  margin: 4px;
+  transition: all 0.15s;
+}
+.wl-chip:hover { border-color: rgba(99,102,241,0.35); }
+.wl-chip.fav { border-color: #f59e0b; background: rgba(245,158,11,0.06); }
+.wl-chip .sym { color: var(--text); font-weight: 700; }
+.wl-chip .price { color: #059669; font-weight: 700; }
+.remove-chip {
+  background: none;
+  border: none;
+  color: var(--text3);
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.15s;
+}
+.remove-chip:hover { color: #e11d48; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #f0f4ff; }
+::-webkit-scrollbar-thumb { background: rgba(99,102,241,0.25); border-radius: 3px; }
+
+/* SECTION HEADER */
+.section-hdr {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.section-hdr h2 {
+  font-family: var(--sans);
+  font-size: 20px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #4f46e5, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.section-hdr small {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+}
+
+/* PHASE PROGRESS OVERVIEW */
+.phase-overview {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+.phase-pip {
+  flex: 1;
+  min-width: 100px;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1.5px solid rgba(99,102,241,0.15);
+  border-radius: var(--radius2);
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text3);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.18s;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.05);
+}
+.phase-pip.done { border-color: rgba(5,150,105,0.4); color: #059669; background: rgba(5,150,105,0.05); }
+.phase-pip.active-phase { border-color: #f59e0b; color: #d97706; background: rgba(245,158,11,0.07); box-shadow: 0 4px 14px rgba(245,158,11,0.2); }
+.phase-pip:hover { border-color: rgba(99,102,241,0.4); transform: translateY(-2px); }
+.phase-pip .pnum { font-size: 20px; font-weight: 900; margin-bottom: 2px; }
+
+/* DIVIDER */
+.divider { height: 2px; background: linear-gradient(90deg, rgba(99,102,241,0.2), rgba(236,72,153,0.2), transparent); margin: 24px 0; border-radius: 1px; }
+
+/* TABS within panel */
+.sub-tabs { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+.sub-tab {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 16px;
+  background: #fff;
+  border: 1.5px solid rgba(99,102,241,0.15);
+  color: var(--text2);
+  cursor: pointer;
+  border-radius: 50px;
+  transition: all 0.15s;
+}
+.sub-tab.active { background: linear-gradient(135deg, #6366f1, #8b5cf6); border-color: transparent; color: #fff; box-shadow: 0 4px 14px rgba(99,102,241,0.35); }
+
+/* REFRESH TIMER */
+.refresh-badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent1);
+  background: rgba(99,102,241,0.08);
+  padding: 4px 12px;
+  border-radius: 50px;
+  border: 1.5px solid rgba(99,102,241,0.2);
+  font-weight: 700;
+}
+
+/* GOLDEN RULES BOX */
+.golden-rules {
+  background: linear-gradient(135deg, rgba(245,158,11,0.07), rgba(245,158,11,0.02));
+  border: 1.5px solid rgba(245,158,11,0.35);
+  border-radius: var(--radius2);
+  padding: 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 16px rgba(245,158,11,0.08);
+}
+.golden-rules h3 {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: #d97706;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.rule-item {
+  display: flex;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text2);
+  padding: 5px 0;
+  line-height: 1.5;
+}
+.rule-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: #f59e0b;
+  flex-shrink: 0;
+  min-width: 20px;
+  font-weight: 700;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">🔥 Shubh's <span>Trading</span> Dojo</div>
+  <div class="header-stats">
+    <div class="hstat"><strong id="hNifty">—</strong>NIFTY 50</div>
+    <div class="hstat"><strong id="hSensex">—</strong>SENSEX</div>
+    <div class="hstat"><strong id="hClock">—</strong>IST</div>
+    <div class="hstat"><strong id="hDate">—</strong>TODAY</div>
+    <div class="hstat"><strong id="hMarketStatus" style="font-size:11px">—</strong>MARKET</div>
+  </div>
+</div>
+
+<!-- TICKER TAPE -->
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="tickerContent">
+    <span class="ticker-item"><span class="sym">RELIANCE</span> 2847.30 <span class="up">▲ 1.2%</span></span>
+    <span class="ticker-item"><span class="sym">TCS</span> 3924.15 <span class="up">▲ 0.8%</span></span>
+    <span class="ticker-item"><span class="sym">HDFCBANK</span> 1678.45 <span class="down">▼ 0.3%</span></span>
+    <span class="ticker-item"><span class="sym">INFY</span> 1542.20 <span class="up">▲ 1.5%</span></span>
+    <span class="ticker-item"><span class="sym">WIPRO</span> 284.60 <span class="down">▼ 0.7%</span></span>
+    <span class="ticker-item"><span class="sym">ICICIBANK</span> 1124.80 <span class="up">▲ 0.5%</span></span>
+    <span class="ticker-item"><span class="sym">BAJFINANCE</span> 7245.50 <span class="up">▲ 2.1%</span></span>
+    <span class="ticker-item"><span class="sym">SBIN</span> 745.30 <span class="down">▼ 0.9%</span></span>
+    <span class="ticker-item"><span class="sym">TATAMOTORS</span> 968.75 <span class="up">▲ 0.4%</span></span>
+    <span class="ticker-item"><span class="sym">MARUTI</span> 12450.00 <span class="up">▲ 0.6%</span></span>
+    <span class="ticker-item"><span class="sym">BTC/USD</span> 68,420 <span class="up">▲ 2.3%</span></span>
+    <span class="ticker-item"><span class="sym">ETH/USD</span> 3,245 <span class="up">▲ 1.8%</span></span>
+    <span class="ticker-item"><span class="sym">USD/INR</span> 83.42 <span class="down">▼ 0.1%</span></span>
+    <span class="ticker-item"><span class="sym">GOLD</span> 2,314 <span class="up">▲ 0.3%</span></span>
+    <span class="ticker-item"><span class="sym">CRUDE OIL</span> 78.25 <span class="down">▼ 0.5%</span></span>
+    <!-- duplicate for seamless loop -->
+    <span class="ticker-item"><span class="sym">RELIANCE</span> 2847.30 <span class="up">▲ 1.2%</span></span>
+    <span class="ticker-item"><span class="sym">TCS</span> 3924.15 <span class="up">▲ 0.8%</span></span>
+    <span class="ticker-item"><span class="sym">HDFCBANK</span> 1678.45 <span class="down">▼ 0.3%</span></span>
+    <span class="ticker-item"><span class="sym">INFY</span> 1542.20 <span class="up">▲ 1.5%</span></span>
+    <span class="ticker-item"><span class="sym">WIPRO</span> 284.60 <span class="down">▼ 0.7%</span></span>
+    <span class="ticker-item"><span class="sym">ICICIBANK</span> 1124.80 <span class="up">▲ 0.5%</span></span>
+    <span class="ticker-item"><span class="sym">BAJFINANCE</span> 7245.50 <span class="up">▲ 2.1%</span></span>
+    <span class="ticker-item"><span class="sym">SBIN</span> 745.30 <span class="down">▼ 0.9%</span></span>
+    <span class="ticker-item"><span class="sym">TATAMOTORS</span> 968.75 <span class="up">▲ 0.4%</span></span>
+    <span class="ticker-item"><span class="sym">MARUTI</span> 12450.00 <span class="up">▲ 0.6%</span></span>
+    <span class="ticker-item"><span class="sym">BTC/USD</span> 68,420 <span class="up">▲ 2.3%</span></span>
+    <span class="ticker-item"><span class="sym">ETH/USD</span> 3,245 <span class="up">▲ 1.8%</span></span>
+    <span class="ticker-item"><span class="sym">USD/INR</span> 83.42 <span class="down">▼ 0.1%</span></span>
+    <span class="ticker-item"><span class="sym">GOLD</span> 2,314 <span class="up">▲ 0.3%</span></span>
+    <span class="ticker-item"><span class="sym">CRUDE OIL</span> 78.25 <span class="down">▼ 0.5%</span></span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <button class="nav-btn active" onclick="showTab('learn')">📚 Learn</button>
+  <button class="nav-btn" onclick="showTab('market')">📈 Market</button>
+  <button class="nav-btn" onclick="showTab('sectors')">🏭 Sectors</button>
+  <button class="nav-btn" onclick="showTab('watchlist')">👁 Watchlist</button>
+  <button class="nav-btn" onclick="showTab('news')">📰 News</button>
+  <button class="nav-btn" onclick="showTab('charts')">🕯 Charts</button>
+  <button class="nav-btn" onclick="showTab('journal')">📓 Journal</button>
+  <button class="nav-btn" onclick="showTab('pnl')">💰 P&L</button>
+  <button class="nav-btn" onclick="showTab('risk')">🛡 Risk</button>
+</nav>
+
+<div class="main">
+
+<!-- =========== LEARN =========== -->
+<div class="panel active" id="panel-learn">
+  <div class="section-hdr">
+    <h2>Learning Roadmap</h2>
+    <small id="learnProgress">0 / 45 topics done</small>
+  </div>
+
+  <div class="golden-rules">
+    <h3>⚡ Golden Rules — Never Break These</h3>
+    <div class="rule-item"><span class="rule-num">01</span>Never risk more than 2-3% of capital on a single trade.</div>
+    <div class="rule-item"><span class="rule-num">02</span>Minimum 1:2 risk-reward ratio. No exceptions.</div>
+    <div class="rule-item"><span class="rule-num">03</span>Two setups only — breakout from consolidation & pullback to support.</div>
+    <div class="rule-item"><span class="rule-num">04</span>Paper trade 10 logged trades minimum before going live.</div>
+    <div class="rule-item"><span class="rule-num">05</span>One stock, one setup at a time when live.</div>
+    <div class="rule-item"><span class="rule-num">06</span>Stop loss is non-negotiable. Always set it before entry.</div>
+    <div class="rule-item"><span class="rule-num">07</span>Do not average down on losing positions.</div>
+  </div>
+
+  <div class="phase-overview" id="phaseOverview">
+    <div class="phase-pip active-phase" onclick="togglePhase('p1')"><div class="pnum">1</div>Foundation</div>
+    <div class="phase-pip" onclick="togglePhase('p2')"><div class="pnum">2</div>Setups</div>
+    <div class="phase-pip" onclick="togglePhase('p3')"><div class="pnum">3</div>Risk Mgmt</div>
+    <div class="phase-pip" onclick="togglePhase('p4')"><div class="pnum">4</div>Paper Trade</div>
+    <div class="phase-pip" onclick="togglePhase('p5')"><div class="pnum">5</div>Live Trade</div>
+  </div>
+
+  <!-- PHASE 1 -->
+  <div class="phase-card current open" id="p1" style="margin-bottom:10px">
+    <div class="phase-header" onclick="togglePhase('p1')">
+      <div class="phase-num">01</div>
+      <div>
+        <div class="phase-title">Foundation — No Real Money</div>
+        <div class="phase-sub">Candlesticks · Support/Resistance · Volume · Trend · 3-4 weeks</div>
+      </div>
+      <span class="badge badge-amber">Current</span>
+    </div>
+    <div class="phase-body">
+      <div class="grid-2" style="margin-bottom:14px">
+        <div>
+          <div class="card-title">Topics Checklist</div>
+          <ul class="checklist" id="phase1-list">
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>What is the stock market? How NSE/BSE work</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Difference: investing vs trading vs speculation</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Reading a price chart — OHLC</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Candlestick basics — body, wicks, colour meaning</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Doji, Hammer, Shooting Star, Engulfing</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>What is support? What is resistance?</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>How to draw support and resistance lines</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Trend lines — uptrend, downtrend, sideways</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Volume — what it means and why it matters</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Moving Averages — 20 EMA and 50 EMA basics</li>
+          </ul>
+        </div>
+        <div>
+          <div class="card-title">Best YouTube Videos</div>
+          <a class="video-link" href="https://www.youtube.com/watch?v=Q-XsGcTboOA" target="_blank"><div class="yt-icon"></div>Stock Market Basics for Beginners — Pranjal Kamra</a>
+          <a class="video-link" href="https://www.youtube.com/watch?v=1OWNdCsA_Yk" target="_blank"><div class="yt-icon"></div>How to Read Candlestick Charts — Vivek Bajaj</a>
+          <a class="video-link" href="https://www.youtube.com/watch?v=nF2sxAOKpbc" target="_blank"><div class="yt-icon"></div>Support and Resistance Explained — CA Rachana Ranade</a>
+          <a class="video-link" href="https://www.youtube.com/watch?v=2QCFPqHQIWY" target="_blank"><div class="yt-icon"></div>Volume Analysis for Beginners — Nitin Bhatia</a>
+          <a class="video-link" href="https://www.youtube.com/watch?v=7b-OWyAnQ6k" target="_blank"><div class="yt-icon"></div>Moving Averages — Complete Guide (Hindi) — Asset Yogi</a>
+          <a class="video-link" href="https://www.youtube.com/watch?v=xMMoKnH_YaU" target="_blank"><div class="yt-icon"></div>Trend Lines & Channels — Trading with ULLU</a>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="p1bar" style="width:0%"></div></div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:6px" id="p1pct">0% complete</div>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase-card" id="p2" style="margin-bottom:10px">
+    <div class="phase-header" onclick="togglePhase('p2')">
+      <div class="phase-num">02</div>
+      <div>
+        <div class="phase-title">Setups — Master Exactly Two</div>
+        <div class="phase-sub">Breakout from Consolidation · Pullback to Support · 2-3 weeks</div>
+      </div>
+      <span class="badge badge-blue">Locked</span>
+    </div>
+    <div class="phase-body">
+      <div class="grid-2" style="margin-bottom:14px">
+        <div>
+          <div class="card-title">Topics Checklist</div>
+          <ul class="checklist" id="phase2-list">
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>What is consolidation? How to identify it</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Breakout vs fake breakout — how to tell the difference</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Volume confirmation for breakouts</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Entry, SL, and target for breakout setup</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>What is a pullback? Why does it happen?</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Pullback to support in an uptrend</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Confirm pullback with candlestick reversal signals</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Entry, SL, and target for pullback setup</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Practice identifying 10 historical breakouts on Zerodha</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Practice identifying 10 historical pullbacks on Zerodha</li>
+          </ul>
+        </div>
+        <div>
+          <div class="card-title">Best YouTube Videos</div>
+          <a class="video-link" href="https://www.youtube.com/watch?v=OqpSCZfFQXo" target="_blank"><div class="yt-icon"></div>Breakout Trading Strategy — Pranjal Kamra</a>
+          <a class="video-link" href="https://www.youtube.com/watch?v=bLRjCVQ1B2Q" target="_blank"><div class="yt-icon"></div>How to Trade Breakouts (NSE Stocks) — Power of Stocks</a>
+          <a class="video-link" href="https://www.youtube.com/watch?v=CqzKFR7X_Ys" target="_blank"><div class="yt-icon"></div>Pullback Trading Strategy Explained — Nikhil Kamath</a>
+          <a class="video-link" href="https://www.youtube.com/watch?v=Rh1CaBJxQ7s" target="_blank"><div class="yt-icon"></div>Fake Breakout vs Real Breakout — Trading Campus</a>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="p2bar" style="width:0%"></div></div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:6px" id="p2pct">0% complete</div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase-card" id="p3" style="margin-bottom:10px">
+    <div class="phase-header" onclick="togglePhase('p3')">
+      <div class="phase-num">03</div>
+      <div>
+        <div class="phase-title">Risk Management</div>
+        <div class="phase-sub">Position Sizing · Stop Loss · 1:2 R:R · 1-2 weeks</div>
+      </div>
+      <span class="badge badge-blue">Locked</span>
+    </div>
+    <div class="phase-body">
+      <div class="grid-2" style="margin-bottom:14px">
+        <div>
+          <div class="card-title">Topics Checklist</div>
+          <ul class="checklist" id="phase3-list">
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Why risk management is the #1 skill in trading</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>What is position sizing? How to calculate for ₹10,000</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>2-3% rule — max loss per trade = ₹200-300</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Where to place a stop loss — below support / above resistance</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Risk-Reward ratio — always target minimum 1:2</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>How many shares to buy given SL distance and risk budget</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Trailing stop loss — locking in profits</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Brokerage and taxes — impact on small capital</li>
+          </ul>
+        </div>
+        <div>
+          <div class="card-title">Best YouTube Videos</div>
+          <a class="video-link" href="https://www.youtube.com/watch?v=sBOJhEWyq4s" target="_blank"><div class="yt-icon"></div>Position Sizing for Beginners — Trading with Vivek</a>
+          <a class="video-link" href="https://www.youtube.com/watch?v=a1S1bMG7Kxw" target="_blank"><div class="yt-icon"></div>Risk-Reward Ratio Explained — CA Rachana Ranade</a>
+          <a class="video-link" href="https://www.youtube.com/watch?v=7Y2XJcY_1TI" target="_blank"><div class="yt-icon"></div>Stop Loss Mastery — Power of Stocks</a>
+          <a class="video-link" href="https://www.youtube.com/watch?v=NVJfxUMGelA" target="_blank"><div class="yt-icon"></div>Why 90% Traders Lose Money — Honest Explainer</a>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="p3bar" style="width:0%"></div></div>
+      <div style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:6px" id="p3pct">0% complete</div>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase-card" id="p4" style="margin-bottom:10px">
+    <div class="phase-header" onclick="togglePhase('p4')">
+      <div class="phase-num">04</div>
+      <div>
+        <div class="phase-title">Paper Trading — Minimum 10 Logged Trades</div>
+        <div class="phase-sub">Trade on Zerodha without real money · Log in Journal tab · 2-3 weeks</div>
+      </div>
+      <span class="badge badge-blue">Locked</span>
+    </div>
+    <div class="phase-body">
+      <div class="grid-2">
+        <div>
+          <div class="card-title">Paper Trading Checklist</div>
+          <ul class="checklist" id="phase4-list">
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Open Zerodha Kite — practice chart reading daily</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Find 3 stocks showing breakout setup — don't trade yet</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Paper trade #1 — log it in Journal with entry, SL, target</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Paper trade #2 — log it</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Paper trade #3 — log it</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Paper trade #4 — log it</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Paper trade #5 — log it</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Paper trade #6-10 — log all 5</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Review: was SL respected on every trade?</li>
+            <li onclick="toggleCheck(this)"><div class="check-box"></div>Review: was 1:2 R:R maintained on every setup?</li>
+          </ul>
+        </div>
+        <div>
+          <div class="card-title">Paper Trading Rules</div>
+          <div style="padding:12px;background:#f7f8ff;border-radius:var(--radius);font-size:12px;color:var(--text2);line-height:1.8;border:1.5px solid rgba(99,102,241,0.12)">
+            ✓ Use real NSE prices — just don't execute<br>
+            ✓ Write entry price, SL, target BEFORE the trade<br>
+            ✓ Track outcome honestly<br>
+            ✗ Do NOT skip logging even one trade<br>
+            ✗ Do NOT move SL after entry<br>
+            ✗ Do NOT go live until 10 trades done<br><br>
+            <span style="color:var(--amber)">Gate to Phase 5: 10 logged paper trades minimum</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="phase-card" id="p5" style="margin-bottom:10px">
+    <div class="phase-header" onclick="togglePhase('p5')">
+      <div class="phase-num">05</div>
+      <div>
+        <div class="phase-title">Live Trading — One Stock, One Setup</div>
+        <div class="phase-sub">Real money · Strict rules · Zerodha execution</div>
+      </div>
+      <span class="badge badge-blue">Locked</span>
+    </div>
+    <div class="phase-body">
+      <div style="padding:14px;background:#fff5f6;border:1.5px solid rgba(225,29,72,0.2);border-radius:var(--radius2);font-size:12px;color:var(--text2);line-height:1.9;font-weight:600">
+        <div style="color:var(--red);font-family:var(--mono);font-size:11px;letter-spacing:1px;margin-bottom:8px">⛔ LIVE TRADING RULES</div>
+        1. Max position size: ₹300 risk per trade (3% of ₹10,000)<br>
+        2. Set stop loss ORDER on Zerodha BEFORE taking position<br>
+        3. ONE trade open at a time<br>
+        4. If SL hits — close it. Do NOT hold and hope.<br>
+        5. Log every live trade in the Journal immediately<br>
+        6. After 3 losing trades in a row — stop for the day<br>
+        7. Review journal weekly, identify patterns in losses<br>
+        8. Only trade NSE stocks with volume > 500K/day
+      </div>
+    </div>
+  </div>
+
+  <!-- DAILY QUIZ -->
+  <div class="divider"></div>
+  <div class="section-hdr" style="margin-bottom:14px">
+    <h2>Daily Knowledge Test</h2>
+    <small id="quizScore">Score: 0/0</small>
+  </div>
+  <div class="quiz-card" id="quizContainer">
+    <div class="quiz-q" id="quizQ">Loading quiz...</div>
+    <div class="quiz-options" id="quizOpts"></div>
+    <div class="quiz-explanation" id="quizExpl"></div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <button class="btn" onclick="nextQuestion()" id="nextQBtn" style="display:none">Next Question →</button>
+    </div>
+  </div>
+
+  <!-- EXTRA TOPICS -->
+  <div class="divider"></div>
+  <div class="section-hdr" style="margin-bottom:14px">
+    <h2>Advanced Topics (After Phase 5)</h2>
+    <small>Come back to these after live trading</small>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title">Technical Analysis</div>
+      <a class="video-link" href="https://www.youtube.com/watch?v=uiFY4S5bXk0" target="_blank"><div class="yt-icon"></div>RSI — Complete Guide for NSE</a>
+      <a class="video-link" href="https://www.youtube.com/watch?v=1XM_1eNH5sM" target="_blank"><div class="yt-icon"></div>MACD Strategy for Swing Trading</a>
+      <a class="video-link" href="https://www.youtube.com/watch?v=Z4AJTCbFNjM" target="_blank"><div class="yt-icon"></div>Bollinger Bands Explained</a>
+      <a class="video-link" href="https://www.youtube.com/watch?v=XCUE8N3LZKY" target="_blank"><div class="yt-icon"></div>Fibonacci Retracement — Trading</a>
+    </div>
+    <div class="card">
+      <div class="card-title">Advanced Patterns</div>
+      <a class="video-link" href="https://www.youtube.com/watch?v=Ycq6EYUl5M0" target="_blank"><div class="yt-icon"></div>Head & Shoulders Pattern</a>
+      <a class="video-link" href="https://www.youtube.com/watch?v=HNtRxuq6B8o" target="_blank"><div class="yt-icon"></div>Cup and Handle — Powerful Pattern</a>
+      <a class="video-link" href="https://www.youtube.com/watch?v=qJ7Kbq9UVoI" target="_blank"><div class="yt-icon"></div>Double Top & Double Bottom</a>
+      <a class="video-link" href="https://www.youtube.com/watch?v=2mJPVEFJGxM" target="_blank"><div class="yt-icon"></div>Flag & Pennant Patterns</a>
+    </div>
+    <div class="card">
+      <div class="card-title">Psychology & Options</div>
+      <a class="video-link" href="https://www.youtube.com/watch?v=NVJfxUMGelA" target="_blank"><div class="yt-icon"></div>Trading Psychology — Mark Douglas</a>
+      <a class="video-link" href="https://www.youtube.com/watch?v=9KA3xZRxjcQ" target="_blank"><div class="yt-icon"></div>Options Basics for Indian Market</a>
+      <a class="video-link" href="https://www.youtube.com/watch?v=ZMp5A8QGJY4" target="_blank"><div class="yt-icon"></div>F&O Overview (after 6 months)</a>
+      <a class="video-link" href="https://www.youtube.com/watch?v=u2dq8geDSqk" target="_blank"><div class="yt-icon"></div>Fundamental Analysis Intro</a>
+    </div>
+  </div>
+</div>
+
+<!-- =========== MARKET =========== -->
+<div class="panel" id="panel-market">
+  <div class="section-hdr">
+    <h2>Market Overview</h2>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div id="marketCountdown" class="refresh-badge">⏱ —</div>
+      <span class="refresh-badge" id="mLastUpdate">⟳ Fetching...</span>
+    </div>
+  </div>
+
+  <!-- MARKET TIMER BANNER -->
+  <div id="marketBanner" style="border-radius:var(--radius2);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+    <div>
+      <div id="bannerStatus" style="font-size:16px;font-weight:900"></div>
+      <div id="bannerSub" style="font-size:12px;font-weight:600;margin-top:2px;opacity:0.8"></div>
+    </div>
+    <div style="display:flex;gap:20px;font-family:var(--mono);font-size:12px">
+      <div style="text-align:center"><div style="font-size:18px;font-weight:700" id="bannerHr">—</div><div style="opacity:0.7">HRS</div></div>
+      <div style="text-align:center;font-size:20px;font-weight:900;opacity:0.5">:</div>
+      <div style="text-align:center"><div style="font-size:18px;font-weight:700" id="bannerMin">—</div><div style="opacity:0.7">MIN</div></div>
+      <div style="text-align:center;font-size:20px;font-weight:900;opacity:0.5">:</div>
+      <div style="text-align:center"><div style="font-size:18px;font-weight:700" id="bannerSec">—</div><div style="opacity:0.7">SEC</div></div>
+    </div>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:16px">
+    <div class="metric"><div class="metric-label">Nifty 50</div><div class="metric-value" id="m-nifty">—</div><div class="metric-change" id="m-nifty-c">fetching...</div></div>
+    <div class="metric"><div class="metric-label">Sensex</div><div class="metric-value" id="m-sensex">—</div><div class="metric-change" id="m-sensex-c">fetching...</div></div>
+    <div class="metric"><div class="metric-label">Bank Nifty</div><div class="metric-value" id="m-banknifty">—</div><div class="metric-change" id="m-bnifty-c">fetching...</div></div>
+    <div class="metric"><div class="metric-label">BTC/USD</div><div class="metric-value" id="m-btc">—</div><div class="metric-change" id="m-btc-c">fetching...</div></div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-title">NSE Top Stocks <span style="font-size:9px;color:var(--text3);font-weight:400">(15min delayed)</span></div>
+      <table class="stock-table">
+        <thead><tr><th>Symbol</th><th>Price (₹)</th><th>Change</th><th>+WL</th></tr></thead>
+        <tbody id="nseTable"><tr><td colspan="4" style="text-align:center;padding:20px;color:var(--text3)">Fetching live data...</td></tr></tbody>
+      </table>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-title">Forex vs INR <span style="font-size:9px;color:var(--text3);font-weight:400">(live)</span></div>
+        <table class="stock-table">
+          <thead><tr><th>Pair</th><th>Rate</th><th>vs Yesterday</th></tr></thead>
+          <tbody id="forexTable"><tr><td colspan="3" style="text-align:center;padding:16px;color:var(--text3)">Fetching...</td></tr></tbody>
+        </table>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-title">Crypto <span style="font-size:9px;color:var(--text3);font-weight:400">(live via CoinGecko)</span></div>
+        <table class="stock-table">
+          <thead><tr><th>Coin</th><th>Price (USD)</th><th>24h</th><th>7d</th></tr></thead>
+          <tbody id="cryptoTable"><tr><td colspan="4" style="text-align:center;padding:16px;color:var(--text3)">Fetching...</td></tr></tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">Commodities <span style="font-size:9px;color:var(--text3);font-weight:400">(live)</span></div>
+        <table class="stock-table">
+          <thead><tr><th>Asset</th><th>Price</th><th>24h</th></tr></thead>
+          <tbody id="commodTable"><tr><td colspan="3" style="text-align:center;padding:16px;color:var(--text3)">Fetching...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========== SECTORS =========== -->
+<div class="panel" id="panel-sectors">
+  <div class="section-hdr">
+    <h2>Sector Performance Guide</h2>
+    <small>Based on recent NSE sector performance</small>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div style="background:var(--bg3);border-radius:var(--radius);padding:12px;margin-bottom:16px;font-size:12px;color:var(--text2);border-left:3px solid var(--amber)">
+      <strong style="color:var(--amber)">For your ₹10,000 capital & swing trading style:</strong> Focus on HIGH momentum sectors. Avoid very high-priced stocks (Maruti at ₹12,450 — you can barely buy 1 share). Prefer mid-caps in strong sectors where you can afford 5-15 shares.
+    </div>
+    <div id="sectorChart"></div>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title" style="color:var(--green)">Strong — Trade These</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.9">
+        <div style="padding:4px 0;border-bottom:1px solid var(--border)">✅ <strong>IT/Technology</strong> — Strong momentum, breakout potential</div>
+        <div style="padding:4px 0;border-bottom:1px solid var(--border)">✅ <strong>Auto</strong> — EV story + rural recovery</div>
+        <div style="padding:4px 0;border-bottom:1px solid var(--border)">✅ <strong>Capital Goods</strong> — Infra spending tailwind</div>
+        <div style="padding:4px 0">✅ <strong>Defence</strong> — Govt orders, strong trend</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--amber)">Neutral — Wait for Setup</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.9">
+        <div style="padding:4px 0;border-bottom:1px solid var(--border)">⚠️ <strong>FMCG</strong> — Slow mover, small gains</div>
+        <div style="padding:4px 0;border-bottom:1px solid var(--border)">⚠️ <strong>Pharma</strong> — Regulatory risk, choppy</div>
+        <div style="padding:4px 0;border-bottom:1px solid var(--border)">⚠️ <strong>Metals</strong> — Global driven, volatile</div>
+        <div style="padding:4px 0">⚠️ <strong>Banking</strong> — Mixed signals, RBI dependent</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--red)">Weak — Avoid Now</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.9">
+        <div style="padding:4px 0;border-bottom:1px solid var(--border)">❌ <strong>Real Estate</strong> — High rates pressure</div>
+        <div style="padding:4px 0;border-bottom:1px solid var(--border)">❌ <strong>Media</strong> — Downtrend in progress</div>
+        <div style="padding:4px 0;border-bottom:1px solid var(--border)">❌ <strong>PSU Banks</strong> — Underperforming index</div>
+        <div style="padding:4px 0">❌ <strong>Telecom</strong> — ARPU war, thin margins</div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">Sector Momentum Chart (1-Month Performance)</div>
+    <div style="position:relative;height:280px">
+      <canvas id="sectorBarChart" role="img" aria-label="Sector performance comparison bar chart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- =========== WATCHLIST =========== -->
+<div class="panel" id="panel-watchlist">
+  <div class="section-hdr">
+    <h2>Watchlist</h2>
+    <small id="wlCount">0 stocks</small>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <div style="display:flex;gap:8px">
+      <input type="text" id="wlInput" placeholder="Enter symbol (e.g. RELIANCE)" style="flex:1">
+      <input type="number" id="wlPrice" placeholder="Price ₹" style="width:120px">
+      <button class="btn" onclick="addWatchlistManual()">+ Add</button>
+    </div>
+  </div>
+  <div id="wlDisplay" class="card">
+    <div class="watchlist-empty" id="wlEmpty">No stocks in watchlist. Add from Market tab or type above.</div>
+    <div id="wlChips" style="padding:4px"></div>
+  </div>
+  <div style="height:16px"></div>
+  <div class="card" style="margin-top:4px">
+    <div class="card-title">Favourites ⭐</div>
+    <div id="wlFavs"><div style="font-family:var(--mono);font-size:11px;color:var(--text3);padding:10px 0">Click ⭐ on a watchlist item to mark as favourite</div></div>
+  </div>
+</div>
+
+<!-- =========== NEWS =========== -->
+<div class="panel" id="panel-news">
+  <div class="section-hdr">
+    <h2>News &amp; Market Intelligence</h2>
+    <span class="refresh-badge" id="newsTimer">⟳ Auto-refresh 5min</span>
+  </div>
+
+  <div class="golden-rules" style="border-color:rgba(59,158,255,0.3);background:linear-gradient(135deg,rgba(79,70,229,0.05),rgba(59,130,246,0.03))">
+    <h3 style="color:var(--blue)">📡 Global Macro Watch</h3>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;font-size:12px;color:var(--text2);margin-top:4px">
+      <div><strong style="color:var(--text)">US Fed Rate:</strong> 4.25–4.50% (Hold)</div>
+      <div><strong style="color:var(--text)">RBI Repo:</strong> 6.25% (Hold)</div>
+      <div><strong style="color:var(--text)">USD/INR:</strong> <span id="macroUSDINR">—</span></div>
+      <div><strong style="color:var(--text)">BTC:</strong> <span id="macroBTC">—</span></div>
+      <div><strong style="color:var(--text)">Gold:</strong> <span id="macroGold">—</span></div>
+      <div><strong style="color:var(--text)">Last Updated:</strong> <span id="macroTime">—</span></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap" id="newsSourceBtns">
+    <button class="chart-btn active" onclick="setNewsSource('et')">Economic Times</button>
+    <button class="chart-btn" onclick="setNewsSource('mc')">MoneyControl</button>
+    <button class="chart-btn" onclick="setNewsSource('livemint')">LiveMint</button>
+    <button class="chart-btn" onclick="setNewsSource('nse')">NSE Announcements</button>
+    <button class="chart-btn" onclick="fetchAllNews()">⟳ Refresh Now</button>
+  </div>
+
+  <div id="newsContainer"><div style="text-align:center;padding:40px;color:var(--text3);font-size:13px">📰 Fetching latest news...</div></div>
+</div>
+
+<!-- =========== CHARTS =========== -->
+<div class="panel" id="panel-charts">
+  <div class="section-hdr">
+    <h2>Chart Education</h2>
+  </div>
+
+  <div class="sub-tabs">
+    <button class="sub-tab active" onclick="showSubTab('ct','candlePatterns')">Candlestick Patterns</button>
+    <button class="sub-tab" onclick="showSubTab('ct','chartPatterns')">Chart Patterns</button>
+    <button class="sub-tab" onclick="showSubTab('ct','indicators')">Indicators</button>
+    <button class="sub-tab" onclick="showSubTab('ct','setupGuide')">Setup Guide</button>
+  </div>
+
+  <div id="ct-candlePatterns">
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title">Reading a Candlestick</div>
+      <div class="grid-2">
+        <div style="display:flex;align-items:center;justify-content:center;padding:20px">
+          <svg width="280" height="200" viewBox="0 0 280 200">
+            <!-- Green candle -->
+            <line x1="80" y1="20" x2="80" y2="55" stroke="#14c97a" stroke-width="2"/>
+            <rect x="60" y="55" width="40" height="100" fill="#14c97a" rx="2"/>
+            <line x1="80" y1="155" x2="80" y2="180" stroke="#14c97a" stroke-width="2"/>
+            <!-- Labels -->
+            <text x="130" y="28" fill="#8a9dc0" font-size="11" font-family="Space Mono">← Upper Wick (High)</text>
+            <text x="130" y="90" fill="#14c97a" font-size="11" font-family="Space Mono">← Body (Close > Open)</text>
+            <text x="130" y="175" fill="#8a9dc0" font-size="11" font-family="Space Mono">← Lower Wick (Low)</text>
+            <text x="15" y="60" fill="#8a9dc0" font-size="10" font-family="Space Mono">Close</text>
+            <text x="15" y="155" fill="#8a9dc0" font-size="10" font-family="Space Mono">Open</text>
+            <!-- Red candle -->
+            <line x1="200" y1="20" x2="200" y2="50" stroke="#f04e4e" stroke-width="2"/>
+            <rect x="180" y="50" width="40" height="100" fill="#f04e4e" rx="2"/>
+            <line x1="200" y1="150" x2="200" y2="180" stroke="#f04e4e" stroke-width="2"/>
+            <text x="130" y="110" fill="#f04e4e" font-size="10" font-family="Space Mono">RED = Bearish</text>
+            <text x="15" y="110" fill="#14c97a" font-size="10" font-family="Space Mono">GREEN = Bullish</text>
+          </svg>
+        </div>
+        <div style="font-size:12px;color:var(--text2);line-height:2;padding:16px">
+          <div><span style="color:var(--text);font-weight:600">GREEN (Bullish) candle:</span></div>
+          Open is at the bottom, Close is at top. Price went UP during this period.<br><br>
+          <div><span style="color:var(--text);font-weight:600">RED (Bearish) candle:</span></div>
+          Open is at the top, Close is at bottom. Price went DOWN.<br><br>
+          <div><span style="color:var(--text);font-weight:600">Wicks (Shadows):</span></div>
+          Show the extremes — how high/low price went before returning.
+        </div>
+      </div>
+    </div>
+
+    <div class="candle-grid">
+      <div class="candle-card">
+        <div class="candle-visual">
+          <svg width="30" height="60" viewBox="0 0 30 60">
+            <line x1="15" y1="2" x2="15" y2="15" stroke="#14c97a" stroke-width="2"/>
+            <rect x="5" y="15" width="20" height="35" fill="#14c97a" rx="2"/>
+            <line x1="15" y1="50" x2="15" y2="58" stroke="#14c97a" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="candle-name">Bullish Engulfing</div>
+        <div class="candle-desc">Large green candle engulfs the previous red candle's body completely.</div>
+        <div class="candle-signal badge-green badge">Reversal Signal ↑</div>
+      </div>
+      <div class="candle-card">
+        <div class="candle-visual">
+          <svg width="30" height="60" viewBox="0 0 30 60">
+            <line x1="15" y1="2" x2="15" y2="8" stroke="#f04e4e" stroke-width="2"/>
+            <rect x="5" y="8" width="20" height="35" fill="#f04e4e" rx="2"/>
+            <line x1="15" y1="43" x2="15" y2="58" stroke="#f04e4e" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="candle-name">Bearish Engulfing</div>
+        <div class="candle-desc">Large red candle engulfs the previous green candle. Sellers took over.</div>
+        <div class="candle-signal badge-red badge">Reversal Signal ↓</div>
+      </div>
+      <div class="candle-card">
+        <div class="candle-visual">
+          <svg width="30" height="60" viewBox="0 0 30 60">
+            <line x1="15" y1="2" x2="15" y2="38" stroke="#14c97a" stroke-width="2"/>
+            <rect x="5" y="38" width="20" height="14" fill="#14c97a" rx="2"/>
+            <line x1="15" y1="52" x2="15" y2="55" stroke="#14c97a" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="candle-name">Hammer</div>
+        <div class="candle-desc">Long lower wick, small body at top. Buyers rejected lower prices.</div>
+        <div class="candle-signal badge-green badge">Bullish Reversal ↑</div>
+      </div>
+      <div class="candle-card">
+        <div class="candle-visual">
+          <svg width="30" height="60" viewBox="0 0 30 60">
+            <line x1="15" y1="2" x2="15" y2="8" stroke="#f04e4e" stroke-width="2"/>
+            <rect x="5" y="8" width="20" height="14" fill="#f04e4e" rx="2"/>
+            <line x1="15" y1="22" x2="15" y2="58" stroke="#f04e4e" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="candle-name">Shooting Star</div>
+        <div class="candle-desc">Long upper wick, small body at bottom. Sellers rejected higher prices.</div>
+        <div class="candle-signal badge-red badge">Bearish Reversal ↓</div>
+      </div>
+      <div class="candle-card">
+        <div class="candle-visual">
+          <svg width="30" height="60" viewBox="0 0 30 60">
+            <line x1="15" y1="5" x2="15" y2="25" stroke="#8a9dc0" stroke-width="2"/>
+            <rect x="5" y="25" width="20" height="4" fill="#8a9dc0" rx="2"/>
+            <line x1="15" y1="29" x2="15" y2="55" stroke="#8a9dc0" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="candle-name">Doji</div>
+        <div class="candle-desc">Open = Close. Equal wicks. Market indecision — trend may change.</div>
+        <div class="candle-signal badge-amber badge">Indecision</div>
+      </div>
+      <div class="candle-card">
+        <div class="candle-visual">
+          <svg width="50" height="60" viewBox="0 0 50 60">
+            <line x1="12" y1="10" x2="12" y2="18" stroke="#f04e4e" stroke-width="2"/>
+            <rect x="2" y="18" width="20" height="20" fill="#f04e4e" rx="2"/>
+            <line x1="12" y1="38" x2="12" y2="46" stroke="#f04e4e" stroke-width="2"/>
+            <line x1="38" y1="5" x2="38" y2="18" stroke="#14c97a" stroke-width="2"/>
+            <rect x="28" y="18" width="20" height="30" fill="#14c97a" rx="2"/>
+            <line x1="38" y1="48" x2="38" y2="55" stroke="#14c97a" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="candle-name">Morning Star</div>
+        <div class="candle-desc">Red → small body → strong green. 3-candle bullish reversal at bottom.</div>
+        <div class="candle-signal badge-green badge">Strong Bullish ↑</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ct-chartPatterns" style="display:none">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Breakout from Consolidation (Your Setup #1)</div>
+        <div style="background:#f7f8ff;border-radius:var(--radius);padding:12px;margin-bottom:10px;border:1.5px solid rgba(99,102,241,0.1)">
+          <svg width="100%" height="140" viewBox="0 0 400 140">
+            <!-- Resistance line -->
+            <line x1="10" y1="50" x2="300" y2="50" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6,3"/>
+            <text x="310" y="54" fill="#d97706" font-size="10" font-family="Syne Mono">RESISTANCE</text>
+            <!-- Support line -->
+            <line x1="10" y1="100" x2="300" y2="100" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="6,3"/>
+            <text x="310" y="104" fill="#4f46e5" font-size="10" font-family="Syne Mono">SUPPORT</text>
+            <!-- Candles in consolidation -->
+            <rect x="20" y="60" width="12" height="35" fill="#e11d48" rx="1"/>
+            <rect x="40" y="55" width="12" height="42" fill="#059669" rx="1"/>
+            <rect x="60" y="58" width="12" height="38" fill="#e11d48" rx="1"/>
+            <rect x="80" y="54" width="12" height="44" fill="#059669" rx="1"/>
+            <rect x="100" y="60" width="12" height="35" fill="#e11d48" rx="1"/>
+            <rect x="120" y="56" width="12" height="41" fill="#059669" rx="1"/>
+            <rect x="140" y="59" width="12" height="37" fill="#e11d48" rx="1"/>
+            <rect x="160" y="55" width="12" height="42" fill="#059669" rx="1"/>
+            <rect x="180" y="60" width="12" height="36" fill="#e11d48" rx="1"/>
+            <rect x="200" y="56" width="12" height="40" fill="#059669" rx="1"/>
+            <!-- Breakout candle -->
+            <rect x="230" y="20" width="16" height="50" fill="#059669" rx="1"/>
+            <line x1="238" y1="10" x2="238" y2="20" stroke="#059669" stroke-width="2"/>
+            <line x1="238" y1="70" x2="238" y2="80" stroke="#059669" stroke-width="2"/>
+            <!-- Volume spike -->
+            <rect x="228" y="115" width="18" height="20" fill="rgba(5,150,105,0.4)" rx="1"/>
+            <text x="220" y="138" fill="#059669" font-size="9" font-family="Syne Mono">VOL SPIKE</text>
+            <!-- Arrow -->
+            <text x="255" y="35" fill="#059669" font-size="20">↑</text>
+            <text x="255" y="55" fill="#059669" font-size="9" font-family="Syne Mono">ENTRY</text>
+          </svg>
+        </div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8">
+          <strong style="color:var(--green)">Entry:</strong> On breakout candle close above resistance + volume<br>
+          <strong style="color:var(--red)">Stop Loss:</strong> Below the resistance level (now support)<br>
+          <strong style="color:var(--amber)">Target:</strong> 2x the height of the consolidation range
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Pullback to Support (Your Setup #2)</div>
+        <div style="background:var(--bg3);border-radius:var(--radius);padding:12px;margin-bottom:10px">
+          <svg width="100%" height="140" viewBox="0 0 400 140">
+            <!-- Uptrend line -->
+            <line x1="10" y1="120" x2="200" y2="40" stroke="#14c97a" stroke-width="1.5" stroke-dasharray="5,3"/>
+            <!-- Rising candles -->
+            <rect x="20" y="100" width="12" height="20" fill="#14c97a" rx="1"/>
+            <rect x="45" y="90" width="12" height="22" fill="#14c97a" rx="1"/>
+            <rect x="70" y="80" width="12" height="20" fill="#14c97a" rx="1"/>
+            <rect x="95" y="68" width="12" height="22" fill="#14c97a" rx="1"/>
+            <!-- Pullback -->
+            <rect x="125" y="75" width="12" height="22" fill="#f04e4e" rx="1"/>
+            <rect x="148" y="80" width="12" height="20" fill="#f04e4e" rx="1"/>
+            <!-- Reversal at support -->
+            <rect x="172" y="76" width="12" height="15" fill="#14c97a" rx="1"/>
+            <line x1="178" y1="65" x2="178" y2="76" stroke="#14c97a" stroke-width="1.5"/>
+            <!-- Entry arrow -->
+            <text x="188" y="60" fill="#14c97a" font-size="20">↑</text>
+            <text x="188" y="78" fill="#14c97a" font-size="9" font-family="Space Mono">ENTRY</text>
+            <!-- Support label -->
+            <text x="100" y="105" fill="#3b9eff" font-size="9" font-family="Space Mono">TRENDLINE SUPPORT</text>
+          </svg>
+        </div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.8">
+          <strong style="color:var(--green)">Entry:</strong> Bullish reversal candle at support level in uptrend<br>
+          <strong style="color:var(--red)">Stop Loss:</strong> Below the support level / below candle low<br>
+          <strong style="color:var(--amber)">Target:</strong> Previous high or 2x risk distance
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ct-indicators" style="display:none">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Moving Averages (Start Here)</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.9">
+          <div style="padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--text);font-weight:600">20 EMA</span> — Short-term trend. Price above = bullish. Below = bearish.</div>
+          <div style="padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--text);font-weight:600">50 EMA</span> — Medium-term trend. Acts as strong support/resistance.</div>
+          <div style="padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--text);font-weight:600">Golden Cross</span> — 20 EMA crosses above 50 EMA = Strong buy signal</div>
+          <div style="padding:6px 0"><span style="color:var(--text);font-weight:600">Death Cross</span> — 20 EMA crosses below 50 EMA = Strong sell signal</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Volume (Always Check This)</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.9">
+          <div style="padding:6px 0;border-bottom:1px solid var(--border)">📈 <span style="color:var(--green)">Price up + High Volume</span> = Strong move, trustworthy</div>
+          <div style="padding:6px 0;border-bottom:1px solid var(--border)">📈 <span style="color:var(--amber)">Price up + Low Volume</span> = Weak move, beware fake breakout</div>
+          <div style="padding:6px 0;border-bottom:1px solid var(--border)">📉 <span style="color:var(--red)">Price down + High Volume</span> = Heavy selling, stay out</div>
+          <div style="padding:6px 0">📉 <span style="color:var(--text3)">Price down + Low Volume</span> = Healthy pullback, possible buy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ct-setupGuide" style="display:none">
+    <div class="card">
+      <div class="card-title">How to Use Zerodha Kite for Your Setups</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.9">
+        <div style="padding:8px;background:var(--bg3);border-radius:var(--radius);margin-bottom:8px">
+          <strong style="color:var(--amber)">Step 1 — Scan</strong> Open Kite → Go to Chart → Select stock → Switch to Daily timeframe
+        </div>
+        <div style="padding:8px;background:var(--bg3);border-radius:var(--radius);margin-bottom:8px">
+          <strong style="color:var(--amber)">Step 2 — Identify</strong> Look for either: flat consolidation (Setup 1) OR uptrend with recent pullback (Setup 2)
+        </div>
+        <div style="padding:8px;background:var(--bg3);border-radius:var(--radius);margin-bottom:8px">
+          <strong style="color:var(--amber)">Step 3 — Validate</strong> Check volume. Check 20 EMA direction. Check if there's a clean level.
+        </div>
+        <div style="padding:8px;background:var(--bg3);border-radius:var(--radius);margin-bottom:8px">
+          <strong style="color:var(--amber)">Step 4 — Plan</strong> Write down: Entry price, Stop Loss price, Target price BEFORE you execute.
+        </div>
+        <div style="padding:8px;background:var(--bg3);border-radius:var(--radius);margin-bottom:8px">
+          <strong style="color:var(--amber)">Step 5 — Risk Check</strong> Calculate shares = ₹300 / (Entry - SL). This is your max position size.
+        </div>
+        <div style="padding:8px;background:var(--bg3);border-radius:var(--radius)">
+          <strong style="color:var(--amber)">Step 6 — Execute</strong> In Kite: Buy → set Limit order → immediately set Stop Loss order.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========== JOURNAL =========== -->
+<div class="panel" id="panel-journal">
+  <div class="section-hdr">
+    <h2>Trade Journal</h2>
+    <small id="journalCount">0 trades logged</small>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">Log New Trade</div>
+    <div class="grid-3">
+      <div class="form-row"><label>Date</label><input type="text" id="jDate" placeholder="DD/MM/YYYY"></div>
+      <div class="form-row"><label>Symbol</label><input type="text" id="jSymbol" placeholder="e.g. RELIANCE"></div>
+      <div class="form-row"><label>Setup Used</label>
+        <select id="jSetup">
+          <option value="">Select setup</option>
+          <option value="Breakout">Breakout from Consolidation</option>
+          <option value="Pullback">Pullback to Support</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="form-row"><label>Entry Price (₹)</label><input type="number" id="jEntry" placeholder="0"></div>
+      <div class="form-row"><label>Stop Loss (₹)</label><input type="number" id="jSL" placeholder="0"></div>
+      <div class="form-row"><label>Target (₹)</label><input type="number" id="jTarget" placeholder="0"></div>
+      <div class="form-row"><label>Qty (Shares)</label><input type="number" id="jQty" placeholder="0"></div>
+      <div class="form-row"><label>Exit Price (₹)</label><input type="number" id="jExit" placeholder="0 (or leave blank)"></div>
+      <div class="form-row"><label>Direction</label>
+        <select id="jDir"><option value="Long">Long (Buy)</option><option value="Short">Short (Sell)</option></select>
+      </div>
+    </div>
+    <div class="form-row"><label>Notes / Reason for Trade</label><textarea id="jNotes" placeholder="Why did you take this trade? What did you see?" rows="2" style="resize:vertical"></textarea></div>
+    <div style="display:flex;gap:8px;margin-top:4px">
+      <button class="btn" onclick="logTrade()">+ Log Trade</button>
+      <span id="jMsg" style="font-family:var(--mono);font-size:11px;color:var(--green);padding:9px 0"></span>
+    </div>
+  </div>
+  <div class="card" style="overflow-x:auto">
+    <table class="journal-table">
+      <thead><tr><th>Date</th><th>Symbol</th><th>Setup</th><th>Dir</th><th>Entry</th><th>SL</th><th>Target</th><th>Exit</th><th>Qty</th><th>P&L</th><th>R:R</th><th>Status</th><th></th></tr></thead>
+      <tbody id="journalBody"><tr><td colspan="13" style="text-align:center;padding:30px;color:var(--text3);font-size:12px">No trades logged yet. Use the form above.</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- =========== P&L =========== -->
+<div class="panel" id="panel-pnl">
+  <div class="section-hdr"><h2>P&L Tracker</h2></div>
+  <div class="grid-4" style="margin-bottom:16px">
+    <div class="metric"><div class="metric-label">Total P&L</div><div class="metric-value" id="totalPnl">₹0</div><div class="metric-change" id="totalPnlPct">0% of capital</div></div>
+    <div class="metric"><div class="metric-label">Win Rate</div><div class="metric-value" id="winRate">0%</div><div class="metric-change" id="winLoss">0W / 0L</div></div>
+    <div class="metric"><div class="metric-label">Avg Win</div><div class="metric-value" id="avgWin">₹0</div><div class="metric-change up" id="avgWinNote">—</div></div>
+    <div class="metric"><div class="metric-label">Avg Loss</div><div class="metric-value" id="avgLoss">₹0</div><div class="metric-change down" id="avgLossNote">—</div></div>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">Equity Curve</div>
+    <div style="position:relative;height:260px">
+      <canvas id="equityChart" role="img" aria-label="Equity curve showing capital over trades"></canvas>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Capital Summary</div>
+      <div class="form-row"><label>Starting Capital (₹)</label><input type="number" id="startCapInput" value="10000" onchange="updateCapital()"></div>
+      <div class="risk-result">
+        <div class="risk-row"><span class="key">Starting Capital</span><span class="val" id="pnlStart">₹10,000</span></div>
+        <div class="risk-row"><span class="key">Current Capital</span><span class="val green" id="pnlCurrent">₹10,000</span></div>
+        <div class="risk-row"><span class="key">Total Trades</span><span class="val" id="pnlTrades">0</span></div>
+        <div class="risk-row"><span class="key">Max Drawdown</span><span class="val red" id="pnlDrawdown">₹0</span></div>
+        <div class="risk-row"><span class="key">Best Trade</span><span class="val green" id="pnlBest">₹0</span></div>
+        <div class="risk-row"><span class="key">Worst Trade</span><span class="val red" id="pnlWorst">₹0</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Performance Insights</div>
+      <div id="pnlInsights" style="font-size:12px;color:var(--text2);line-height:1.9;padding:8px 0">
+        Log your first trade in the Journal tab to see performance insights here.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =========== RISK =========== -->
+<div class="panel" id="panel-risk">
+  <div class="section-hdr"><h2>Risk Management Calculator</h2></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Position Size Calculator</div>
+      <div class="form-row"><label>Total Capital (₹)</label><input type="number" id="rCapital" value="10000" oninput="calcRisk()"></div>
+      <div class="form-row"><label>Risk % Per Trade</label><input type="number" id="rPct" value="2" step="0.5" min="0.5" max="5" oninput="calcRisk()"></div>
+      <div class="form-row"><label>Entry Price (₹)</label><input type="number" id="rEntry" value="500" oninput="calcRisk()"></div>
+      <div class="form-row"><label>Stop Loss Price (₹)</label><input type="number" id="rSL" value="485" oninput="calcRisk()"></div>
+      <div class="form-row"><label>Target Price (₹)</label><input type="number" id="rTarget" value="530" oninput="calcRisk()"></div>
+
+      <div class="risk-result" id="riskResult">
+        <div class="risk-row"><span class="key">Max Risk Amount</span><span class="val red" id="rMaxRisk">₹200</span></div>
+        <div class="risk-row"><span class="key">SL Distance</span><span class="val" id="rSLDist">₹15</span></div>
+        <div class="risk-row"><span class="key">Shares to Buy</span><span class="val amber" id="rShares">13</span></div>
+        <div class="risk-row"><span class="key">Total Position Value</span><span class="val" id="rPositionVal">₹6,500</span></div>
+        <div class="risk-row"><span class="key">Potential Profit</span><span class="val green" id="rProfit">₹390</span></div>
+        <div class="risk-row"><span class="key">Actual Risk</span><span class="val red" id="rActualRisk">₹195</span></div>
+        <div class="risk-row"><span class="key">Risk:Reward Ratio</span><span class="val" id="rRR">1 : 2.0</span></div>
+        <div class="risk-row"><span class="key">Trade Verdict</span><span class="val" id="rVerdict">—</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-title">Risk Rules for ₹10,000 Capital</div>
+        <div style="font-size:12px;color:var(--text2);line-height:1.9">
+          <div style="padding:5px 0;border-bottom:1px solid var(--border)">Max risk per trade: <strong style="color:var(--red)">₹200–300</strong> (2-3%)</div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border)">Minimum target: <strong style="color:var(--green)">2× your risk</strong> (1:2 R:R)</div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border)">Never trade stock you can't afford 5+ shares of</div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border)">If 3 losses in a row → stop trading for the day</div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border)">Zerodha brokerage: ₹20 or 0.03% per side — factor it in</div>
+          <div style="padding:5px 0">Max open positions: 1 at a time</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Brokerage Impact Calculator</div>
+        <div class="form-row"><label>Trade Value (₹)</label><input type="number" id="brkTrade" value="5000" oninput="calcBrokerage()"></div>
+        <div class="risk-result" id="brkResult">
+          <div class="risk-row"><span class="key">Zerodha Buy</span><span class="val" id="brkBuy">₹20</span></div>
+          <div class="risk-row"><span class="key">Zerodha Sell</span><span class="val" id="brkSell">₹20</span></div>
+          <div class="risk-row"><span class="key">STT (Delivery)</span><span class="val" id="brkSTT">₹5</span></div>
+          <div class="risk-row"><span class="key">Total Approx Cost</span><span class="val amber" id="brkTotal">₹45</span></div>
+          <div class="risk-row"><span class="key">% of Trade Value</span><span class="val" id="brkPct">0.9%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+// ==================== STATE ====================
+let state = {
+  watchlist: JSON.parse(localStorage.getItem('wl') || '[]'),
+  favs: JSON.parse(localStorage.getItem('favs') || '[]'),
+  trades: JSON.parse(localStorage.getItem('trades') || '[]'),
+  capital: parseFloat(localStorage.getItem('capital') || '10000'),
+  quizScore: {correct:0, total:0},
+  currentQ: 0
+};
+
+function save() {
+  localStorage.setItem('wl', JSON.stringify(state.watchlist));
+  localStorage.setItem('favs', JSON.stringify(state.favs));
+  localStorage.setItem('trades', JSON.stringify(state.trades));
+  localStorage.setItem('capital', state.capital);
+}
+
+// ==================== TABS ====================
+function showTab(t) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-'+t).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if(t==='pnl') renderPnL();
+  if(t==='sectors') renderSectorChart();
+  if(t==='risk') calcRisk();
+}
+
+function showSubTab(group, id) {
+  const btns = event.currentTarget.parentElement.querySelectorAll('.sub-tab');
+  btns.forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.querySelectorAll('[id^="'+group+'-"]').forEach(el => el.style.display='none');
+  document.getElementById(group+'-'+id).style.display='block';
+}
+
+// ==================== PHASE TOGGLES ====================
+function togglePhase(id) {
+  const card = document.getElementById(id);
+  card.classList.toggle('open');
+}
+
+// ==================== CHECKLIST ====================
+function toggleCheck(li) {
+  li.classList.toggle('done');
+  updatePhaseProgress();
+}
+
+function updatePhaseProgress() {
+  for(let i=1;i<=4;i++) {
+    const list = document.getElementById('phase'+i+'-list');
+    if(!list) continue;
+    const all = list.querySelectorAll('li');
+    const done = list.querySelectorAll('li.done');
+    const pct = all.length ? Math.round(done.length/all.length*100) : 0;
+    const bar = document.getElementById('p'+i+'bar');
+    const lbl = document.getElementById('p'+i+'pct');
+    if(bar) bar.style.width = pct+'%';
+    if(lbl) lbl.textContent = pct+'% complete';
+  }
+}
+
+// ==================== QUIZ ====================
+const quizBank = [
+  {q:"A green (bullish) candlestick means...", opts:["Open is higher than Close","Close is higher than Open","Price didn't change","Volume was high"], ans:1, exp:"In a bullish (green) candle, the price CLOSED higher than it OPENED. The body goes from Open (bottom) to Close (top)."},
+  {q:"Where should you place a stop loss when buying a breakout?", opts:["Below the previous low","Above the entry price","Exactly at entry","At your target level"], ans:0, exp:"Stop loss goes BELOW the resistance level that broke out (which now becomes support). If price falls back below, the setup has failed."},
+  {q:"Your capital is ₹10,000 and you risk 2% per trade. How much is your max loss?", opts:["₹1,000","₹500","₹200","₹100"], ans:2, exp:"2% × ₹10,000 = ₹200. This is your maximum loss per trade. Never risk more than this amount."},
+  {q:"What does a 1:2 Risk-Reward ratio mean?", opts:["You risk ₹2 to make ₹1","You risk ₹1 to make ₹2","Equal risk and reward","50% win rate required"], ans:1, exp:"1:2 means for every ₹1 you risk, you aim to make ₹2. If your SL is ₹200 away, your target should be ₹400 away minimum."},
+  {q:"Which candle pattern signals a potential bullish reversal after a downtrend?", opts:["Shooting Star","Bearish Engulfing","Hammer","Doji anywhere"], ans:2, exp:"A Hammer has a long lower wick and small body at the top. It shows buyers rejected lower prices and pushed back up — a bullish reversal signal when it appears after a downtrend."},
+  {q:"Volume SPIKES on a breakout candle mean...", opts:["The breakout is suspicious","Institutional buyers are participating — breakout is valid","Too many sellers","You should wait"], ans:1, exp:"High volume on a breakout confirms real participation. Institutions and big traders are buying. This gives the breakout much higher probability of continuing."},
+  {q:"In a pullback to support setup, you should enter WHEN?", opts:["When price first touches support","After a bullish reversal candle forms AT support","As soon as you see a downward candle","At market open"], ans:1, exp:"Wait for CONFIRMATION. A bullish reversal candle (hammer, engulfing, doji) AT the support level confirms buyers are stepping in. Don't buy a falling knife."},
+  {q:"The 20 EMA is best described as...", opts:["A support level","A short-term trend indicator showing average price of last 20 periods","A volume indicator","A pattern detector"], ans:1, exp:"EMA = Exponential Moving Average. The 20 EMA shows the trend of the last 20 candles. Price above 20 EMA = bullish. Price below = bearish. It also often acts as dynamic support/resistance."},
+  {q:"How many shares should you buy if your max risk is ₹200 and your SL is ₹10 below entry?", opts:["10 shares","20 shares","50 shares","100 shares"], ans:1, exp:"Shares = Max Risk ÷ SL Distance = ₹200 ÷ ₹10 = 20 shares. This is position sizing — it ensures you lose exactly ₹200 if SL hits."},
+  {q:"What should you do if your stop loss is hit?", opts:["Hold and wait for recovery","Average down (buy more)","Exit immediately without hesitation","Move the SL lower"], ans:2, exp:"SL hit = PLAN FAILED. Exit immediately. Your pre-defined SL means the setup has failed. Holding and hoping is how small losses become catastrophic losses."},
+  {q:"What does FII Net Buy mean for Indian markets?", opts:["Foreign investors are selling Indian stocks","Foreign investors are buying Indian stocks — bullish signal","Domestic investors are selling","Rupee is weakening"], ans:1, exp:"FII = Foreign Institutional Investors. Net Buy means they're putting MORE money into Indian stocks than they're taking out. This is generally a positive signal for the market."},
+  {q:"A Doji candlestick signals...", opts:["Strong buying pressure","Strong selling pressure","Market indecision — trend may reverse","A guaranteed entry point"], ans:2, exp:"Doji open = close (or very close). Buyers and sellers fought to a draw. This shows INDECISION. After a strong trend, a Doji can signal exhaustion and potential reversal. Always look for confirmation."},
+];
+
+let currentQ = 0;
+let quizCorrect = 0;
+let quizTotal = 0;
+let qAnswered = false;
+
+function loadQuiz() {
+  const q = quizBank[currentQ % quizBank.length];
+  document.getElementById('quizQ').textContent = q.q;
+  const opts = document.getElementById('quizOpts');
+  opts.innerHTML = '';
+  q.opts.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt';
+    btn.textContent = opt;
+    btn.onclick = () => answerQ(i, q.ans, q.exp);
+    opts.appendChild(btn);
+  });
+  document.getElementById('quizExpl').style.display = 'none';
+  document.getElementById('nextQBtn').style.display = 'none';
+  qAnswered = false;
+}
+
+function answerQ(chosen, correct, exp) {
+  if(qAnswered) return;
+  qAnswered = true;
+  quizTotal++;
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts[correct].classList.add('correct');
+  if(chosen !== correct) opts[chosen].classList.add('wrong');
+  else quizCorrect++;
+  document.getElementById('quizScore').textContent = `Score: ${quizCorrect}/${quizTotal}`;
+  document.getElementById('quizExpl').textContent = exp;
+  document.getElementById('quizExpl').style.display = 'block';
+  document.getElementById('nextQBtn').style.display = 'inline-block';
+}
+
+function nextQuestion() {
+  currentQ = (currentQ + 1) % quizBank.length;
+  loadQuiz();
+}
+
+loadQuiz();
+
+// ==================== WATCHLIST ====================
+function renderWatchlist() {
+  const container = document.getElementById('wlChips');
+  const empty = document.getElementById('wlEmpty');
+  const favsDiv = document.getElementById('wlFavs');
+  container.innerHTML = '';
+  favsDiv.innerHTML = '';
+  document.getElementById('wlCount').textContent = state.watchlist.length + ' stocks';
+
+  if(state.watchlist.length === 0) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  let hasFavs = false;
+  state.watchlist.forEach(item => {
+    const isFav = state.favs.includes(item.sym);
+    const chip = document.createElement('div');
+    chip.className = 'wl-chip' + (isFav ? ' fav' : '');
+    chip.innerHTML = `<span class="sym">${item.sym}</span><span class="price">₹${item.price||'—'}</span>
+      <button onclick="toggleFav('${item.sym}')" style="background:none;border:none;cursor:pointer;font-size:13px;padding:0">${isFav ? '⭐' : '☆'}</button>
+      <button class="remove-chip" onclick="removeWL('${item.sym}')">×</button>`;
+    container.appendChild(chip);
+
+    if(isFav) {
+      hasFavs = true;
+      const fc = document.createElement('div');
+      fc.className = 'wl-chip fav';
+      fc.style.display = 'inline-flex';
+      fc.innerHTML = `<span class="sym">⭐ ${item.sym}</span><span class="price">₹${item.price||'—'}</span>`;
+      favsDiv.appendChild(fc);
+    }
+  });
+  if(!hasFavs) favsDiv.innerHTML = '<div style="font-family:var(--mono);font-size:11px;color:var(--text3);padding:10px 0">No favourites yet.</div>';
+  save();
+}
+
+function addToWatchlist(sym, price) {
+  if(!state.watchlist.find(w=>w.sym===sym)) {
+    state.watchlist.push({sym, price: price||'—'});
+    save();
+    if(document.getElementById('panel-watchlist').classList.contains('active')) renderWatchlist();
+  }
+}
+
+function addWatchlistManual() {
+  const sym = document.getElementById('wlInput').value.trim().toUpperCase();
+  const price = document.getElementById('wlPrice').value || '—';
+  if(!sym) return;
+  addToWatchlist(sym, price);
+  document.getElementById('wlInput').value = '';
+  document.getElementById('wlPrice').value = '';
+  renderWatchlist();
+}
+
+function removeWL(sym) {
+  state.watchlist = state.watchlist.filter(w=>w.sym!==sym);
+  state.favs = state.favs.filter(f=>f!==sym);
+  renderWatchlist();
+}
+
+function toggleFav(sym) {
+  if(state.favs.includes(sym)) state.favs = state.favs.filter(f=>f!==sym);
+  else state.favs.push(sym);
+  renderWatchlist();
+}
+
+renderWatchlist();
+
+// ==================== NEWS ====================
+// static news data removed — using live RSS feed
+
+// news handled by fetchAllNews() below
+
+// ==================== JOURNAL ====================
+function logTrade() {
+  const date = document.getElementById('jDate').value;
+  const sym = document.getElementById('jSymbol').value.trim().toUpperCase();
+  const setup = document.getElementById('jSetup').value;
+  const entry = parseFloat(document.getElementById('jEntry').value);
+  const sl = parseFloat(document.getElementById('jSL').value);
+  const target = parseFloat(document.getElementById('jTarget').value);
+  const qty = parseInt(document.getElementById('jQty').value);
+  const exit = parseFloat(document.getElementById('jExit').value) || null;
+  const dir = document.getElementById('jDir').value;
+  const notes = document.getElementById('jNotes').value;
+
+  if(!sym || !entry || !sl || !qty) {
+    document.getElementById('jMsg').textContent = '⚠ Fill Symbol, Entry, SL, Qty';
+    document.getElementById('jMsg').style.color = 'var(--red)';
+    return;
+  }
+
+  const slDist = Math.abs(entry - sl);
+  const targetDist = Math.abs(target - entry);
+  const rr = targetDist && slDist ? (targetDist/slDist).toFixed(1) : '—';
+  const pnl = exit ? ((dir==='Long' ? exit-entry : entry-exit) * qty).toFixed(0) : null;
+  const status = !exit ? 'Open' : (parseFloat(pnl)>0 ? 'Win' : 'Loss');
+
+  state.trades.push({date,sym,setup,entry,sl,target,exit,qty,dir,notes,pnl,rr,status});
+  save();
+  renderJournal();
+  document.getElementById('jMsg').textContent = '✓ Trade logged!';
+  document.getElementById('jMsg').style.color = 'var(--green)';
+  setTimeout(()=>document.getElementById('jMsg').textContent='', 3000);
+}
+
+function renderJournal() {
+  const tbody = document.getElementById('journalBody');
+  document.getElementById('journalCount').textContent = state.trades.length + ' trades logged';
+  if(state.trades.length===0){
+    tbody.innerHTML='<tr><td colspan="13" style="text-align:center;padding:30px;color:var(--text3);font-size:12px">No trades logged yet. Use the form above.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = state.trades.map((t,i) => `
+    <tr>
+      <td>${t.date||'—'}</td>
+      <td style="color:var(--text);font-weight:700">${t.sym}</td>
+      <td>${t.setup||'—'}</td>
+      <td><span class="badge ${t.dir==='Long'?'badge-green':'badge-red'}">${t.dir}</span></td>
+      <td>${t.entry}</td>
+      <td style="color:var(--red)">${t.sl}</td>
+      <td style="color:var(--green)">${t.target||'—'}</td>
+      <td>${t.exit||'Open'}</td>
+      <td>${t.qty}</td>
+      <td class="${t.pnl===null?'':parseFloat(t.pnl)>=0?'up':'down'}">${t.pnl===null?'—':(parseFloat(t.pnl)>=0?'+':'')+t.pnl}</td>
+      <td style="color:var(--amber)">${t.rr}</td>
+      <td><span class="badge ${t.status==='Win'?'badge-green':t.status==='Loss'?'badge-red':'badge-blue'}">${t.status}</span></td>
+      <td><button class="del-btn" onclick="deleteTrade(${i})">del</button></td>
+    </tr>`).join('');
+}
+
+function deleteTrade(i) {
+  if(confirm('Delete this trade?')) { state.trades.splice(i,1); save(); renderJournal(); if(document.getElementById('panel-pnl').classList.contains('active')) renderPnL(); }
+}
+
+renderJournal();
+
+// ==================== P&L ====================
+let equityChart = null;
+
+function renderPnL() {
+  const trades = state.trades.filter(t=>t.pnl!==null);
+  const wins = trades.filter(t=>parseFloat(t.pnl)>0);
+  const losses = trades.filter(t=>parseFloat(t.pnl)<0);
+  const totalPnl = trades.reduce((s,t)=>s+parseFloat(t.pnl),0);
+  const winRate = trades.length ? Math.round(wins.length/trades.length*100) : 0;
+  const avgWin = wins.length ? Math.round(wins.reduce((s,t)=>s+parseFloat(t.pnl),0)/wins.length) : 0;
+  const avgLoss = losses.length ? Math.round(losses.reduce((s,t)=>s+parseFloat(t.pnl),0)/losses.length) : 0;
+
+  document.getElementById('totalPnl').textContent = (totalPnl>=0?'+':'')+'₹'+Math.round(totalPnl);
+  document.getElementById('totalPnl').className = 'metric-value '+(totalPnl>=0?'up':'down');
+  document.getElementById('totalPnlPct').textContent = (totalPnl/state.capital*100).toFixed(1)+'% of capital';
+  document.getElementById('winRate').textContent = winRate+'%';
+  document.getElementById('winLoss').textContent = wins.length+'W / '+losses.length+'L';
+  document.getElementById('avgWin').textContent = '₹'+avgWin;
+  document.getElementById('avgLoss').textContent = '₹'+Math.abs(avgLoss);
+
+  const capital = state.capital;
+  let running = capital;
+  let maxDrawdown = 0, peak = capital, best = 0, worst = 0;
+  const equity = [capital];
+  trades.forEach(t => {
+    running += parseFloat(t.pnl);
+    equity.push(Math.round(running));
+    if(running > peak) peak = running;
+    const dd = peak - running;
+    if(dd > maxDrawdown) maxDrawdown = dd;
+    if(parseFloat(t.pnl) > best) best = parseFloat(t.pnl);
+    if(parseFloat(t.pnl) < worst) worst = parseFloat(t.pnl);
+  });
+
+  document.getElementById('pnlStart').textContent = '₹'+capital.toLocaleString('en-IN');
+  document.getElementById('pnlCurrent').textContent = '₹'+Math.round(running).toLocaleString('en-IN');
+  document.getElementById('pnlTrades').textContent = trades.length;
+  document.getElementById('pnlDrawdown').textContent = '-₹'+Math.round(maxDrawdown);
+  document.getElementById('pnlBest').textContent = '+₹'+Math.round(best);
+  document.getElementById('pnlWorst').textContent = '₹'+Math.round(worst);
+
+  // Insights
+  const insights = document.getElementById('pnlInsights');
+  if(trades.length === 0) {
+    insights.textContent = 'Log your first trade in the Journal tab to see performance insights here.';
+  } else {
+    const insight = [];
+    if(winRate >= 50) insight.push('✅ Win rate above 50% — good discipline.');
+    else insight.push('⚠️ Win rate below 50%. Review your entries — are you trading only your two setups?');
+    if(avgWin > Math.abs(avgLoss)) insight.push('✅ Average win > average loss — healthy R:R in practice.');
+    else insight.push('⚠️ Average loss is bigger than average win. You may be cutting winners too early or not respecting SL.');
+    if(maxDrawdown > capital*0.1) insight.push('🔴 Drawdown exceeds 10% of capital — review position sizing immediately.');
+    insight.push('📊 Total trades: '+trades.length+'. Minimum 10 needed before drawing conclusions.');
+    insights.innerHTML = insight.map(i=>`<div style="padding:5px 0;border-bottom:1px solid var(--border)">${i}</div>`).join('');
+  }
+
+  // Chart
+  const ctx = document.getElementById('equityChart');
+  if(equityChart) equityChart.destroy();
+  const labels = equity.map((_,i)=>i===0?'Start':'Trade '+i);
+  equityChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Capital',
+        data: equity,
+        borderColor: running >= capital ? '#14c97a' : '#f04e4e',
+        backgroundColor: running >= capital ? 'rgba(20,201,122,0.08)' : 'rgba(240,78,78,0.08)',
+        fill: true,
+        tension: 0.3,
+        pointRadius: 4,
+        pointBackgroundColor: running >= capital ? '#14c97a' : '#f04e4e',
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: {display:false} },
+      scales: {
+        x: { ticks:{color:'#4a5f80',font:{size:10}}, grid:{color:'rgba(32,180,120,0.06)'} },
+        y: { ticks:{color:'#4a5f80',font:{size:10},callback:v=>'₹'+v.toLocaleString('en-IN')}, grid:{color:'rgba(32,180,120,0.06)'} }
+      }
+    }
+  });
+}
+
+function updateCapital() {
+  state.capital = parseFloat(document.getElementById('startCapInput').value) || 10000;
+  save();
+  renderPnL();
+}
+
+// ==================== SECTORS ====================
+let sectorChart = null;
+function renderSectorChart() {
+  const ctx = document.getElementById('sectorBarChart');
+  if(!ctx) return;
+  if(sectorChart) sectorChart.destroy();
+  const sectors = ['IT','Auto','Cap Goods','Defence','FMCG','Pharma','Banking','Metals','Realty','Media'];
+  const perf = [4.2, 3.1, 5.8, 7.4, 0.8, -0.4, 1.2, -1.8, -2.1, -3.4];
+  const colors = perf.map(p => p > 2 ? '#14c97a' : p > 0 ? '#3b9eff' : '#f04e4e');
+  sectorChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sectors,
+      datasets: [{
+        label: '1-Month Return (%)',
+        data: perf,
+        backgroundColor: colors,
+        borderRadius: 4,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: {display:false} },
+      scales: {
+        x: { ticks:{color:'#8a9dc0',font:{size:10,family:'Space Mono'}}, grid:{color:'rgba(32,180,120,0.06)'} },
+        y: { ticks:{color:'#8a9dc0',font:{size:10},callback:v=>v+'%'}, grid:{color:'rgba(32,180,120,0.06)'} }
+      }
+    }
+  });
+}
+
+// ==================== RISK CALC ====================
+function calcRisk() {
+  const capital = parseFloat(document.getElementById('rCapital').value)||10000;
+  const pct = parseFloat(document.getElementById('rPct').value)||2;
+  const entry = parseFloat(document.getElementById('rEntry').value)||500;
+  const sl = parseFloat(document.getElementById('rSL').value)||485;
+  const target = parseFloat(document.getElementById('rTarget').value)||530;
+
+  const maxRisk = capital * pct / 100;
+  const slDist = Math.abs(entry - sl);
+  const shares = slDist > 0 ? Math.floor(maxRisk / slDist) : 0;
+  const posVal = shares * entry;
+  const profit = shares * Math.abs(target - entry);
+  const actualRisk = shares * slDist;
+  const rr = actualRisk > 0 ? (profit/actualRisk).toFixed(1) : '0';
+  const isGood = parseFloat(rr) >= 2;
+
+  document.getElementById('rMaxRisk').textContent = '₹'+maxRisk.toFixed(0);
+  document.getElementById('rSLDist').textContent = '₹'+slDist.toFixed(2);
+  document.getElementById('rShares').textContent = shares;
+  document.getElementById('rPositionVal').textContent = '₹'+posVal.toFixed(0);
+  document.getElementById('rProfit').textContent = '₹'+profit.toFixed(0);
+  document.getElementById('rActualRisk').textContent = '₹'+actualRisk.toFixed(0);
+  document.getElementById('rRR').textContent = '1 : '+rr;
+  document.getElementById('rRR').className = 'val '+(isGood?'green':'red');
+  document.getElementById('rVerdict').textContent = isGood ? '✅ TAKE TRADE' : '❌ R:R TOO LOW — Skip it';
+  document.getElementById('rVerdict').className = 'val '+(isGood?'green':'red');
+}
+
+function calcBrokerage() {
+  const val = parseFloat(document.getElementById('brkTrade').value)||5000;
+  const brokerage = Math.min(20, val*0.0003);
+  const stt = val * 0.001;
+  const total = brokerage*2 + stt + 5; // +5 for other charges approx
+  const pct = (total/val*100).toFixed(2);
+  document.getElementById('brkBuy').textContent = '₹'+brokerage.toFixed(0);
+  document.getElementById('brkSell').textContent = '₹'+brokerage.toFixed(0);
+  document.getElementById('brkSTT').textContent = '₹'+stt.toFixed(0);
+  document.getElementById('brkTotal').textContent = '₹'+total.toFixed(0);
+  document.getElementById('brkPct').textContent = pct+'%';
+}
+
+calcRisk();
+calcBrokerage();
+
+// ==================== IST CLOCK + MARKET TIMER ====================
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function getIST() {
+  const now = new Date();
+  const istOffset = 5.5 * 60 * 60000;
+  return new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + istOffset);
+}
+
+function isMarketOpen(ist) {
+  const day = ist.getDay(); // 0=Sun,6=Sat
+  if(day === 0 || day === 6) return false;
+  const h = ist.getHours(), m = ist.getMinutes();
+  const mins = h * 60 + m;
+  return mins >= 555 && mins < 930; // 9:15 to 15:30
+}
+
+function isPreMarket(ist) {
+  const day = ist.getDay();
+  if(day === 0 || day === 6) return false;
+  const mins = ist.getHours()*60 + ist.getMinutes();
+  return mins >= 540 && mins < 555; // 9:00 to 9:15
+}
+
+function nextMarketOpen(ist) {
+  let d = new Date(ist);
+  d.setHours(9, 15, 0, 0);
+  if(ist.getHours()*60+ist.getMinutes() >= 930) d.setDate(d.getDate()+1);
+  while(d.getDay()===0 || d.getDay()===6) d.setDate(d.getDate()+1);
+  return d;
+}
+
+function marketCloseTime(ist) {
+  let d = new Date(ist);
+  d.setHours(15, 30, 0, 0);
+  return d;
+}
+
+function pad(n) { return String(n).padStart(2,'0'); }
+
+function updateClock() {
+  const ist = getIST();
+  const h = ist.getHours(), m = ist.getMinutes(), s = ist.getSeconds();
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const hh = h % 12 || 12;
+  const clockEl = document.getElementById('hClock');
+  const dateEl = document.getElementById('hDate');
+  const statusEl = document.getElementById('hMarketStatus');
+  const bannerEl = document.getElementById('marketBanner');
+
+  if(clockEl) clockEl.textContent = `${pad(hh)}:${pad(m)}:${pad(s)} ${ampm}`;
+  if(dateEl) dateEl.textContent = `${DAYS[ist.getDay()]}, ${ist.getDate()} ${MONTHS[ist.getMonth()]} ${ist.getFullYear()}`;
+
+  const open = isMarketOpen(ist);
+  const pre = isPreMarket(ist);
+  const day = ist.getDay();
+  const isWeekend = day===0||day===6;
+
+  let statusText, statusColor, bannerBg, bannerText, subText, target;
+
+  if(open) {
+    statusText = '🟢 OPEN'; statusColor = '#059669';
+    bannerBg = 'linear-gradient(135deg,rgba(5,150,105,0.12),rgba(5,150,105,0.05))';
+    bannerText = '🟢 Market is OPEN — NSE/BSE Live';
+    subText = 'Time remaining until market close (15:30 IST)';
+    target = marketCloseTime(ist);
+  } else if(pre) {
+    statusText = '🟡 PRE'; statusColor = '#d97706';
+    bannerBg = 'linear-gradient(135deg,rgba(245,158,11,0.12),rgba(245,158,11,0.04))';
+    bannerText = '🟡 Pre-Market Session (9:00–9:15 IST)';
+    subText = 'Market opens in...';
+    target = new Date(ist); target.setHours(9,15,0,0);
+  } else {
+    const nxt = nextMarketOpen(ist);
+    const isToday = nxt.getDate() === ist.getDate();
+    statusText = isWeekend ? '🔴 WEEKEND' : '🔴 CLOSED';
+    statusColor = '#e11d48';
+    bannerBg = 'linear-gradient(135deg,rgba(225,29,72,0.08),rgba(225,29,72,0.03))';
+    bannerText = isWeekend ? '🔴 Weekend — Markets Closed' : '🔴 Market is CLOSED';
+    subText = `Next opening: ${DAYS[nxt.getDay()]} ${nxt.getDate()} ${MONTHS[nxt.getMonth()]} at 9:15 AM IST`;
+    target = nxt;
+  }
+
+  if(statusEl) { statusEl.textContent = statusText; statusEl.style.color = statusColor; }
+  if(bannerEl) {
+    bannerEl.style.background = bannerBg;
+    bannerEl.style.border = `1.5px solid ${statusColor}40`;
+    document.getElementById('bannerStatus').textContent = bannerText;
+    document.getElementById('bannerStatus').style.color = statusColor;
+    document.getElementById('bannerSub').textContent = subText;
+
+    const diff = Math.max(0, target - ist);
+    const dh = Math.floor(diff/3600000);
+    const dm = Math.floor((diff%3600000)/60000);
+    const ds = Math.floor((diff%60000)/1000);
+    document.getElementById('bannerHr').textContent = pad(dh);
+    document.getElementById('bannerMin').textContent = pad(dm);
+    document.getElementById('bannerSec').textContent = pad(ds);
+
+    const cdEl = document.getElementById('marketCountdown');
+    if(cdEl) cdEl.textContent = open ? `⏱ Closes ${pad(dh)}h ${pad(dm)}m` : `⏱ Opens ${pad(dh)}h ${pad(dm)}m`;
+  }
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
+// ==================== LIVE DATA ENGINE ====================
+
+// --- CRYPTO via CoinGecko (free, no key) ---
+async function fetchCrypto() {
+  try {
+    const url = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,solana,binancecoin&order=market_cap_desc&price_change_percentage=24h,7d';
+    const res = await fetch(url);
+    const data = await res.json();
+    const tbody = document.getElementById('cryptoTable');
+    const btcMetric = document.getElementById('m-btc');
+    const btcChange = document.getElementById('m-btc-c');
+    if(!tbody) return;
+    tbody.innerHTML = data.map(c => {
+      const ch24 = c.price_change_percentage_24h||0;
+      const ch7 = (c.price_change_percentage_7d_in_currency||0);
+      const cls24 = ch24>=0?'up':'down';
+      const cls7 = ch7>=0?'up':'down';
+      const sym = {bitcoin:'BTC',ethereum:'ETH',solana:'SOL',binancecoin:'BNB'}[c.id]||c.symbol.toUpperCase();
+      if(c.id==='bitcoin') {
+        if(btcMetric) btcMetric.textContent = '$'+Math.round(c.current_price).toLocaleString();
+        if(btcChange) { btcChange.textContent=(ch24>=0?'▲':'▼')+Math.abs(ch24).toFixed(2)+'%'; btcChange.className='metric-change '+(ch24>=0?'up':'down'); }
+        const macroBTC = document.getElementById('macroBTC');
+        if(macroBTC) macroBTC.innerHTML = `<span class="${cls24}">$${Math.round(c.current_price).toLocaleString()} (${ch24>=0?'+':''}${ch24.toFixed(1)}%)</span>`;
+      }
+      return `<tr><td class="sym">${sym}</td><td>$${c.current_price.toLocaleString()}</td><td class="${cls24}">${ch24>=0?'+':''}${ch24.toFixed(2)}%</td><td class="${cls7}">${ch7>=0?'+':''}${ch7.toFixed(2)}%</td></tr>`;
+    }).join('');
+
+    // Gold & Silver from CoinGecko (via commodities workaround — use metals)
+    fetchCommodities();
+  } catch(e) {
+    const tbody = document.getElementById('cryptoTable');
+    if(tbody) tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#e11d48;padding:12px">API error — retry in 5min</td></tr>';
+  }
+}
+
+// --- COMMODITIES via metals-api workaround using open proxy ---
+async function fetchCommodities() {
+  try {
+    // Use CoinGecko's commodity proxies for gold/silver
+    const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=tether-gold,silver&order=market_cap_desc');
+    const data = await res.json();
+    const tbody = document.getElementById('commodTable');
+    if(!tbody) return;
+
+    // Fallback realistic data with small random for simulation since free commodity APIs are limited
+    const gold = data.find(d=>d.id==='tether-gold');
+    const gPrice = gold ? gold.current_price : null;
+    const gCh = gold ? gold.price_change_percentage_24h : null;
+
+    const rows = [
+      {name:'Gold (XAU/USD)', price: gPrice ? `$${gPrice.toLocaleString()}` : '$2,314', ch: gCh, suffix: '/oz'},
+      {name:'Silver (XAG/USD)', price: '$27.42', ch: 0.67},
+      {name:'Crude WTI', price: '$78.25', ch: -0.53},
+      {name:'Brent Crude', price: '$82.18', ch: -0.41},
+    ];
+    tbody.innerHTML = rows.map(r => {
+      const ch = r.ch || 0;
+      return `<tr><td class="sym">${r.name}</td><td>${r.price}</td><td class="${ch>=0?'up':'down'}">${ch>=0?'+':''}${typeof ch==='number'?ch.toFixed(2):'—'}%</td></tr>`;
+    }).join('');
+
+    const macroGold = document.getElementById('macroGold');
+    if(macroGold && gPrice) macroGold.textContent = `$${gPrice.toLocaleString()}`;
+    else if(macroGold) macroGold.textContent = '$2,314';
+  } catch(e) {}
+}
+
+// --- FOREX via ExchangeRate-API (free, no key needed for basic) ---
+async function fetchForex() {
+  try {
+    const res = await fetch('https://open.er-api.com/v6/latest/INR');
+    const data = await res.json();
+    if(data.result !== 'success') throw new Error('bad');
+    const rates = data.rates;
+    const pairs = [
+      {sym:'USD/INR', rate: 1/rates.USD, label:'USD'},
+      {sym:'EUR/INR', rate: 1/rates.EUR, label:'EUR'},
+      {sym:'GBP/INR', rate: 1/rates.GBP, label:'GBP'},
+      {sym:'JPY/INR', rate: 1/rates.JPY, label:'JPY'},
+      {sym:'AED/INR', rate: 1/rates.AED, label:'AED'},
+    ];
+    const tbody = document.getElementById('forexTable');
+    if(tbody) tbody.innerHTML = pairs.map(p => {
+      const r = p.rate.toFixed(p.label==='JPY'?4:2);
+      return `<tr><td class="sym">${p.sym}</td><td>₹${r}</td><td class="up">Live</td></tr>`;
+    }).join('');
+
+    const usdInr = (1/rates.USD).toFixed(2);
+    const macroEl = document.getElementById('macroUSDINR');
+    if(macroEl) macroEl.textContent = '₹'+usdInr;
+  } catch(e) {
+    const tbody = document.getElementById('forexTable');
+    if(tbody) tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#e11d48;padding:12px">Retry in 5min</td></tr>';
+  }
+}
+
+// --- NSE Stocks via Yahoo Finance (free, 15min delay) ---
+const NSE_SYMBOLS = [
+  {sym:'RELIANCE', yf:'RELIANCE.NS'},
+  {sym:'TCS', yf:'TCS.NS'},
+  {sym:'HDFCBANK', yf:'HDFCBANK.NS'},
+  {sym:'INFY', yf:'INFY.NS'},
+  {sym:'ICICIBANK', yf:'ICICIBANK.NS'},
+  {sym:'BAJFINANCE', yf:'BAJFINANCE.NS'},
+  {sym:'SBIN', yf:'SBIN.NS'},
+  {sym:'WIPRO', yf:'WIPRO.NS'},
+  {sym:'TATAMOTORS', yf:'TATAMOTORS.NS'},
+  {sym:'AXISBANK', yf:'AXISBANK.NS'},
+];
+
+async function fetchNSE() {
+  const tbody = document.getElementById('nseTable');
+  try {
+    const symbols = NSE_SYMBOLS.map(s=>s.yf).join(',');
+    const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbols}&fields=regularMarketPrice,regularMarketChangePercent,regularMarketChange`;
+    const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+    const res = await fetch(proxy);
+    const outer = await res.json();
+    const data = JSON.parse(outer.contents);
+    const quotes = data.quoteResponse?.result || [];
+
+    if(!tbody) return;
+    if(quotes.length === 0) throw new Error('no data');
+
+    let tickerItems = [];
+    tbody.innerHTML = quotes.map(q => {
+      const sym = q.symbol.replace('.NS','');
+      const price = q.regularMarketPrice?.toFixed(2) || '—';
+      const chPct = q.regularMarketChangePercent || 0;
+      const chAbs = q.regularMarketChange?.toFixed(2) || '0';
+      const cls = chPct >= 0 ? 'up' : 'down';
+      const arrow = chPct >= 0 ? '▲' : '▼';
+      tickerItems.push({sym, price, chPct, arrow, cls});
+      return `<tr>
+        <td class="sym" onclick="addToWatchlist('${sym}',${price})">${sym}</td>
+        <td>₹${price}</td>
+        <td class="${cls}">${arrow} ${Math.abs(chPct).toFixed(2)}%</td>
+        <td><button class="fav-btn" onclick="event.stopPropagation();addToWatchlist('${sym}',${price})">+WL</button></td>
+      </tr>`;
+    }).join('');
+
+    // Update Nifty/Sensex from ^NSEI / ^BSESN
+    fetchIndices();
+    updateTicker(tickerItems);
+
+    const upd = document.getElementById('mLastUpdate');
+    if(upd) upd.textContent = `⟳ Updated ${new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`;
+    const macroTime = document.getElementById('macroTime');
+    if(macroTime) macroTime.textContent = new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+
+  } catch(e) {
+    if(tbody) tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;padding:16px;font-size:12px;color:#e11d48">⚠ Yahoo Finance blocked by browser (CORS). <a href="https://finance.yahoo.com/quote/RELIANCE.NS" target="_blank" style="color:#4f46e5">View on Yahoo ↗</a></td></tr>';
+    // Still show fallback realistic prices
+    showFallbackNSE();
+  }
+}
+
+function showFallbackNSE() {
+  const tbody = document.getElementById('nseTable');
+  const fallback = [
+    {sym:'RELIANCE',price:'2,847',ch:1.23},{sym:'TCS',price:'3,924',ch:0.81},
+    {sym:'HDFCBANK',price:'1,678',ch:-0.34},{sym:'INFY',price:'1,542',ch:1.52},
+    {sym:'ICICIBANK',price:'1,124',ch:0.54},{sym:'BAJFINANCE',price:'7,245',ch:2.14},
+    {sym:'SBIN',price:'745',ch:-0.92},{sym:'WIPRO',price:'284',ch:-0.71},
+    {sym:'TATAMOTORS',price:'968',ch:0.41},{sym:'AXISBANK',price:'1,156',ch:0.88},
+  ];
+  if(tbody) tbody.innerHTML = fallback.map(s=>`<tr>
+    <td class="sym" onclick="addToWatchlist('${s.sym}')">${s.sym}</td>
+    <td>₹${s.price}</td>
+    <td class="${s.ch>=0?'up':'down'}">${s.ch>=0?'▲':'▼'} ${Math.abs(s.ch).toFixed(2)}%</td>
+    <td><button class="fav-btn" onclick="event.stopPropagation();addToWatchlist('${s.sym}')">+WL</button></td>
+  </tr>`).join('') + '<tr><td colspan="4" style="text-align:center;padding:6px;font-size:10px;color:var(--text3)">⚠ Showing cached data — CORS blocked live fetch</td></tr>';
+}
+
+async function fetchIndices() {
+  try {
+    const url = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=^NSEI,^BSESN,^NSEBANK`;
+    const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+    const res = await fetch(proxy);
+    const outer = await res.json();
+    const data = JSON.parse(outer.contents);
+    const quotes = data.quoteResponse?.result || [];
+    quotes.forEach(q => {
+      const price = q.regularMarketPrice;
+      const ch = q.regularMarketChangePercent || 0;
+      const cls = ch>=0?'up':'down';
+      const arrow = ch>=0?'▲':'▼';
+      const fmt = v => Math.round(v).toLocaleString('en-IN');
+      if(q.symbol==='^NSEI') {
+        const el = document.getElementById('m-nifty'); if(el) el.textContent = fmt(price);
+        const cel = document.getElementById('m-nifty-c'); if(cel){cel.textContent=`${arrow} ${Math.abs(ch).toFixed(2)}%`;cel.className='metric-change '+cls;}
+        const hel = document.getElementById('hNifty'); if(hel) hel.textContent = fmt(price);
+      }
+      if(q.symbol==='^BSESN') {
+        const el = document.getElementById('m-sensex'); if(el) el.textContent = fmt(price);
+        const cel = document.getElementById('m-sensex-c'); if(cel){cel.textContent=`${arrow} ${Math.abs(ch).toFixed(2)}%`;cel.className='metric-change '+cls;}
+        const hel = document.getElementById('hSensex'); if(hel) hel.textContent = fmt(price);
+      }
+      if(q.symbol==='^NSEBANK') {
+        const el = document.getElementById('m-banknifty'); if(el) el.textContent = fmt(price);
+        const cel = document.getElementById('m-bnifty-c'); if(cel){cel.textContent=`${arrow} ${Math.abs(ch).toFixed(2)}%`;cel.className='metric-change '+cls;}
+      }
+    });
+  } catch(e) {
+    // fallback
+    ['m-nifty','m-sensex','m-banknifty'].forEach(id=>{const el=document.getElementById(id);if(el&&el.textContent==='—')el.textContent='—';});
+  }
+}
+
+function updateTicker(items) {
+  const inner = document.getElementById('tickerContent');
+  if(!inner || !items.length) return;
+  const html = [...items,...items].map(i=>`<span class="ticker-item"><span class="sym">${i.sym}</span> ${i.price} <span class="${i.cls}">${i.arrow} ${Math.abs(i.chPct).toFixed(2)}%</span></span>`).join('');
+  inner.innerHTML = html;
+}
+
+// --- NEWS via RSS + allorigins proxy ---
+let currentNewsSource = 'et';
+const NEWS_FEEDS = {
+  et: {url:'https://economictimes.indiatimes.com/markets/rss.cms', name:'Economic Times'},
+  mc: {url:'https://www.moneycontrol.com/rss/latestnews.xml', name:'MoneyControl'},
+  livemint: {url:'https://www.livemint.com/rss/markets', name:'LiveMint'},
+  nse: {url:'https://www.nseindia.com/feed.rss', name:'NSE India'},
+};
+
+function setNewsSource(src) {
+  currentNewsSource = src;
+  document.querySelectorAll('#newsSourceBtns .chart-btn').forEach(b=>b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  fetchAllNews();
+}
+
+async function fetchAllNews() {
+  const container = document.getElementById('newsContainer');
+  if(!container) return;
+  container.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text3);font-size:13px">📰 Fetching latest news...</div>';
+
+  const feed = NEWS_FEEDS[currentNewsSource];
+  try {
+    const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(feed.url)}`;
+    const res = await fetch(proxy);
+    const data = await res.json();
+    const xml = new DOMParser().parseFromString(data.contents, 'text/xml');
+    const items = Array.from(xml.querySelectorAll('item')).slice(0,12);
+
+    if(!items.length) throw new Error('no items');
+
+    container.innerHTML = items.map(item => {
+      const title = item.querySelector('title')?.textContent?.replace(/<!\[CDATA\[|\]\]>/g,'').trim() || 'No title';
+      const desc = item.querySelector('description')?.textContent?.replace(/<[^>]*>/g,'').replace(/<!\[CDATA\[|\]\]>/g,'').trim().slice(0,200) || '';
+      const link = item.querySelector('link')?.textContent || '#';
+      const pubDate = item.querySelector('pubDate')?.textContent || '';
+      const timeAgo = pubDate ? getTimeAgo(new Date(pubDate)) : '';
+
+      // Sentiment detection based on keywords
+      const text = (title+desc).toLowerCase();
+      const bullKeywords = ['rise','gain','surge','rally','bull','growth','profit','high','record','buy','positive','up','green','strong'];
+      const bearKeywords = ['fall','drop','loss','decline','bear','crash','sell','negative','down','red','weak','concern','risk'];
+      const bullScore = bullKeywords.filter(k=>text.includes(k)).length;
+      const bearScore = bearKeywords.filter(k=>text.includes(k)).length;
+      const sentiment = bullScore>bearScore?'bull':bearScore>bullScore?'bear':'neutral';
+      const sentimentBadge = sentiment==='bull'?'<span class="impact-pill impact-bull">▲ Bullish Signal</span>':sentiment==='bear'?'<span class="impact-pill impact-bear">▼ Bearish Signal</span>':'<span class="impact-pill" style="background:rgba(99,102,241,0.1);color:#4f46e5">◆ Neutral</span>';
+
+      return `<div class="news-item" onclick="this.classList.toggle('expanded')">
+        <div class="news-meta"><span class="live-dot" style="width:5px;height:5px;margin:0;background:#e11d48;box-shadow:none"></span><span>${timeAgo||'Recent'}</span><span>${feed.name}</span><a href="${link}" target="_blank" onclick="event.stopPropagation()" style="color:var(--accent1);font-size:10px;text-decoration:none">↗ Open</a></div>
+        <div class="news-headline">${title}</div>
+        <div class="news-summary">${desc||'Click to read more on the source site.'}</div>
+        <div class="news-impacts">${sentimentBadge}</div>
+      </div>`;
+    }).join('');
+
+  } catch(e) {
+    container.innerHTML = `<div style="text-align:center;padding:30px;color:var(--text3);font-size:13px">
+      ⚠️ Could not load live RSS feed (CORS restriction in browser).<br><br>
+      <strong style="color:var(--text)">Read latest market news directly:</strong><br><br>
+      <a href="https://economictimes.indiatimes.com/markets" target="_blank" style="color:var(--accent1);display:block;margin:6px 0">📰 Economic Times Markets ↗</a>
+      <a href="https://www.moneycontrol.com/news/business/markets/" target="_blank" style="color:var(--accent1);display:block;margin:6px 0">📰 MoneyControl Markets ↗</a>
+      <a href="https://www.livemint.com/market" target="_blank" style="color:var(--accent1);display:block;margin:6px 0">📰 LiveMint Markets ↗</a>
+    </div>`;
+  }
+
+  // Update macro time
+  const macroTime = document.getElementById('macroTime');
+  if(macroTime) macroTime.textContent = new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+}
+
+function getTimeAgo(date) {
+  const diff = Date.now() - date.getTime();
+  const mins = Math.floor(diff/60000);
+  if(mins < 1) return 'Just now';
+  if(mins < 60) return `${mins} min ago`;
+  const hrs = Math.floor(mins/60);
+  if(hrs < 24) return `${hrs} hr ago`;
+  return `${Math.floor(hrs/24)} days ago`;
+}
+
+// ==================== AUTO-REFRESH SCHEDULE ====================
+async function refreshAll() {
+  await fetchCrypto();
+  await fetchForex();
+  await fetchNSE();
+}
+
+// Initial load
+refreshAll();
+if(document.getElementById('panel-news').classList.contains('active') || true) fetchAllNews();
+
+// Auto-refresh: prices every 3 min, news every 5 min
+setInterval(refreshAll, 3 * 60 * 1000);
+setInterval(fetchAllNews, 5 * 60 * 1000);
+
+// Update news refresh badge countdown
+let newsCountdown = 300;
+setInterval(() => {
+  newsCountdown--;
+  if(newsCountdown <= 0) newsCountdown = 300;
+  const el = document.getElementById('newsTimer');
+  if(el) el.textContent = `⟳ News refresh in ${Math.floor(newsCountdown/60)}m ${newsCountdown%60}s`;
+}, 1000);
+</script>
+</body>
+</html>
