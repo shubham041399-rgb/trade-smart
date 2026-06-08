@@ -1390,11 +1390,52 @@ const SECTOR_DATA={
 let scInst=null;
 function updateSectorDropdown(){const mkt=document.getElementById('mktSelect').value;const sec=document.getElementById('sectorSelect');sec.innerHTML='';const sectors=SECTOR_DATA[mkt]?.sectors||{};Object.entries(sectors).forEach(([k,v])=>{const o=document.createElement('option');o.value=k;o.textContent=v.name;sec.appendChild(o);});renderSectorDetail();}
 function renderSectorDetail(){
-  const mkt=document.getElementById('mktSelect').value;const sec=document.getElementById('sectorSelect').value;const d=SECTOR_DATA[mkt]?.sectors[sec];if(!d){document.getElementById('sectorDetail').innerHTML='';return;}
-  const cls=d.perf>=3?'neon':d.perf>0?'amber':'red';
-  document.getElementById('sectorDetail').innerHTML=`<div class="card"><div class="card-title">${d.name}<div class="info-wrap" style="margin-left:8px"><span class="info-icon" tabindex="0">i</span><div class="info-popup right"><h4>Key Points</h4>${(d.pros||[]).map(p=>`<div class="ip-row">✅ ${p}</div>`).join('')}${(d.cons||[]).map(c=>`<div class="ip-row">⚠️ ${c}</div>`).join('')}</div></div><div class="nl"></div></div><div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px"><div><div style="font-family:var(--mono);font-size:26px;font-weight:700;color:var(--${cls})">${d.perf>=0?'+':''}${d.perf}%</div><div style="font-size:10px;color:var(--text3)">1-MONTH</div></div><span class="badge ${d.perf>=3?'b-neon':d.perf>0?'b-amber':'b-red'}">${d.trend}</span><div style="flex:1;font-size:12px;color:var(--text2)">${d.reason}</div></div>${d.stocks?`<div style="margin-bottom:12px">${d.stocks.map(s=>`<span class="badge b-blue" style="margin:2px">${s}</span>`).join('')}</div>`:''}${d.info?`<div style="padding:10px;background:rgba(88,166,255,0.05);border-radius:var(--r);border-left:3px solid var(--blue);font-size:12px;color:var(--text2);margin-bottom:12px">${d.info}</div>`:''}<div style="padding:12px;background:${d.perf>=3?'rgba(0,255,148,0.06)':d.perf>0?'rgba(244,166,35,0.06)':'rgba(255,71,87,0.06)'};border-radius:var(--r);border:1px solid ${d.perf>=3?'rgba(0,255,148,0.2)':d.perf>0?'rgba(244,166,35,0.2)':'rgba(255,71,87,0.2)'}"><div style="font-size:9px;color:${d.perf>=3?'var(--neon)':d.perf>0?'var(--amber)':'var(--red)'};font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Recommendation</div><div style="font-size:12px;color:var(--text2)">${d.rec}</div></div></div>`;
-  const d2=SECTOR_DATA[mkt]?.sectors||{};const labels=Object.values(d2).map(s=>s.name.slice(0,12));const perf=Object.values(d2).map(s=>s.perf);const colors=perf.map(p=>p>=3?'rgba(0,255,148,0.8)':p>0?'rgba(244,166,35,0.8)':'rgba(255,71,87,0.8)');
-  const ctx=document.getElementById('sectorChart');if(!ctx)return;if(scInst)scInst.destroy();scInst=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data:perf,backgroundColor:colors,borderRadius:4,borderSkipped:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8B949E',font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}},y:{ticks:{color:'#8B949E',callback:v=>v+'%',font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}}}}}});
+  var mkt=document.getElementById('mktSelect').value;
+  var sec=document.getElementById('sectorSelect').value;
+  var d=SECTOR_DATA[mkt]&&SECTOR_DATA[mkt].sectors?SECTOR_DATA[mkt].sectors[sec]:null;
+  if(!d){document.getElementById('sectorDetail').innerHTML='';return;}
+  var cls=d.perf>=3?'neon':d.perf>0?'amber':'red';
+  var bc=d.perf>=3?'rgba(0,255,148,0.06)':d.perf>0?'rgba(244,166,35,0.06)':'rgba(255,71,87,0.06)';
+  var bc2=d.perf>=3?'rgba(0,255,148,0.2)':d.perf>0?'rgba(244,166,35,0.2)':'rgba(255,71,87,0.2)';
+  var rc=d.perf>=3?'var(--neon)':d.perf>0?'var(--amber)':'var(--red)';
+  var bb=d.perf>=3?'b-neon':d.perf>0?'b-amber':'b-red';
+  var pros=(d.pros||[]).map(function(p){return '<div class="ip-row">&#10003; '+p+'</div>';}).join('');
+  var cons=(d.cons||[]).map(function(c){return '<div class="ip-row">&#9888; '+c+'</div>';}).join('');
+  var stocks=d.stocks?'<div style="margin-bottom:12px">'+d.stocks.map(function(s){return '<span class="badge b-blue" style="margin:2px">'+s+'</span>';}).join('')+'</div>':'';
+  var info=d.info?'<div style="padding:10px;background:rgba(88,166,255,0.05);border-radius:var(--r);border-left:3px solid var(--blue);font-size:12px;color:var(--text2);margin-bottom:12px">'+d.info+'</div>':'';
+  var h='<div class="card">';
+  h+='<div class="card-title">'+d.name+'<div class="nl"></div></div>';
+  h+='<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px">';
+  h+='<div><div style="font-family:var(--mono);font-size:26px;font-weight:700;color:var(--'+cls+')">';
+  h+=(d.perf>=0?'+':'')+d.perf+'%</div>';
+  h+='<div style="font-size:10px;color:var(--text3)">1-MONTH</div></div>';
+  h+='<span class="badge '+bb+'">'+d.trend+'</span>';
+  h+='<div style="flex:1;font-size:12px;color:var(--text2)">'+d.reason+'</div></div>';
+  h+=stocks+info;
+  h+='<div style="padding:12px;background:'+bc+';border-radius:var(--r);border:1px solid '+bc2+'">';
+  h+='<div style="font-size:9px;color:'+rc+';font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Recommendation</div>';
+  h+='<div style="font-size:12px;color:var(--text2)">'+d.rec+'</div></div></div>';
+  document.getElementById('sectorDetail').innerHTML=h;
+  var d2=SECTOR_DATA[mkt]?SECTOR_DATA[mkt].sectors:{};
+  var labels=Object.values(d2).map(function(s){return s.name.slice(0,12);});
+  var perf=Object.values(d2).map(function(s){return s.perf;});
+  var colors=perf.map(function(p){return p>=3?'rgba(0,255,148,0.8)':p>0?'rgba(244,166,35,0.8)':'rgba(255,71,87,0.8)';});
+  var ctx=document.getElementById('sectorChart');
+  if(!ctx)return;
+  if(scInst)scInst.destroy();
+  scInst=new Chart(ctx,{
+    type:'bar',
+    data:{labels:labels,datasets:[{data:perf,backgroundColor:colors,borderRadius:4,borderSkipped:false}]},
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{
+        x:{ticks:{color:'#8B949E',font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}},
+        y:{ticks:{color:'#8B949E',callback:function(v){return v+'%';},font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}}
+      }
+    }
+  });
 }
 function initSectors(){updateSectorDropdown();}
 
