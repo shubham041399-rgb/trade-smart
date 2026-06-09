@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Trade Smart — Shubh</title>
+<title>TradeSmart v3 — Shubh</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <style>
@@ -419,7 +419,6 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
   <button class="nav-btn" onclick="showTab('journal',this)">📓 Journal</button>
   <button class="nav-btn" onclick="showTab('pnl',this)">💰 P&L</button>
   <button class="nav-btn" onclick="showTab('risk',this)">🛡 Risk</button>
-  <button class="nav-btn" onclick="showTab('zerodha',this)">🔑 Zerodha API</button>
   <button class="nav-btn" onclick="showTab('manual',this)">📖 Manual</button>
 </nav>
 <div class="content"><div class="main">
@@ -1029,182 +1028,6 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
     </div>
   </div>
 </div>
-<!-- ZERODHA API SETUP GUIDE -->
-<div class="panel" id="panel-zerodha">
-  <div class="sec-hdr"><h2>🔑 Zerodha <span>Kite Connect API</span></h2></div>
-
-  <div class="warning-box">
-    <h4>⚠️ Read This First</h4>
-    <div style="font-size:12px;color:var(--text2);line-height:1.8">
-      Kite Connect API is a <strong style="color:var(--text)">paid service by Zerodha</strong> that lets you access your live account data programmatically. The <strong style="color:var(--text)">₹500/month plan (Connect plan)</strong> gives you: real-time quotes, order placement, portfolio data, positions, P&L, and historical candle data. This guide covers the exact steps to set it up and connect it to your Trade Smart app.
-    </div>
-  </div>
-
-  <!-- STEP 1 -->
-  <div class="card" style="margin-bottom:14px">
-    <div class="card-title" style="color:var(--neon)">Step 1 — Subscribe to Kite Connect <div class="nl"></div></div>
-    <div class="kite-step"><div class="kite-step-num">1</div><div class="kite-step-body"><strong>Go to:</strong> <a href="https://developers.kite.trade" target="_blank" style="color:var(--neon)">https://developers.kite.trade</a> → Sign in with your Zerodha Kite credentials</div></div>
-    <div class="kite-step"><div class="kite-step-num">2</div><div class="kite-step-body"><strong>Choose the Connect plan:</strong> ₹500/month. This gives API access, historical data, and real-time quotes. Click "Subscribe".</div></div>
-    <div class="kite-step"><div class="kite-step-num">3</div><div class="kite-step-body"><strong>Create a new App:</strong> Click "Create new app" → App name: "TradeSmart" → Redirect URL: <code style="background:var(--bg4);padding:2px 6px;border-radius:4px;color:var(--amber)">https://shubhtradesmart-kite.netlify.app/callback</code> → App type: "Connect"</div></div>
-    <div class="kite-step"><div class="kite-step-num">4</div><div class="kite-step-body"><strong>Save your credentials:</strong> You will get an <strong>API Key</strong> and <strong>API Secret</strong>. Save these — you will need them. Never share them publicly.</div></div>
-  </div>
-
-  <!-- STEP 2 -->
-  <div class="card" style="margin-bottom:14px">
-    <div class="card-title" style="color:var(--amber)">Step 2 — Understanding OAuth Login (Daily) <div class="nl"></div></div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.8;margin-bottom:12px">Zerodha uses OAuth 2.0 for security. Every trading day you need to log in once to get a <strong style="color:var(--text)">request_token</strong>, then exchange it for an <strong style="color:var(--text)">access_token</strong>. The access_token expires at the end of the trading day (6:30 AM next day). This is mandatory — Zerodha does this for your security.</div>
-    <div style="background:rgba(244,166,35,0.07);border:1px solid rgba(244,166,35,0.2);border-radius:var(--r);padding:12px;font-size:12px;color:var(--text2);line-height:1.8">
-      <strong style="color:var(--amber)">Daily Flow:</strong><br>
-      1. Open login URL → Zerodha login page → Enter PIN/TOTP<br>
-      2. Zerodha redirects to your URL with <code style="color:var(--neon)">?request_token=XXXXX</code><br>
-      3. Your app exchanges request_token + API Secret → gets <code style="color:var(--neon)">access_token</code><br>
-      4. Use access_token for all API calls that day
-    </div>
-  </div>
-
-  <!-- STEP 3 -->
-  <div class="card" style="margin-bottom:14px">
-    <div class="card-title" style="color:var(--blue)">Step 3 — Simple Node.js Backend (Minimal Setup) <div class="nl"></div></div>
-    <div style="font-size:12px;color:var(--text2);margin-bottom:10px">You need a tiny backend to handle the OAuth exchange and serve your account data. Here is the complete minimal setup — copy and run this.</div>
-    <div style="font-size:10px;color:var(--text3);margin-bottom:6px;font-family:var(--mono)">Prerequisites: Install Node.js from nodejs.org (free)</div>
-    <div class="code-block">
-<span class="comment"># Terminal commands — run these once</span>
-mkdir kite-backend
-cd kite-backend
-npm init -y
-npm install kiteconnect express cors dotenv
-    </div>
-    <div style="font-size:10px;color:var(--text3);margin:8px 0 4px;font-family:var(--mono)">File: .env (create this file, fill in your values)</div>
-    <div class="code-block">
-KITE_API_KEY=your_api_key_here
-KITE_API_SECRET=your_api_secret_here
-PORT=3000
-    </div>
-    <div style="font-size:10px;color:var(--text3);margin:8px 0 4px;font-family:var(--mono)">File: server.js (complete backend)</div>
-    <div class="code-block">
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const { KiteConnect } = require('kiteconnect');
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-const kite = new KiteConnect({ api_key: process.env.KITE_API_KEY });
-let accessToken = null;
-
-<span class="comment">// Step 1: Get login URL — open this in browser each morning</span>
-app.get('/login', (req, res) => {
-  res.redirect(kite.getLoginURL());
-});
-
-<span class="comment">// Step 2: Zerodha redirects here with request_token</span>
-app.get('/callback', async (req, res) => {
-  const requestToken = req.query.request_token;
-  try {
-    const data = await kite.generateSession(requestToken, process.env.KITE_API_SECRET);
-    accessToken = data.access_token;
-    kite.setAccessToken(accessToken);
-    res.send('✅ Login successful! You can close this tab. App is connected.');
-  } catch (e) {
-    res.status(500).send('Login failed: ' + e.message);
-  }
-});
-
-<span class="comment">// API endpoints for Trade Smart app</span>
-app.get('/api/profile', async (req, res) => {
-  if (!accessToken) return res.status(401).json({ error: 'Not logged in' });
-  try { res.json(await kite.getProfile()); } catch(e) { res.status(500).json({ error: e.message }); }
-});
-
-app.get('/api/margins', async (req, res) => {
-  if (!accessToken) return res.status(401).json({ error: 'Not logged in' });
-  try { res.json(await kite.getMargins()); } catch(e) { res.status(500).json({ error: e.message }); }
-});
-
-app.get('/api/positions', async (req, res) => {
-  if (!accessToken) return res.status(401).json({ error: 'Not logged in' });
-  try { res.json(await kite.getPositions()); } catch(e) { res.status(500).json({ error: e.message }); }
-});
-
-app.get('/api/orders', async (req, res) => {
-  if (!accessToken) return res.status(401).json({ error: 'Not logged in' });
-  try { res.json(await kite.getOrders()); } catch(e) { res.status(500).json({ error: e.message }); }
-});
-
-app.get('/api/holdings', async (req, res) => {
-  if (!accessToken) return res.status(401).json({ error: 'Not logged in' });
-  try { res.json(await kite.getHoldings()); } catch(e) { res.status(500).json({ error: e.message }); }
-});
-
-app.get('/api/status', (req, res) => {
-  res.json({ connected: !!accessToken, time: new Date().toISOString() });
-});
-
-app.listen(process.env.PORT, () => {
-  console.log('Trade Smart Kite backend running on port ' + process.env.PORT);
-  console.log('Daily login URL: https://shubhtradesmart-kite.netlify.app/login');
-});
-    </div>
-    <div style="font-size:10px;color:var(--text3);margin:8px 0 4px;font-family:var(--mono)">Run the backend:</div>
-    <div class="code-block">node server.js</div>
-  </div>
-
-  <!-- STEP 4 -->
-  <div class="card" style="margin-bottom:14px">
-    <div class="card-title" style="color:var(--purple)">Step 4 — Daily Login Process <div class="nl"></div></div>
-    <div class="kite-step"><div class="kite-step-num">1</div><div class="kite-step-body">Every morning before trading, open: <a href="https://shubhtradesmart-kite.netlify.app/login" target="_blank" style="color:var(--neon)">https://shubhtradesmart-kite.netlify.app/login</a> in your browser</div></div>
-    <div class="kite-step"><div class="kite-step-num">2</div><div class="kite-step-body">It will redirect to Zerodha login → enter your Zerodha ID, password, and TOTP (2FA)</div></div>
-    <div class="kite-step"><div class="kite-step-num">3</div><div class="kite-step-body">After login, it redirects back and shows "✅ Connected!" — close the tab</div></div>
-    <div class="kite-step"><div class="kite-step-num">4</div><div class="kite-step-body">Trade Smart app now automatically fetches your live balance, positions and orders</div></div>
-    <div style="background:rgba(255,71,87,0.06);border:1px solid rgba(255,71,87,0.2);border-radius:var(--r);padding:10px;margin-top:8px;font-size:12px;color:var(--text2)">
-      <strong style="color:var(--red)">Important security rules:</strong><br>
-      • Never commit .env file to GitHub — your API keys must stay private<br>
-      • The backend only runs locally on your machine — not publicly accessible<br>
-      • Access token expires at 6:30 AM next day — login fresh each morning<br>
-      • Add .env to .gitignore if you use Git
-    </div>
-  </div>
-
-  <!-- LIVE ACCOUNT VIEWER -->
-  <div class="card" style="margin-bottom:14px">
-    <div class="card-title" style="color:var(--neon)">Live Account Data — After Backend Running <div class="nl"></div></div>
-    <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-      <a href="https://shubhtradesmart-kite.netlify.app/login" target="_blank" class="btn btn-neon" style="text-decoration:none;display:inline-block">🔑 Login with Zerodha</a>
-      <button class="btn btn-ghost" onclick="fetchKiteData()" style="margin-left:8px">🔄 Fetch Live Data</button>
-      <span id="kiteStatus" style="font-family:var(--mono);font-size:10px;color:var(--text3);padding:8px 0">Backend not connected</span>
-    </div>
-    <div class="g2" style="margin-bottom:12px">
-      <div class="metric"><div class="metric-lbl">Available Balance</div><div class="metric-val" id="kite-balance">—</div><div class="metric-ch" id="kite-balance-sub">Connect backend</div></div>
-      <div class="metric"><div class="metric-lbl">Used Margin</div><div class="metric-val" id="kite-used">—</div><div class="metric-ch">equity segment</div></div>
-    </div>
-    <div class="g2">
-      <div>
-        <div class="card-title">Open Positions <div class="nl"></div></div>
-        <div id="kite-positions" style="font-size:12px;color:var(--text3);padding:8px 0">No data — connect backend first</div>
-      </div>
-      <div>
-        <div class="card-title">Today's Orders <div class="nl"></div></div>
-        <div id="kite-orders" style="font-size:12px;color:var(--text3);padding:8px 0">No data — connect backend first</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- COST SUMMARY -->
-  <div class="card">
-    <div class="card-title">What ₹500/month Gets You <div class="nl"></div></div>
-    <div style="font-size:12px;color:var(--text2);line-height:2">
-      <div style="padding:5px 0;border-bottom:1px solid var(--border)">✅ Real-time quotes for all NSE stocks</div>
-      <div style="padding:5px 0;border-bottom:1px solid var(--border)">✅ Live portfolio balance and margin data</div>
-      <div style="padding:5px 0;border-bottom:1px solid var(--border)">✅ Open positions with live P&L</div>
-      <div style="padding:5px 0;border-bottom:1px solid var(--border)">✅ Order history and status</div>
-      <div style="padding:5px 0;border-bottom:1px solid var(--border)">✅ Historical OHLC data (candles) for chart analysis</div>
-      <div style="padding:5px 0;border-bottom:1px solid var(--border)">✅ Order placement via API (automation)</div>
-      <div style="padding:5px 0">ℹ️ <a href="https://kite.trade/docs/connect/v3/" target="_blank" style="color:var(--neon)">Full API documentation ↗</a></div>
-    </div>
-  </div>
-</div>
 
 <!-- MANUAL -->
 <div class="panel" id="panel-manual">
@@ -1435,10 +1258,61 @@ function showNewsPeriod(period, btn) {
 }
 function fetchNews() {
   var src = S.newsSource;
-  var url = 'https://shubhtradesmart-kite.netlify.app/.netlify/functions/news?src=' + src;
+  // Primary: our Netlify backend (server-side, no CORS)
+  var backendUrl = 'https://shubhtradesmart-kite.netlify.app/.netlify/functions/news?src=' + src;
+  
+  function tryAllorigins() {
+    var FEED_URLS = {
+      et: 'https://economictimes.indiatimes.com/markets/rss.cms',
+      mc: 'https://www.moneycontrol.com/rss/latestnews.xml',
+      mint: 'https://www.livemint.com/rss/markets',
+      bl: 'https://www.thehindubusinessline.com/markets/feeder/default.rss',
+      reuters: 'https://feeds.reuters.com/reuters/businessNews'
+    };
+    var feedUrl = FEED_URLS[src] || FEED_URLS.et;
+    var proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(feedUrl);
+    var xhr2 = new XMLHttpRequest();
+    xhr2.timeout = 12000;
+    xhr2.open('GET', proxy, true);
+    xhr2.onreadystatechange = function() {
+      if (xhr2.readyState !== 4) return;
+      if (xhr2.status === 200) {
+        try {
+          var outer = JSON.parse(xhr2.responseText);
+          var xml = new DOMParser().parseFromString(outer.contents, 'text/xml');
+          var xmlItems = Array.from(xml.querySelectorAll('item')).slice(0, 20);
+          if (xmlItems.length) {
+            var items = xmlItems.map(function(item) {
+              return processNewsItem(
+                (item.querySelector('title') || {}).textContent || '',
+                (item.querySelector('description') || {}).textContent || '',
+                (item.querySelector('link') || {}).textContent || '#',
+                (item.querySelector('pubDate') || {}).textContent || ''
+              );
+            }).filter(function(n) { return n.title.length > 5; });
+            storeNewsItems(src, items);
+            renderNewsPeriod(items, currentNewsPeriod);
+            var mt = document.getElementById('macroTime');
+            if (mt) mt.textContent = new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'});
+            return;
+          }
+        } catch(e) {}
+      }
+      var stored = getNewsForPeriod(src, currentNewsPeriod);
+      if (stored.length) renderNewsPeriod(stored, currentNewsPeriod);
+      else showNewsFallback();
+    };
+    xhr2.ontimeout = function() {
+      var stored = getNewsForPeriod(src, currentNewsPeriod);
+      if (stored.length) renderNewsPeriod(stored, currentNewsPeriod);
+      else showNewsFallback();
+    };
+    xhr2.send();
+  }
+
   var xhr = new XMLHttpRequest();
-  xhr.timeout = 15000;
-  xhr.open('GET', url, true);
+  xhr.timeout = 10000;
+  xhr.open('GET', backendUrl, true);
   xhr.onreadystatechange = function() {
     if (xhr.readyState !== 4) return;
     if (xhr.status === 200) {
@@ -1456,19 +1330,10 @@ function fetchNews() {
         }
       } catch(e) {}
     }
-    // Backend failed - try stored news or show fallback
-    var stored = getNewsForPeriod(src, currentNewsPeriod);
-    if (stored.length) {
-      renderNewsPeriod(stored, currentNewsPeriod);
-    } else {
-      showNewsFallback();
-    }
+    // Backend failed or returned no items - try allorigins
+    tryAllorigins();
   };
-  xhr.ontimeout = function() {
-    var stored = getNewsForPeriod(src, currentNewsPeriod);
-    if (stored.length) renderNewsPeriod(stored, currentNewsPeriod);
-    else showNewsFallback();
-  };
+  xhr.ontimeout = function() { tryAllorigins(); };
   xhr.send();
 }
 function renderNewsPeriod(items, period) {
