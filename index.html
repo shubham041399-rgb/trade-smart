@@ -807,7 +807,9 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
     <button class="chart-btn active" id="nbET" onclick="setNewsSrc('et',this)">Economic Times</button>
     <button class="chart-btn" id="nbMC" onclick="setNewsSrc('mc',this)">MoneyControl</button>
     <button class="chart-btn" id="nbMint" onclick="setNewsSrc('mint',this)">LiveMint</button>
-    <button class="chart-btn" onclick="fetchNews()">Refresh Now</button>
+    <button class="chart-btn" id="nbBL" onclick="setNewsSrc('bl',this)">Business Line</button>
+    <button class="chart-btn" id="nbReuters" onclick="setNewsSrc('reuters',this)">Reuters</button>
+    <button class="chart-btn" onclick="fetchNews()">&#8635; Refresh</button>
   </div>
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
     <button class="sub-tab active" onclick="showNewsPeriod('1d',this)">Today (1D)</button>
@@ -1433,10 +1435,9 @@ function showNewsPeriod(period, btn) {
 }
 function fetchNews() {
   var src = S.newsSource;
-  // Use our Netlify backend as news proxy (server-side fetch, no CORS issues)
   var url = 'https://shubhtradesmart-kite.netlify.app/.netlify/functions/news?src=' + src;
   var xhr = new XMLHttpRequest();
-  xhr.timeout = 12000;
+  xhr.timeout = 15000;
   xhr.open('GET', url, true);
   xhr.onreadystatechange = function() {
     if (xhr.readyState !== 4) return;
@@ -1455,43 +1456,13 @@ function fetchNews() {
         }
       } catch(e) {}
     }
-    // Fallback to allorigins
-    var proxy = 'https://api.allorigins.win/get?url=' + encodeURIComponent(feeds[src]);
-    var xhr2 = new XMLHttpRequest();
-    xhr2.timeout = 12000;
-    xhr2.open('GET', proxy, true);
-    xhr2.onreadystatechange = function() {
-      if (xhr2.readyState !== 4) return;
-      if (xhr2.status === 200) {
-        try {
-          var outer = JSON.parse(xhr2.responseText);
-          var xml = new DOMParser().parseFromString(outer.contents, 'text/xml');
-          var xmlItems = Array.from(xml.querySelectorAll('item')).slice(0, 20);
-          if (xmlItems.length) {
-            var items2 = xmlItems.map(function(item) {
-              return processNewsItem(
-                (item.querySelector('title') || {}).textContent || '',
-                (item.querySelector('description') || {}).textContent || '',
-                (item.querySelector('link') || {}).textContent || '#',
-                (item.querySelector('pubDate') || {}).textContent || ''
-              );
-            }).filter(function(n) { return n.title.length > 5; });
-            storeNewsItems(src, items2);
-            renderNewsPeriod(items2, currentNewsPeriod);
-            return;
-          }
-        } catch(e2) {}
-      }
-      var stored = getNewsForPeriod(src, currentNewsPeriod);
-      if (stored.length) renderNewsPeriod(stored, currentNewsPeriod);
-      else showNewsFallback();
-    };
-    xhr2.ontimeout = function() {
-      var stored = getNewsForPeriod(src, currentNewsPeriod);
-      if (stored.length) renderNewsPeriod(stored, currentNewsPeriod);
-      else showNewsFallback();
-    };
-    xhr2.send();
+    // Backend failed - try stored news or show fallback
+    var stored = getNewsForPeriod(src, currentNewsPeriod);
+    if (stored.length) {
+      renderNewsPeriod(stored, currentNewsPeriod);
+    } else {
+      showNewsFallback();
+    }
   };
   xhr.ontimeout = function() {
     var stored = getNewsForPeriod(src, currentNewsPeriod);
