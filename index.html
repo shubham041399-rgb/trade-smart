@@ -1433,9 +1433,8 @@ function showNewsPeriod(period, btn) {
 }
 function fetchNews() {
   var src = S.newsSource;
-  var feeds = {et:'https://economictimes.indiatimes.com/markets/rss.cms', mc:'https://www.moneycontrol.com/rss/latestnews.xml', mint:'https://www.livemint.com/rss/markets'};
-  // Try rss2json first (CORS-free)
-  var url = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feeds[src]) + '&count=20';
+  // Use our Netlify backend as news proxy (server-side fetch, no CORS issues)
+  var url = 'https://shubhtradesmart-kite.netlify.app/.netlify/functions/news?src=' + src;
   var xhr = new XMLHttpRequest();
   xhr.timeout = 12000;
   xhr.open('GET', url, true);
@@ -1444,9 +1443,9 @@ function fetchNews() {
     if (xhr.status === 200) {
       try {
         var data = JSON.parse(xhr.responseText);
-        if (data.status === 'ok' && data.items && data.items.length) {
+        if (data.success && data.items && data.items.length) {
           var items = data.items.map(function(item) {
-            return processNewsItem(item.title || '', item.description || item.content || '', item.link || '#', item.pubDate || '');
+            return processNewsItem(item.title || '', item.description || '', item.link || '#', item.pubDate || '');
           }).filter(function(n) { return n.title.length > 5; });
           storeNewsItems(src, items);
           renderNewsPeriod(items, currentNewsPeriod);
