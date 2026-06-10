@@ -807,7 +807,7 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
     <button class="chart-btn" id="nbMC" onclick="setNewsSrc('mc',this)">MoneyControl</button>
     <button class="chart-btn" id="nbMint" onclick="setNewsSrc('mint',this)">LiveMint</button>
     <button class="chart-btn" id="nbBL" onclick="setNewsSrc('bl',this)">Business Line</button>
-    <button class="chart-btn" id="nbReuters" onclick="setNewsSrc('reuters',this)">Reuters</button>
+    <button class="chart-btn" id="nbReuters" onclick="setNewsSrc('reuters',this)">Reuters (Global)</button>
     <button class="chart-btn" onclick="fetchNews()">&#8635; Refresh</button>
   </div>
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
@@ -1340,7 +1340,7 @@ function renderNewsPeriod(items, period) {
   var c = document.getElementById('newsContainer');
   if (!c) return;
   var src = S.newsSource;
-  var srcLabel = src === 'et' ? 'ET' : src === 'mc' ? 'MC' : 'Mint';
+  var srcLabel = src === 'et' ? 'ET' : src === 'mc' ? 'MC' : src === 'mint' ? 'Mint' : src === 'bl' ? 'BL' : 'Reuters';
   var showFull = (period === '1d' || period === '1w');
   if (!items.length) {
     c.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text3);font-size:12px">No stored news yet for this period.<br><br><button class="btn btn-ghost" onclick="fetchNews()" style="margin-top:8px">Fetch Now</button></div>';
