@@ -1301,31 +1301,72 @@ const NSE_SYMS=[{s:'RELIANCE',y:'RELIANCE.NS'},{s:'TCS',y:'TCS.NS'},{s:'HDFCBANK
 const FB_NSE=[{s:'RELIANCE',p:'2,847',ch:1.23},{s:'TCS',p:'3,924',ch:0.81},{s:'HDFCBANK',p:'1,678',ch:-0.34},{s:'INFY',p:'1,542',ch:1.52},{s:'ICICIBANK',p:'1,124',ch:0.54},{s:'BAJFINANCE',p:'7,245',ch:2.14},{s:'SBIN',p:'745',ch:-0.92},{s:'WIPRO',p:'284',ch:-0.71},{s:'TATAMOTORS',p:'968',ch:0.41},{s:'AXISBANK',p:'1,156',ch:0.88},{s:'MARUTI',p:'12,450',ch:0.63},{s:'LT',p:'3,412',ch:1.15}];
 
 async function fetchNSE(){
-  try{
-    const syms=NSE_SYMS.map(s=>s.y).join(',');
-    const url=`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${syms}`;
-    const proxy=`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-    const r=await fetch(proxy,{signal:AbortSignal.timeout(10000)});
-    const outer=await r.json();const data=JSON.parse(outer.contents);
-    const quotes=data.quoteResponse?.result||[];if(!quotes.length)throw new Error('empty');
-    document.getElementById('nseTable').innerHTML=quotes.map(q=>{const sym=q.symbol.replace('.NS','');const p=q.regularMarketPrice||0;const ch=q.regularMarketChangePercent||0;return `<tr><td class="sym">${sym}</td><td>₹${p.toFixed(2)}</td><td class="${ch>=0?'up':'down'}">${ch>=0?'▲':'▼'}${Math.abs(ch).toFixed(2)}%</td><td><button class="vid-save-btn" onclick="addToWatchlist('${sym}',${p.toFixed(2)})">+WL</button></td></tr>`;}).join('');
-    const ti=document.getElementById('tickerInner');if(ti&&quotes.length){const items=quotes.map(q=>{const sym=q.symbol.replace('.NS','');const ch=q.regularMarketChangePercent||0;return `<span class="ti"><span class="s">${sym}</span>${(q.regularMarketPrice||0).toFixed(0)} <span class="${ch>=0?'up':'down'}">${ch>=0?'▲':'▼'}${Math.abs(ch).toFixed(1)}%</span></span>`;});ti.innerHTML=[...items,...items].join('');}
-    const iurl=`https://query1.finance.yahoo.com/v7/finance/quote?symbols=^NSEI,^BSESN,^NSEBANK`;
-    const iproxy=`https://api.allorigins.win/get?url=${encodeURIComponent(iurl)}`;
-    const ir=await fetch(iproxy,{signal:AbortSignal.timeout(8000)});const iouter=await ir.json();const idata=JSON.parse(iouter.contents);const qs=idata.quoteResponse?.result||[];
-    qs.forEach(q=>{const p=q.regularMarketPrice;const ch=q.regularMarketChangePercent||0;const cls=ch>=0?'up':'down';const arr=ch>=0?'▲':'▼';const fmt=v=>Math.round(v).toLocaleString('en-IN');
-      if(q.symbol==='^NSEI'){['m-nifty','hm-nifty','hNifty'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=fmt(p);});['m-nifty-c','hm-nifty-c'].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent=arr+Math.abs(ch).toFixed(2)+'%';el.style.color=ch>=0?'var(--neon)':'var(--red)';}});}
-      if(q.symbol==='^BSESN'){['m-sensex','hSensex'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=fmt(p);});const ec=document.getElementById('m-sensex-c');if(ec){ec.textContent=arr+Math.abs(ch).toFixed(2)+'%';ec.style.color=ch>=0?'var(--neon)':'var(--red)';}}
-      if(q.symbol==='^NSEBANK'){const el=document.getElementById('m-bnifty');if(el)el.textContent=fmt(p);const ec=document.getElementById('m-bnifty-c');if(ec){ec.textContent=arr+Math.abs(ch).toFixed(2)+'%';ec.style.color=ch>=0?'var(--neon)':'var(--red)';}}
-    });
+  const BACKEND='https://shubhtradesmart-kite.netlify.app/.netlify/functions/indices';
+  const fmt=v=>Math.round(v).toLocaleString('en-IN');
+
+  function applyIndices(indices){
+    const n=indices['^NSEI'],b=indices['^BSESN'],bn=indices['^NSEBANK'];
+    if(n){
+      const ch=n.change||0,arr=ch>=0?'▲':'▼',cls=ch>=0?'var(--neon)':'var(--red)';
+      ['m-nifty','hm-nifty','hNifty'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=fmt(n.price);});
+      ['m-nifty-c','hm-nifty-c'].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent=arr+Math.abs(ch).toFixed(2)+'%';el.style.color=cls;}});
+    }
+    if(b){
+      const ch=b.change||0,arr=ch>=0?'▲':'▼',cls=ch>=0?'var(--neon)':'var(--red)';
+      ['m-sensex','hSensex'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=fmt(b.price);});
+      const ec=document.getElementById('m-sensex-c');if(ec){ec.textContent=arr+Math.abs(ch).toFixed(2)+'%';ec.style.color=cls;}
+    }
+    if(bn){
+      const ch=bn.change||0,arr=ch>=0?'▲':'▼',cls=ch>=0?'var(--neon)':'var(--red)';
+      const el=document.getElementById('m-bnifty');if(el)el.textContent=fmt(bn.price);
+      const ec=document.getElementById('m-bnifty-c');if(ec){ec.textContent=arr+Math.abs(ch).toFixed(2)+'%';ec.style.color=cls;}
+    }
     const mU=document.getElementById('mktUpdate');if(mU){mU.textContent='⟳ '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});mU.style.opacity='1';}
-  }catch(e){
-    document.getElementById('nseTable').innerHTML=FB_NSE.map(s=>`<tr><td class="sym">${s.s}</td><td>₹${s.p}</td><td class="${s.ch>=0?'up':'down'}">${s.ch>=0?'▲':'▼'}${Math.abs(s.ch).toFixed(2)}%</td><td><button class="vid-save-btn" onclick="addToWatchlist('${s.s}')">+WL</button></td></tr>`).join('')+'<tr><td colspan="4" style="font-size:9px;text-align:center;color:var(--text3);padding:4px">Cached — Yahoo Finance CORS blocked</td></tr>';
-    const fv={hNifty:'24,832',hSensex:'81,404','m-nifty':'24,832','m-sensex':'81,404','m-bnifty':'52,147','hm-nifty':'24,832'};
-    Object.entries(fv).forEach(([id,v])=>{const el=document.getElementById(id);if(el&&(el.textContent==='—'||el.textContent.includes('Fetching')||el.textContent===''))el.textContent=v;});
-    ['hm-nifty-c','m-nifty-c'].forEach(id=>{const el=document.getElementById(id);if(el&&(el.textContent.includes('Fetching')||el.textContent==='—'||el.textContent===''))el.innerHTML='<span class="cached-badge">cached</span>';});
-    // Show retry in NSE table if still showing default
-    const nt=document.getElementById('nseTable');if(nt&&nt.querySelector('td[colspan]')){nt.innerHTML='<tr><td colspan="4"><div class="retry-box">Live data unavailable — Yahoo Finance CORS blocked<br><span class="cached-badge">showing last cached prices</span><br><button class="retry-btn" onclick="refreshAll()">⟳ Tap to Retry</button></div></td></tr>';}
+  }
+
+  function applyStocks(stocks){
+    if(!stocks||!stocks.length)return;
+    document.getElementById('nseTable').innerHTML=stocks.map(s=>`<tr><td class="sym">${s.symbol}</td><td>₹${(s.price||0).toFixed(2)}</td><td class="${(s.change||0)>=0?'up':'down'}">${(s.change||0)>=0?'▲':'▼'}${Math.abs(s.change||0).toFixed(2)}%</td><td><button class="vid-save-btn" onclick="addToWatchlist('${s.symbol}',${(s.price||0).toFixed(2)})">+WL</button></td></tr>`).join('');
+    const ti=document.getElementById('tickerInner');
+    if(ti){const items=stocks.map(s=>{const ch=s.change||0;return `<span class="ti"><span class="s">${s.symbol}</span>${(s.price||0).toFixed(0)} <span class="${ch>=0?'up':'down'}">${ch>=0?'▲':'▼'}${Math.abs(ch).toFixed(1)}%</span></span>`;});ti.innerHTML=[...items,...items].join('');}
+  }
+
+  // PRIMARY: Use our Netlify backend (server-side, no CORS)
+  try{
+    const r=await fetch(BACKEND,{signal:AbortSignal.timeout(10000)});
+    const d=await r.json();
+    if(d.success && d.indices){
+      applyIndices(d.indices);
+      applyStocks(d.stocks);
+      return;
+    }
+    throw new Error('backend empty');
+  }catch(backendErr){
+    // FALLBACK: Try allorigins proxy
+    try{
+      const syms=NSE_SYMS.map(s=>s.y).join(',');
+      const url=`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${syms}`;
+      const proxy=`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+      const r=await fetch(proxy,{signal:AbortSignal.timeout(10000)});
+      const outer=await r.json();const data=JSON.parse(outer.contents);
+      const quotes=data.quoteResponse?.result||[];if(!quotes.length)throw new Error('empty');
+      applyStocks(quotes.map(q=>({symbol:q.symbol.replace('.NS',''),price:q.regularMarketPrice||0,change:q.regularMarketChangePercent||0})));
+      const iurl=`https://query1.finance.yahoo.com/v7/finance/quote?symbols=^NSEI,^BSESN,^NSEBANK`;
+      const iproxy=`https://api.allorigins.win/get?url=${encodeURIComponent(iurl)}`;
+      const ir=await fetch(iproxy,{signal:AbortSignal.timeout(8000)});const iouter=await ir.json();
+      const idata=JSON.parse(iouter.contents);const qs=idata.quoteResponse?.result||[];
+      const idxMap={};qs.forEach(q=>{idxMap[q.symbol]={price:q.regularMarketPrice,change:q.regularMarketChangePercent||0};});
+      if(Object.keys(idxMap).length)applyIndices(idxMap);
+      const mU=document.getElementById('mktUpdate');if(mU){mU.textContent='⟳ '+new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});mU.style.opacity='1';}
+    }catch(proxyErr){
+      // FINAL FALLBACK: Show cached static data
+      applyStocks(FB_NSE.map(s=>({symbol:s.s,price:parseFloat(s.p.replace(',','')),change:s.ch})));
+      const fv={'^NSEI':{price:24832,change:0},'^BSESN':{price:81404,change:0},'^NSEBANK':{price:52147,change:0}};
+      // Set cached values with badge
+      [{id:'m-nifty',v:'24,832'},{id:'hm-nifty',v:'24,832'},{id:'hNifty',v:'24,832'},{id:'m-sensex',v:'81,404'},{id:'hSensex',v:'81,404'},{id:'m-bnifty',v:'52,147'}].forEach(({id,v})=>{const el=document.getElementById(id);if(el&&(el.textContent==='—'||el.textContent===''))el.textContent=v;});
+      ['m-nifty-c','hm-nifty-c','m-sensex-c','m-bnifty-c'].forEach(id=>{const el=document.getElementById(id);if(el&&(el.textContent==='—'||el.textContent===''))el.innerHTML='<span class="cached-badge">cached</span>';});
+      document.getElementById('nseTable').innerHTML=FB_NSE.map(s=>`<tr><td class="sym">${s.s}</td><td>₹${s.p}</td><td class="${s.ch>=0?'up':'down'}">${s.ch>=0?'▲':'▼'}${Math.abs(s.ch).toFixed(2)}%</td><td><button class="vid-save-btn" onclick="addToWatchlist('${s.s}')">+WL</button></td></tr>`).join('')+'<tr><td colspan="4"><div class="retry-box">Live data unavailable<br><span class="cached-badge">cached prices shown</span><br><button class="retry-btn" onclick="refreshAll()">⟳ Tap to Retry</button></div></td></tr>';
+    }
   }
 }
 
