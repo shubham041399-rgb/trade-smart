@@ -224,6 +224,34 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
 .quiz-opt.correct{border-color:var(--neon);background:var(--neon-dim);color:var(--neon)}
 .quiz-opt.wrong{border-color:var(--red);background:var(--red-dim);color:var(--red)}
 .quiz-expl{display:none;margin-top:12px;padding:12px;background:rgba(244,166,35,0.07);border-left:3px solid var(--amber);border-radius:0 var(--r) var(--r) 0;font-size:12px;color:var(--text2);line-height:1.6}
+.qz-tab-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.qz-tab-btn{flex:1;min-width:140px;padding:12px 16px;background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r2);cursor:pointer;text-align:left;transition:all 0.15s}
+.qz-tab-btn.active{border-color:rgba(0,255,148,0.4);background:rgba(0,255,148,0.05)}
+.qz-tab-btn .qzt-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.qz-tab-btn .qzt-sub{font-size:10px;color:var(--text3)}
+.qz-panel{display:none}.qz-panel.active{display:block}
+.qz-scoreboard{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r2);padding:16px;margin-bottom:16px;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.qz-stat{text-align:center;flex:1;min-width:70px}
+.qz-stat-val{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--neon)}
+.qz-stat-lbl{font-size:10px;color:var(--text3);margin-top:2px}
+.qz-stat.fail .qz-stat-val{color:var(--red)}
+.qz-stat.warn .qz-stat-val{color:var(--amber)}
+.qz-result-box{border-radius:var(--r2);padding:16px;margin-bottom:14px;text-align:center}
+.qz-result-box.pass{background:rgba(0,255,148,0.07);border:1px solid rgba(0,255,148,0.3)}
+.qz-result-box.fail{background:rgba(255,71,87,0.07);border:1px solid rgba(255,71,87,0.3)}
+.qz-result-box h3{font-size:18px;font-weight:800;margin-bottom:6px}
+.qz-result-box.pass h3{color:var(--neon)}
+.qz-result-box.fail h3{color:var(--red)}
+.qz-result-box p{font-size:12px;color:var(--text2);line-height:1.6}
+.wrong-topic-card{background:var(--bg2);border:1px solid rgba(255,71,87,0.25);border-radius:var(--r2);padding:12px 14px;margin-bottom:8px}
+.wrong-topic-card .wtc-title{font-size:12px;font-weight:700;color:var(--red);margin-bottom:4px}
+.wrong-topic-card .wtc-body{font-size:11px;color:var(--text2);line-height:1.6}
+.vid-watched{border-color:rgba(0,255,148,0.5)!important;background:rgba(0,255,148,0.04)!important}
+.vid-watch-btn{margin-left:6px;background:none;border:1px solid var(--border2);color:var(--text3);font-size:9px;padding:2px 7px;border-radius:50px;cursor:pointer;transition:all 0.15s;white-space:nowrap;font-family:var(--mono);flex-shrink:0}
+.vid-watch-btn:hover{border-color:var(--neon);color:var(--neon)}
+.vid-watch-btn.watched{border-color:var(--neon);color:var(--neon);background:rgba(0,255,148,0.08)}
+.qz-progress-bar{height:6px;background:var(--bg3);border-radius:3px;margin-bottom:16px;overflow:hidden}
+.qz-progress-fill{height:100%;background:var(--neon);border-radius:3px;transition:width 0.3s}
 .zerodha-notice{background:rgba(88,166,255,0.06);border:1px solid rgba(88,166,255,0.2);border-radius:var(--r2);padding:16px}
 .sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
 .sec-hdr h2{font-size:18px;font-weight:800;color:var(--text)}
@@ -409,17 +437,18 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
 <!-- NAV -->
 <nav class="nav">
   <button class="nav-btn active" onclick="showTab('home',this)">🏠 Home</button>
-  <button class="nav-btn" onclick="showTab('learn',this)">📚 Learn</button>
+  <button class="nav-btn" onclick="showTab('learn',this)">📚 Seekho</button>
   <button class="nav-btn" onclick="showTab('market',this)">📈 Market</button>
-  <button class="nav-btn" onclick="showTab('mktcharts',this)">📊 Mkt Charts</button>
+  <button class="nav-btn" onclick="showTab('mktcharts',this)">📊 Charts</button>
   <button class="nav-btn" onclick="showTab('sectors',this)">🏭 Sectors</button>
   <button class="nav-btn" onclick="showTab('watchlist',this)">👁 Watchlist</button>
   <button class="nav-btn" onclick="showTab('news',this)">📰 News</button>
-  <button class="nav-btn" onclick="showTab('charts',this)">🕯 Charts</button>
+  <button class="nav-btn" onclick="showTab('charts',this)">🕯 Kite Charts</button>
   <button class="nav-btn" onclick="showTab('journal',this)">📓 Journal</button>
   <button class="nav-btn" onclick="showTab('pnl',this)">💰 P&L</button>
-  <button class="nav-btn" onclick="showTab('risk',this)">🛡 Risk</button>
-  <button class="nav-btn" onclick="showTab('manual',this)">📖 Manual</button>
+  <button class="nav-btn" onclick="showTab('risk',this)">🛡 Risk Calc</button>
+  <button class="nav-btn" onclick="showTab('manual',this)">📖 Guide</button>
+  <button class="nav-btn" onclick="showTab('quiz',this)">🧠 Quiz</button>
 </nav>
 <div class="content"><div class="main">
 
@@ -445,7 +474,7 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
       <rect x="1095" y="12" width="105" height="40" fill="#161B22"/><circle cx="1120" cy="-1" r="2" fill="#FF4757" opacity="0.8"/>
     </svg>
     <div class="hero-content">
-      <div style="font-size:12px;color:var(--text3);margin-bottom:4px">Good day, Shubh 👋</div>
+      <div style="font-size:12px;color:var(--text3);margin-bottom:4px">Good day, Shubh bhai 👋</div>
       <div class="hero-pval" id="heroCapital">₹10,000</div>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
         <span class="badge b-neon"><span class="live-dot"></span>LIVE</span>
@@ -461,8 +490,8 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
     </div>
   </div>
   <div class="g4" style="margin-bottom:14px">
-    <div class="metric"><div class="metric-lbl">Nifty 50</div><div class="metric-val" id="hm-nifty">—</div><div class="metric-ch" id="hm-nifty-c">fetching...</div></div>
-    <div class="metric"><div class="metric-lbl">BTC/USD</div><div class="metric-val" id="hm-btc">—</div><div class="metric-ch" id="hm-btc-c">fetching...</div></div>
+    <div class="metric"><div class="metric-lbl">Nifty 50</div><div class="metric-val" id="hm-nifty">—</div><div class="metric-ch" id="hm-nifty-c">Load ho raha hai...</div></div>
+    <div class="metric"><div class="metric-lbl">BTC/USD</div><div class="metric-val" id="hm-btc">—</div><div class="metric-ch" id="hm-btc-c">Load ho raha hai...</div></div>
     <div class="metric"><div class="metric-lbl">USD/INR</div><div class="metric-val" id="hm-usd">—</div><div class="metric-ch" id="hm-usd-c">live</div></div>
     <div class="metric"><div class="metric-lbl">Gold</div><div class="metric-val" id="hm-gold">—</div><div class="metric-ch" id="hm-gold-c">live</div></div>
   </div>
@@ -506,35 +535,35 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
 
   <!-- PHASE 1 -->
   <div class="phase-card current open" id="lp1">
-    <div class="phase-hdr" onclick="togglePhase('lp1')"><div class="phase-num">01</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Foundation — No Real Money</div><div style="font-size:11px;color:var(--text3)">Candlesticks · S&R · Volume · Trend · 3-4 weeks</div></div><span class="badge b-amber">Current</span></div>
+    <div class="phase-hdr" onclick="togglePhase('lp1')"><div class="phase-num">01</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Foundation — Abhi Paisa Mat Lagao</div><div style="font-size:11px;color:var(--text3)">Candlesticks · S&R · Volume · Trend · 3-4 hafte</div></div><span class="badge b-amber">Current (Chal Raha Hai)</span></div>
     <div class="phase-body">
       <div class="g2" style="margin-bottom:12px">
         <div>
-          <div class="card-title">Topics In Order <div class="nl"></div></div>
+          <div class="card-title">Topics — Iss Order Mein Seekho <div class="nl"></div></div>
           <ul class="chklist" id="p1-topics">
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>1. What is the stock market? How NSE/BSE work</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>2. Investing vs trading vs speculation</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>3. Reading a price chart — OHLC explained</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>4. Candlestick basics — body, wicks, colour meaning</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>5. Key candlestick patterns — Doji, Hammer, Engulfing</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>6. Support & resistance — what they are</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>7. How to draw S&R lines on Zerodha Kite</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>8. Trend lines — uptrend, downtrend, sideways</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>9. Volume analysis — why it validates price moves</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>10. Moving Averages — 20 EMA and 50 EMA basics</li>
+            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>1. Stock market kya hai? NSE/BSE kaise kaam karta hai</li>
+            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>2. Investing vs Trading vs Speculation — kya fark hai</li>
+            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>3. Price chart padhna — OHLC kya hota hai</li>
+            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>4. Candlestick basics — body, wicks, colour ka matlab</li>
+            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>5. Key patterns — Doji, Hammer, Engulfing</li>
+            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>6. Support & Resistance — ye hote kya hain</li>
+            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>7. Zerodha Kite pe S&R lines kaise draw karein</li>
+            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>8. Trend lines — uptrend, downtrend, sideways kya hota hai</li>
+            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>9. Volume analysis — price move ko valid kaise karta hai</li>
+            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>10. Moving Averages — 20 EMA aur 50 EMA basics</li>
           </ul>
           <div class="prog-bar"><div class="prog-fill" id="p1-prog" style="width:0%"></div></div>
           <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:4px" id="p1-pct">0% complete</div>
         </div>
         <div>
-          <div class="card-title">YouTube Videos — Click to Watch <div class="nl"></div></div>
-          <div style="font-size:10px;color:var(--amber);margin-bottom:8px;font-family:var(--mono)">⚠ Click any video row to open it directly on YouTube</div>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="vid-num">01</div><div class="yt-btn"></div><div style="flex:1">Stock Market Basics — Pranjal Kamra</div><button class="vid-save-btn" onclick="saveVid(event,this,'Stock Market Basics Pranjal Kamra','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=V47CdOCDo4s" target="_blank"><div class="vid-num">02</div><div class="yt-btn"></div><div style="flex:1">Share Market Basics — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Share Market Basics Rachana Ranade','https://www.youtube.com/watch?v=V47CdOCDo4s')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=KXrVZRCGSnU" target="_blank"><div class="vid-num">03</div><div class="yt-btn"></div><div style="flex:1">Candlestick Patterns — Pranjal Kamra</div><button class="vid-save-btn" onclick="saveVid(event,this,'Candlestick Patterns Pranjal Kamra','https://www.youtube.com/watch?v=KXrVZRCGSnU')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=3o4EQxZ-6-k" target="_blank"><div class="vid-num">04</div><div class="yt-btn"></div><div style="flex:1">Support and Resistance — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Support Resistance Rachana Ranade','https://www.youtube.com/watch?v=3o4EQxZ-6-k')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=ANdwvD8BoSA" target="_blank"><div class="vid-num">05</div><div class="yt-btn"></div><div style="flex:1">Volume and Price Action — Vivek Bajaj</div><button class="vid-save-btn" onclick="saveVid(event,this,'Volume Price Action Vivek Bajaj','https://www.youtube.com/watch?v=ANdwvD8BoSA')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=5R75aCebHPs" target="_blank"><div class="vid-num">06</div><div class="yt-btn"></div><div style="flex:1">EMA Moving Averages — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'EMA Moving Averages Rachana Ranade','https://www.youtube.com/watch?v=5R75aCebHPs')">+ Save</button></a>
+          <div class="card-title">YouTube Videos — Click Karke Dekho <div class="nl"></div></div>
+          <div style="font-size:10px;color:var(--amber);margin-bottom:8px;font-family:var(--mono)">⚠ Koi bhi video row click karo — seedha YouTube pe khulega</div>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="vid-num">01</div><div class="yt-btn"></div><div style="flex:1">Stock Market Basics — Pranjal Kamra</div><button class="vid-save-btn" onclick="saveVid(event,this,'Stock Market Basics Pranjal Kamra','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'RieqxXMds64')" id="wb-RieqxXMds64">✓ Watched</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=V47CdOCDo4s" target="_blank"><div class="vid-num">02</div><div class="yt-btn"></div><div style="flex:1">Share Market Basics — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Share Market Basics Rachana Ranade','https://www.youtube.com/watch?v=V47CdOCDo4s')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'V47CdOCDo4s')" id="wb-V47CdOCDo4s">✓ Watched</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=KXrVZRCGSnU" target="_blank"><div class="vid-num">03</div><div class="yt-btn"></div><div style="flex:1">Candlestick Patterns — Pranjal Kamra</div><button class="vid-save-btn" onclick="saveVid(event,this,'Candlestick Patterns Pranjal Kamra','https://www.youtube.com/watch?v=KXrVZRCGSnU')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'KXrVZRCGSnU')" id="wb-KXrVZRCGSnU">✓ Watched</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=3o4EQxZ-6-k" target="_blank"><div class="vid-num">04</div><div class="yt-btn"></div><div style="flex:1">Support and Resistance — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Support Resistance Rachana Ranade','https://www.youtube.com/watch?v=3o4EQxZ-6-k')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'3o4EQxZ-6-k')" id="wb-3o4EQxZ-6-k">✓ Watched</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=ANdwvD8BoSA" target="_blank"><div class="vid-num">05</div><div class="yt-btn"></div><div style="flex:1">Volume and Price Action — Vivek Bajaj</div><button class="vid-save-btn" onclick="saveVid(event,this,'Volume Price Action Vivek Bajaj','https://www.youtube.com/watch?v=ANdwvD8BoSA')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'ANdwvD8BoSA')" id="wb-ANdwvD8BoSA">✓ Watched</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=5R75aCebHPs" target="_blank"><div class="vid-num">06</div><div class="yt-btn"></div><div style="flex:1">EMA Moving Averages — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'EMA Moving Averages Rachana Ranade','https://www.youtube.com/watch?v=5R75aCebHPs')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'5R75aCebHPs')" id="wb-5R75aCebHPs">✓ Watched</button></a>
         </div>
       </div>
       <div class="summary-box"><h4>Phase 1 Key Terms</h4>
@@ -553,34 +582,34 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
 
   <!-- PHASE 2 -->
   <div class="phase-card" id="lp2">
-    <div class="phase-hdr" onclick="togglePhase('lp2')"><div class="phase-num">02</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Setups — Master Exactly Two</div><div style="font-size:11px;color:var(--text3)">Breakout from Consolidation · Pullback to Support · 2-3 weeks</div></div><span class="badge b-blue">Locked</span></div>
+    <div class="phase-hdr" onclick="togglePhase('lp2')"><div class="phase-num">02</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Setups — Sirf Do Setup Seekho</div><div style="font-size:11px;color:var(--text3)">Breakout · Pullback to Support · 2-3 hafte</div></div><span class="badge b-blue">Locked (Band Hai)</span></div>
     <div class="phase-body">
       <div class="g2">
         <div>
-          <div class="card-title">Topics In Order <div class="nl"></div></div>
+          <div class="card-title">Topics — Iss Order Mein Seekho <div class="nl"></div></div>
           <ul class="chklist" id="p2-topics">
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>1. What is consolidation — flat range identification</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>2. Real breakout vs fake breakout</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>3. Volume confirmation on breakouts</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>4. Entry, SL, Target for breakout setup</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>5. What is a pullback and why it happens</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>6. Pullback to support in uptrend — identification</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>7. Reversal candle confirmation at support</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>8. Entry, SL, Target for pullback setup</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>9. Practise: find 10 past breakouts on Zerodha</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>10. Practise: find 10 past pullbacks on Zerodha</li>
+            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>1. Consolidation kya hai — flat range kaise identify karein</li>
+            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>2. Real breakout vs fake breakout — fark kaise pata karein</li>
+            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>3. Breakout pe volume confirm karna kyun zaroori hai</li>
+            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>4. Breakout setup mein entry, SL, target kaise set karein</li>
+            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>5. Pullback kya hota hai aur kyun aata hai</li>
+            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>6. Uptrend mein support pe pullback — kaise identify karein</li>
+            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>7. Support pe reversal candle ka confirmation kaise lein</li>
+            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>8. Pullback setup mein entry, SL, target kaise set karein</li>
+            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>9. Practice: Zerodha pe 10 purane breakouts dhundo</li>
+            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>10. Practice: Zerodha pe 10 purane pullbacks dhundo</li>
           </ul>
           <div class="prog-bar"><div class="prog-fill" id="p2-prog" style="width:0%"></div></div>
           <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:4px" id="p2-pct">0% complete</div>
         </div>
         <div>
-          <div class="card-title">YouTube Videos — Click to Watch <div class="nl"></div></div>
-          <div style="font-size:10px;color:var(--amber);margin-bottom:8px;font-family:var(--mono)">⚠ Click any row to open directly on YouTube</div>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=2g05cX2xkn8" target="_blank"><div class="vid-num">01</div><div class="yt-btn"></div><div style="flex:1">Breakout Trading Strategy — Power of Stocks</div><button class="vid-save-btn" onclick="saveVid(event,this,'Breakout Strategy — Power of Stocks','https://www.youtube.com/watch?v=2g05cX2xkn8')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="vid-num">02</div><div class="yt-btn"></div><div style="flex:1">Real vs Fake Breakout — Trading Campus</div><button class="vid-save-btn" onclick="saveVid(event,this,'Real vs Fake Breakout','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="vid-num">03</div><div class="yt-btn"></div><div style="flex:1">Pullback Trading Strategy — NSE Live Charts</div><button class="vid-save-btn" onclick="saveVid(event,this,'Pullback Strategy NSE','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=5R75aCebHPs" target="_blank"><div class="vid-num">04</div><div class="yt-btn"></div><div style="flex:1">Swing Trading Complete Setup — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Swing Trading Setup — Rachana Ranade','https://www.youtube.com/watch?v=5R75aCebHPs')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=KXrVZRCGSnU" target="_blank"><div class="vid-num">05</div><div class="yt-btn"></div><div style="flex:1">How to Find Breakout Stocks — NSE Screener</div><button class="vid-save-btn" onclick="saveVid(event,this,'Finding Breakout Stocks NSE','https://www.youtube.com/watch?v=KXrVZRCGSnU')">+ Save</button></a>
+          <div class="card-title">YouTube Videos — Click Karke Dekho <div class="nl"></div></div>
+          <div style="font-size:10px;color:var(--amber);margin-bottom:8px;font-family:var(--mono)">⚠ Row click karo — YouTube pe khulega</div>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=2g05cX2xkn8" target="_blank"><div class="vid-num">01</div><div class="yt-btn"></div><div style="flex:1">Breakout Trading Strategy — Power of Stocks</div><button class="vid-save-btn" onclick="saveVid(event,this,'Breakout Strategy — Power of Stocks','https://www.youtube.com/watch?v=2g05cX2xkn8')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'2g05cX2xkn8')" id="wb-2g05cX2xkn8">✓ Watched</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="vid-num">02</div><div class="yt-btn"></div><div style="flex:1">Real vs Fake Breakout — Trading Campus</div><button class="vid-save-btn" onclick="saveVid(event,this,'Real vs Fake Breakout','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'RieqxXMds64')" id="wb-RieqxXMds64">✓ Watched</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="vid-num">03</div><div class="yt-btn"></div><div style="flex:1">Pullback Trading Strategy — NSE Live Charts</div><button class="vid-save-btn" onclick="saveVid(event,this,'Pullback Strategy NSE','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'RieqxXMds64')" id="wb-RieqxXMds64">✓ Watched</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=5R75aCebHPs" target="_blank"><div class="vid-num">04</div><div class="yt-btn"></div><div style="flex:1">Swing Trading Complete Setup — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Swing Trading Setup — Rachana Ranade','https://www.youtube.com/watch?v=5R75aCebHPs')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'5R75aCebHPs')" id="wb-5R75aCebHPs">✓ Watched</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=KXrVZRCGSnU" target="_blank"><div class="vid-num">05</div><div class="yt-btn"></div><div style="flex:1">How to Find Breakout Stocks — NSE Screener</div><button class="vid-save-btn" onclick="saveVid(event,this,'Finding Breakout Stocks NSE','https://www.youtube.com/watch?v=KXrVZRCGSnU')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'KXrVZRCGSnU')" id="wb-KXrVZRCGSnU">✓ Watched</button></a>
         </div>
       </div>
       <div class="summary-box"><h4>Phase 2 Key Terms</h4>
@@ -596,31 +625,31 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
 
   <!-- PHASE 3 -->
   <div class="phase-card" id="lp3">
-    <div class="phase-hdr" onclick="togglePhase('lp3')"><div class="phase-num">03</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Risk Management — Most Important Phase</div><div style="font-size:11px;color:var(--text3)">Position Sizing · Stop Loss · 1:2 R:R · 1-2 weeks</div></div><span class="badge b-blue">Locked</span></div>
+    <div class="phase-hdr" onclick="togglePhase('lp3')"><div class="phase-num">03</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Risk Management — Sabse Zaroori Phase</div><div style="font-size:11px;color:var(--text3)">Position Sizing · Stop Loss · 1:2 R:R · 1-2 hafte</div></div><span class="badge b-blue">Locked (Band Hai)</span></div>
     <div class="phase-body">
       <div class="g2">
         <div>
-          <div class="card-title">Topics In Order <div class="nl"></div></div>
+          <div class="card-title">Topics — Iss Order Mein Seekho <div class="nl"></div></div>
           <ul class="chklist" id="p3-topics">
-            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>1. Why risk management is the #1 skill</li>
-            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>2. Position sizing — how many shares to buy</li>
-            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>3. The 2-3% rule for ₹10,000 capital</li>
-            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>4. Correct stop loss placement</li>
-            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>5. Risk-Reward ratio — always minimum 1:2</li>
-            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>6. Position size formula: MaxRisk ÷ SL distance</li>
-            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>7. Trailing stop loss — locking in profits</li>
-            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>8. Zerodha brokerage impact on small capital</li>
+            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>1. Risk management #1 skill kyun hai — samajhna zaroori</li>
+            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>2. Position sizing — kitne shares kharidne chahiye</li>
+            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>3. ₹10,000 capital pe 2-3% rule kya hai</li>
+            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>4. Stop loss sahi jagah kaise lagaate hain</li>
+            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>5. Risk-Reward ratio — hamesha minimum 1:2 kyun</li>
+            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>6. Position size formula: MaxRisk ÷ SL distance yaad karo</li>
+            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>7. Trailing stop loss — profit lock karna kaise seekhein</li>
+            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>8. Zerodha brokerage ka chhote capital pe kitna asar padta hai</li>
           </ul>
           <div class="prog-bar"><div class="prog-fill" id="p3-prog" style="width:0%"></div></div>
           <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:4px" id="p3-pct">0% complete</div>
         </div>
         <div>
-          <div class="card-title">YouTube Videos — Click to Watch <div class="nl"></div></div>
-          <div style="font-size:10px;color:var(--amber);margin-bottom:8px;font-family:var(--mono)">⚠ Click any row to open directly on YouTube</div>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=2g05cX2xkn8" target="_blank"><div class="vid-num">01</div><div class="yt-btn"></div><div style="flex:1">Risk Management Masterclass — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Risk Management — Rachana Ranade','https://www.youtube.com/watch?v=2g05cX2xkn8')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=ANdwvD8BoSA" target="_blank"><div class="vid-num">02</div><div class="yt-btn"></div><div style="flex:1">Position Sizing for Beginners — Trading with Vivek</div><button class="vid-save-btn" onclick="saveVid(event,this,'Position Sizing — Vivek Bajaj','https://www.youtube.com/watch?v=ANdwvD8BoSA')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=3o4EQxZ-6-k" target="_blank"><div class="vid-num">03</div><div class="yt-btn"></div><div style="flex:1">Stop Loss Placement — Power of Stocks</div><button class="vid-save-btn" onclick="saveVid(event,this,'Stop Loss Placement — Power of Stocks','https://www.youtube.com/watch?v=3o4EQxZ-6-k')">+ Save</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=KXrVZRCGSnU" target="_blank"><div class="vid-num">04</div><div class="yt-btn"></div><div style="flex:1">Why 90% Traders Lose — Honest Explanation</div><button class="vid-save-btn" onclick="saveVid(event,this,'Why 90% Traders Lose','https://www.youtube.com/watch?v=KXrVZRCGSnU')">+ Save</button></a>
+          <div class="card-title">YouTube Videos — Click Karke Dekho <div class="nl"></div></div>
+          <div style="font-size:10px;color:var(--amber);margin-bottom:8px;font-family:var(--mono)">⚠ Row click karo — YouTube pe khulega</div>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=2g05cX2xkn8" target="_blank"><div class="vid-num">01</div><div class="yt-btn"></div><div style="flex:1">Risk Management Masterclass — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Risk Management — Rachana Ranade','https://www.youtube.com/watch?v=2g05cX2xkn8')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'2g05cX2xkn8')" id="wb-2g05cX2xkn8">✓ Watched</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=ANdwvD8BoSA" target="_blank"><div class="vid-num">02</div><div class="yt-btn"></div><div style="flex:1">Position Sizing for Beginners — Trading with Vivek</div><button class="vid-save-btn" onclick="saveVid(event,this,'Position Sizing — Vivek Bajaj','https://www.youtube.com/watch?v=ANdwvD8BoSA')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'ANdwvD8BoSA')" id="wb-ANdwvD8BoSA">✓ Watched</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=3o4EQxZ-6-k" target="_blank"><div class="vid-num">03</div><div class="yt-btn"></div><div style="flex:1">Stop Loss Placement — Power of Stocks</div><button class="vid-save-btn" onclick="saveVid(event,this,'Stop Loss Placement — Power of Stocks','https://www.youtube.com/watch?v=3o4EQxZ-6-k')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'3o4EQxZ-6-k')" id="wb-3o4EQxZ-6-k">✓ Watched</button></a>
+          <a class="vid-link" href="https://www.youtube.com/watch?v=KXrVZRCGSnU" target="_blank"><div class="vid-num">04</div><div class="yt-btn"></div><div style="flex:1">Why 90% Traders Lose — Honest Explanation</div><button class="vid-save-btn" onclick="saveVid(event,this,'Why 90% Traders Lose','https://www.youtube.com/watch?v=KXrVZRCGSnU')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'KXrVZRCGSnU')" id="wb-KXrVZRCGSnU">✓ Watched</button></a>
         </div>
       </div>
       <div class="summary-box"><h4>Phase 3 Key Terms</h4>
@@ -635,22 +664,22 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
 
   <!-- PHASE 4 -->
   <div class="phase-card" id="lp4">
-    <div class="phase-hdr" onclick="togglePhase('lp4')"><div class="phase-num">04</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Paper Trading — Gate to Live Money</div><div style="font-size:11px;color:var(--text3)">10 logged trades minimum · Use Journal tab · 2-3 weeks</div></div><span class="badge b-blue">Locked</span></div>
+    <div class="phase-hdr" onclick="togglePhase('lp4')"><div class="phase-num">04</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Paper Trading — Live Money Ka Darwaza</div><div style="font-size:11px;color:var(--text3)">10 trades zaroor likho · Journal use karo · 2-3 hafte</div></div><span class="badge b-blue">Locked (Band Hai)</span></div>
     <div class="phase-body">
       <div style="background:rgba(244,166,35,0.07);border:1px solid rgba(244,166,35,0.2);border-radius:var(--r2);padding:14px;font-size:12px;color:var(--text2);line-height:2">
         <div style="color:var(--amber);font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Rules</div>
-        ✓ Use real NSE prices — just don't execute the trade<br>✓ Write entry, SL, target BEFORE the trade<br>✓ Track outcome when SL or target is hit<br>✗ Don't skip logging even one trade<br>✗ Don't move SL after placing it<br>
-        <span style="color:var(--amber)">GATE: 10 logged trades in Journal → unlock Phase 5</span>
+        ✓ Real NSE prices use karo — bas trade execute mat karo<br>✓ Entry, SL, target trade se PEHLE likho<br>✓ SL ya target hit hone pe result track karo<br>✗ Ek bhi trade ka log mat chodo<br>✗ SL place karne ke baad move mat karna<br>
+        <span style="color:var(--amber)">GATE: Journal mein 10 trades likho → Phase 5 unlock hoga</span>
       </div>
     </div>
   </div>
 
   <!-- PHASE 5 -->
   <div class="phase-card" id="lp5">
-    <div class="phase-hdr" onclick="togglePhase('lp5')"><div class="phase-num">05</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Live Trading — Real Money</div><div style="font-size:11px;color:var(--text3)">One stock · One setup · Zerodha</div></div><span class="badge b-blue">Locked</span></div>
+    <div class="phase-hdr" onclick="togglePhase('lp5')"><div class="phase-num">05</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Live Trading — Asli Paisa</div><div style="font-size:11px;color:var(--text3)">Ek stock · Ek setup · Zerodha</div></div><span class="badge b-blue">Locked (Band Hai)</span></div>
     <div class="phase-body">
       <div style="background:rgba(255,71,87,0.06);border:1px solid rgba(255,71,87,0.2);border-radius:var(--r2);padding:14px;font-size:12px;color:var(--text2);line-height:2">
-        1. Max risk: ₹300 per trade (3% of ₹10,000)<br>2. Set SL order on Zerodha BEFORE entering<br>3. ONE open trade at a time — no exceptions<br>4. SL hits = close immediately, no holding<br>5. Log every trade within 30 minutes<br>6. After 3 consecutive losses = stop for the day<br>7. Only NSE stocks with volume above 500K/day
+        1. 1. Max risk: ₹300 per trade (₹10,000 ka 3%)<br>2. 2. Zerodha pe SL order trade mein jaane se PEHLE lagao<br>3. 3. Ek waqt pe SIRF EK trade — koi exception nahi<br>4. 4. SL hit ho gaya = turant close karo, hold mat karo<br>5. 5. Har trade 30 minutes ke andar journal mein likho<br>6. 6. 3 loss ek ke baad ek = us din ke liye band karo<br>7. 7. Sirf woh NSE stocks jo 500K+ volume roz karte hain
       </div>
     </div>
   </div>
@@ -671,29 +700,29 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
   <div class="g3">
     <div class="card">
       <div class="card-title">Technical Indicators <div class="nl"></div></div>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=ANdwvD8BoSA" target="_blank"><div class="yt-btn"></div><div style="flex:1">RSI Complete Guide for NSE</div><button class="vid-save-btn" onclick="saveVid(event,this,'RSI Guide NSE','https://www.youtube.com/watch?v=ANdwvD8BoSA')">+ Save</button></a>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=5R75aCebHPs" target="_blank"><div class="yt-btn"></div><div style="flex:1">MACD Strategy for Swing Trading</div><button class="vid-save-btn" onclick="saveVid(event,this,'MACD Strategy','https://www.youtube.com/watch?v=5R75aCebHPs')">+ Save</button></a>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=KXrVZRCGSnU" target="_blank"><div class="yt-btn"></div><div style="flex:1">Bollinger Bands Explained</div><button class="vid-save-btn" onclick="saveVid(event,this,'Bollinger Bands','https://www.youtube.com/watch?v=KXrVZRCGSnU')">+ Save</button></a>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="yt-btn"></div><div style="flex:1">Fibonacci Retracement Mastery</div><button class="vid-save-btn" onclick="saveVid(event,this,'Fibonacci Retracement','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button></a>
+      <a class="vid-link" href="https://www.youtube.com/watch?v=ANdwvD8BoSA" target="_blank"><div class="yt-btn"></div><div style="flex:1">RSI Complete Guide for NSE</div><button class="vid-save-btn" onclick="saveVid(event,this,'RSI Guide NSE','https://www.youtube.com/watch?v=ANdwvD8BoSA')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'ANdwvD8BoSA')" id="wb-ANdwvD8BoSA">✓ Watched</button></a>
+      <a class="vid-link" href="https://www.youtube.com/watch?v=5R75aCebHPs" target="_blank"><div class="yt-btn"></div><div style="flex:1">MACD Strategy for Swing Trading</div><button class="vid-save-btn" onclick="saveVid(event,this,'MACD Strategy','https://www.youtube.com/watch?v=5R75aCebHPs')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'5R75aCebHPs')" id="wb-5R75aCebHPs">✓ Watched</button></a>
+      <a class="vid-link" href="https://www.youtube.com/watch?v=KXrVZRCGSnU" target="_blank"><div class="yt-btn"></div><div style="flex:1">Bollinger Bands Explained</div><button class="vid-save-btn" onclick="saveVid(event,this,'Bollinger Bands','https://www.youtube.com/watch?v=KXrVZRCGSnU')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'KXrVZRCGSnU')" id="wb-KXrVZRCGSnU">✓ Watched</button></a>
+      <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="yt-btn"></div><div style="flex:1">Fibonacci Retracement Mastery</div><button class="vid-save-btn" onclick="saveVid(event,this,'Fibonacci Retracement','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'RieqxXMds64')" id="wb-RieqxXMds64">✓ Watched</button></a>
     </div>
     <div class="card">
       <div class="card-title">Advanced Patterns <div class="nl"></div></div>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="yt-btn"></div><div style="flex:1">Head & Shoulders Pattern</div><button class="vid-save-btn" onclick="saveVid(event,this,'Head Shoulders Pattern','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button></a>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=2g05cX2xkn8" target="_blank"><div class="yt-btn"></div><div style="flex:1">Cup & Handle Pattern</div><button class="vid-save-btn" onclick="saveVid(event,this,'Cup Handle Pattern','https://www.youtube.com/watch?v=2g05cX2xkn8')">+ Save</button></a>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=3o4EQxZ-6-k" target="_blank"><div class="yt-btn"></div><div style="flex:1">Double Top & Double Bottom</div><button class="vid-save-btn" onclick="saveVid(event,this,'Double Top Bottom','https://www.youtube.com/watch?v=3o4EQxZ-6-k')">+ Save</button></a>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=2g05cX2xkn8" target="_blank"><div class="yt-btn"></div><div style="flex:1">Flag & Pennant Patterns</div><button class="vid-save-btn" onclick="saveVid(event,this,'Flag Pennant Patterns','https://www.youtube.com/watch?v=2g05cX2xkn8')">+ Save</button></a>
+      <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="yt-btn"></div><div style="flex:1">Head & Shoulders Pattern</div><button class="vid-save-btn" onclick="saveVid(event,this,'Head Shoulders Pattern','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'RieqxXMds64')" id="wb-RieqxXMds64">✓ Watched</button></a>
+      <a class="vid-link" href="https://www.youtube.com/watch?v=2g05cX2xkn8" target="_blank"><div class="yt-btn"></div><div style="flex:1">Cup & Handle Pattern</div><button class="vid-save-btn" onclick="saveVid(event,this,'Cup Handle Pattern','https://www.youtube.com/watch?v=2g05cX2xkn8')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'2g05cX2xkn8')" id="wb-2g05cX2xkn8">✓ Watched</button></a>
+      <a class="vid-link" href="https://www.youtube.com/watch?v=3o4EQxZ-6-k" target="_blank"><div class="yt-btn"></div><div style="flex:1">Double Top & Double Bottom</div><button class="vid-save-btn" onclick="saveVid(event,this,'Double Top Bottom','https://www.youtube.com/watch?v=3o4EQxZ-6-k')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'3o4EQxZ-6-k')" id="wb-3o4EQxZ-6-k">✓ Watched</button></a>
+      <a class="vid-link" href="https://www.youtube.com/watch?v=2g05cX2xkn8" target="_blank"><div class="yt-btn"></div><div style="flex:1">Flag & Pennant Patterns</div><button class="vid-save-btn" onclick="saveVid(event,this,'Flag Pennant Patterns','https://www.youtube.com/watch?v=2g05cX2xkn8')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'2g05cX2xkn8')" id="wb-2g05cX2xkn8">✓ Watched</button></a>
     </div>
     <div class="card">
       <div class="card-title">Psychology & Options <div class="nl"></div></div>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=KXrVZRCGSnU" target="_blank"><div class="yt-btn"></div><div style="flex:1">Trading Psychology — Deep Dive</div><button class="vid-save-btn" onclick="saveVid(event,this,'Trading Psychology','https://www.youtube.com/watch?v=KXrVZRCGSnU')">+ Save</button></a>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="yt-btn"></div><div style="flex:1">Options Basics — Indian Market</div><button class="vid-save-btn" onclick="saveVid(event,this,'Options Basics India','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button></a>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=5R75aCebHPs" target="_blank"><div class="yt-btn"></div><div style="flex:1">Fundamental Analysis Introduction</div><button class="vid-save-btn" onclick="saveVid(event,this,'Fundamental Analysis','https://www.youtube.com/watch?v=5R75aCebHPs')">+ Save</button></a>
+      <a class="vid-link" href="https://www.youtube.com/watch?v=KXrVZRCGSnU" target="_blank"><div class="yt-btn"></div><div style="flex:1">Trading Psychology — Deep Dive</div><button class="vid-save-btn" onclick="saveVid(event,this,'Trading Psychology','https://www.youtube.com/watch?v=KXrVZRCGSnU')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'KXrVZRCGSnU')" id="wb-KXrVZRCGSnU">✓ Watched</button></a>
+      <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="yt-btn"></div><div style="flex:1">Options Basics — Indian Market</div><button class="vid-save-btn" onclick="saveVid(event,this,'Options Basics India','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'RieqxXMds64')" id="wb-RieqxXMds64">✓ Watched</button></a>
+      <a class="vid-link" href="https://www.youtube.com/watch?v=5R75aCebHPs" target="_blank"><div class="yt-btn"></div><div style="flex:1">Fundamental Analysis Introduction</div><button class="vid-save-btn" onclick="saveVid(event,this,'Fundamental Analysis','https://www.youtube.com/watch?v=5R75aCebHPs')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'5R75aCebHPs')" id="wb-5R75aCebHPs">✓ Watched</button></a>
     </div>
   </div>
 </div>
 <!-- MARKET -->
 <div class="panel" id="panel-market">
-  <div class="sec-hdr"><h2>Market <span>Overview</span></h2><div style="display:flex;gap:8px"><div class="r-badge live" id="mktUpdate">⟳ Fetching...</div><div class="r-badge" id="mktCountdown">—</div></div></div>
+  <div class="sec-hdr"><h2>Market <span>Overview</span></h2><div style="display:flex;gap:8px"><div class="r-badge live" id="mktUpdate">⟳ Load ho raha hai...</div><div class="r-badge" id="mktCountdown">—</div></div></div>
   <div class="mkt-banner" id="mktBanner" style="background:rgba(0,255,148,0.05);border-color:rgba(0,255,148,0.2)">
     <div><div class="mkt-banner-title" id="bannerTitle" style="color:var(--neon)">—</div><div style="font-size:11px;opacity:0.75;margin-top:2px" id="bannerSub">—</div></div>
     <div class="countdown"><div class="cd-block"><span class="cd-num" id="cd-h">--</span><span class="cd-lbl">hrs</span></div><span class="cd-sep">:</span><div class="cd-block"><span class="cd-num" id="cd-m">--</span><span class="cd-lbl">min</span></div><span class="cd-sep">:</span><div class="cd-block"><span class="cd-num" id="cd-s">--</span><span class="cd-lbl">sec</span></div></div>
@@ -707,20 +736,20 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
   <div class="g2" style="margin-bottom:14px">
     <div class="card">
       <div class="card-title">NSE Top Stocks <span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)">(15min delayed)</span><div class="nl"></div></div>
-      <div class="tbl-scroll"><table class="tbl"><thead><tr><th>Symbol</th><th>Price ₹</th><th>Change</th><th>+WL</th></tr></thead><tbody id="nseTable"><tr><td colspan="4" style="text-align:center;padding:18px;color:var(--text3)">Fetching...</td></tr></tbody></table></div>
+      <div class="tbl-scroll"><table class="tbl"><thead><tr><th>Symbol</th><th>Price ₹</th><th>Change</th><th>+WL</th></tr></thead><tbody id="nseTable"><tr><td colspan="4" style="text-align:center;padding:18px;color:var(--text3)">Load ho raha hai...</td></tr></tbody></table></div>
     </div>
     <div>
       <div class="card" style="margin-bottom:12px">
         <div class="card-title">Forex vs INR <span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--neon)">(live)</span><div class="nl"></div></div>
-        <div class="tbl-scroll"><table class="tbl"><thead><tr><th>Pair</th><th>Rate</th></tr></thead><tbody id="forexTable"><tr><td colspan="2" style="text-align:center;padding:14px;color:var(--text3)">Fetching...</td></tr></tbody></table></div>
+        <div class="tbl-scroll"><table class="tbl"><thead><tr><th>Pair</th><th>Rate</th></tr></thead><tbody id="forexTable"><tr><td colspan="2" style="text-align:center;padding:14px;color:var(--text3)">Load ho raha hai...</td></tr></tbody></table></div>
       </div>
       <div class="card" style="margin-bottom:12px">
         <div class="card-title">Crypto <span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--neon)">(live)</span><div class="nl"></div></div>
-        <div class="tbl-scroll"><table class="tbl"><thead><tr><th>Coin</th><th>USD</th><th>24h</th><th>7d</th></tr></thead><tbody id="cryptoTable"><tr><td colspan="4" style="text-align:center;padding:14px;color:var(--text3)">Fetching...</td></tr></tbody></table></div>
+        <div class="tbl-scroll"><table class="tbl"><thead><tr><th>Coin</th><th>USD</th><th>24h</th><th>7d</th></tr></thead><tbody id="cryptoTable"><tr><td colspan="4" style="text-align:center;padding:14px;color:var(--text3)">Load ho raha hai...</td></tr></tbody></table></div>
       </div>
       <div class="card">
         <div class="card-title">Commodities <div class="nl"></div></div>
-        <div class="tbl-scroll"><table class="tbl"><thead><tr><th>Asset</th><th>Price</th><th>24h</th></tr></thead><tbody id="commodTable"><tr><td colspan="3" style="text-align:center;padding:14px;color:var(--text3)">Fetching...</td></tr></tbody></table></div>
+        <div class="tbl-scroll"><table class="tbl"><thead><tr><th>Asset</th><th>Price</th><th>24h</th></tr></thead><tbody id="commodTable"><tr><td colspan="3" style="text-align:center;padding:14px;color:var(--text3)">Load ho raha hai...</td></tr></tbody></table></div>
       </div>
     </div>
   </div>
@@ -730,7 +759,7 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
 <div class="panel" id="panel-mktcharts">
   <div class="sec-hdr"><h2>Market <span>Charts</span> — Live TradingView</h2></div>
   <div class="holiday-card" style="margin-bottom:14px">
-    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:8px">📅 NSE Market Holidays 2025 (Remaining)</div>
+    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:8px">📅 NSE Market Holidays 2026 (Remaining)</div>
     <div style="display:flex;gap:8px;flex-wrap:wrap" id="holidayList"></div>
   </div>
   <div class="card" style="margin-bottom:14px">
@@ -1034,10 +1063,10 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
   <div class="sec-hdr"><h2>User <span>Manual</span></h2></div>
   <div class="quote-box"><div class="quote-text" id="manualQuote">Loading...</div><div class="quote-author" id="manualAuthor">—</div></div>
   <div class="manual-section"><h3>📅 Daily Routine</h3>
-    <div class="manual-item">🌅 <strong>Morning:</strong> Tick Daily Checklist → Read top 3 news → Scan 3 stocks for setups</div>
-    <div class="manual-item">📈 <strong>Market hours (9:15–3:30):</strong> Watch setups. Use Risk Calculator before any trade.</div>
-    <div class="manual-item">🌆 <strong>After market:</strong> Log trades → Review chart → Do 1 quiz</div>
-    <div class="manual-item">📅 <strong>Weekend:</strong> Review all trades → Watch saved videos → Read Phase key terms</div>
+    <div class="manual-item">🌅 <strong>Subah:</strong> Daily Checklist tick karo → Top 3 news padho → 3 stocks mein setup dhundo</div>
+    <div class="manual-item">📈 <strong>Market hours (9:15–3:30):</strong> Setups dekho. Koi bhi trade se pehle Risk Calculator use karo.</div>
+    <div class="manual-item">🌆 <strong>Market band hone ke baad:</strong> Trades log karo → Chart review karo → 1 quiz do</div>
+    <div class="manual-item">📅 <strong>Weekend:</strong> Saare trades review karo → Saved videos dekho → Phase key terms padho</div>
   </div>
   <div class="manual-section"><h3>▶ YouTube Videos in Learn Tab</h3>
     <div class="manual-item">Every video row is now a <strong>direct clickable link</strong>. Click anywhere on the row to open the exact recommended video on YouTube. No more searching manually.</div>
@@ -1055,6 +1084,110 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
     <div class="manual-item">3. Add exit price when SL or target is hit</div>
     <div class="manual-item">4. Tick topic checkboxes in Learn as you complete them</div>
     <div class="manual-item">5. Memorise 3 Key Terms from your current phase every day</div>
+  </div>
+</div>
+
+<div class="panel" id="panel-quiz">
+  <div class="sec-hdr"><h2>🧠 <span>Quiz</span> Centre</h2></div>
+
+  <!-- TAB SELECTOR -->
+  <div class="qz-tab-row">
+    <div class="qz-tab-btn active" id="qztab-phase" onclick="switchQzTab('phase',this)">
+      <div class="qzt-title">📚 Phase Quiz</div>
+      <div class="qzt-sub">Jo phases complete kiye — unka poora test</div>
+    </div>
+    <div class="qz-tab-btn" id="qztab-today" onclick="switchQzTab('today',this)">
+      <div class="qzt-title">📅 Aaj Ka Quiz</div>
+      <div class="qzt-sub">Aaj jo topics tickle aur videos dekhe — unse questions</div>
+    </div>
+  </div>
+
+  <!-- PHASE QUIZ PANEL -->
+  <div class="qz-panel active" id="qzpanel-phase">
+    <div id="qz-phase-start">
+      <div class="qz-scoreboard" id="qz-phase-scoreboard" style="display:none"></div>
+      <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r2);padding:16px;margin-bottom:14px">
+        <div style="font-size:12px;color:var(--text2);line-height:1.8;margin-bottom:12px">
+          <strong style="color:var(--text)">Phase Quiz ke Rules:</strong><br>
+          ✓ 10-15 questions — jo bhi phases complete kiye hain unse<br>
+          ✓ Pass hone ke liye: <strong style="color:var(--neon)">90%</strong> (9/10 minimum)<br>
+          ✓ Galat jawab → detailed explanation + usi topic ka retest<br>
+          ✓ Retest: 8-10 questions sirf weak topics se<br>
+          ✓ Retest pass karo tabhi aage badho
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:14px" id="qz-phase-eligibility">Phase 1 ke topics tick karo — tab unlock hoga.</div>
+        <button class="btn" id="qz-phase-start-btn" onclick="startPhaseQuiz()" style="width:100%">Phase Quiz Shuru Karo →</button>
+      </div>
+    </div>
+    <div id="qz-phase-question" style="display:none">
+      <div class="qz-progress-bar"><div class="qz-progress-fill" id="qzp-prog"></div></div>
+      <div style="font-size:10px;font-family:var(--mono);color:var(--text3);margin-bottom:12px" id="qzp-counter">Q1/10</div>
+      <div class="quiz-card">
+        <div style="font-size:9px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px" id="qzp-topic-tag"></div>
+        <div class="quiz-q" id="qzp-q"></div>
+        <div class="quiz-opts" id="qzp-opts"></div>
+        <div class="quiz-expl" id="qzp-expl" style="display:none"></div>
+        <button class="btn btn-ghost" id="qzp-next" onclick="nextPhaseQ()" style="display:none;margin-top:12px">Next Question →</button>
+      </div>
+    </div>
+    <div id="qz-phase-result" style="display:none"></div>
+    <div id="qz-phase-retest" style="display:none">
+      <div class="sec-hdr" style="margin-top:0"><h2>🔁 <span>Retest</span> — Weak Topics</h2></div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:14px" id="qz-retest-intro"></div>
+      <div class="qz-progress-bar"><div class="qz-progress-fill" id="qzr-prog"></div></div>
+      <div style="font-size:10px;font-family:var(--mono);color:var(--text3);margin-bottom:12px" id="qzr-counter"></div>
+      <div class="quiz-card" id="qz-retest-card" style="display:none">
+        <div style="font-size:9px;font-family:var(--mono);color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px" id="qzr-topic-tag"></div>
+        <div class="quiz-q" id="qzr-q"></div>
+        <div class="quiz-opts" id="qzr-opts"></div>
+        <div class="quiz-expl" id="qzr-expl" style="display:none"></div>
+        <button class="btn btn-ghost" id="qzr-next" onclick="nextRetestQ()" style="display:none;margin-top:12px">Next →</button>
+      </div>
+      <div id="qz-retest-result" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- TODAY QUIZ PANEL -->
+  <div class="qz-panel" id="qzpanel-today">
+    <div id="qz-today-start">
+      <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r2);padding:16px;margin-bottom:14px">
+        <div style="font-size:12px;color:var(--text2);line-height:1.8;margin-bottom:12px">
+          <strong style="color:var(--text)">Aaj Ke Quiz Ke Rules:</strong><br>
+          ✓ Sirf woh topics jinhein aaj tick ya dekha — unse questions<br>
+          ✓ Har session mein 5-10 questions<br>
+          ✓ Pass hone ke liye: <strong style="color:var(--neon)">90%</strong><br>
+          ✓ Galat jawab → detailed explanation + retest milega<br>
+          ✓ Roz reset hota hai
+        </div>
+        <div style="font-size:11px;color:var(--text3);margin-bottom:14px" id="qz-today-status">Tick topics or mark videos watched in Learn tab first.</div>
+        <button class="btn" id="qz-today-start-btn" onclick="startTodayQuiz()" style="width:100%">Aaj Ka Quiz Shuru Karo →</button>
+      </div>
+    </div>
+    <div id="qz-today-question" style="display:none">
+      <div class="qz-progress-bar"><div class="qz-progress-fill" id="qzt-prog"></div></div>
+      <div style="font-size:10px;font-family:var(--mono);color:var(--text3);margin-bottom:12px" id="qzt-counter">Q1/5</div>
+      <div class="quiz-card">
+        <div style="font-size:9px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px" id="qzt-topic-tag"></div>
+        <div class="quiz-q" id="qzt-q"></div>
+        <div class="quiz-opts" id="qzt-opts"></div>
+        <div class="quiz-expl" id="qzt-expl" style="display:none"></div>
+        <button class="btn btn-ghost" id="qzt-next" onclick="nextTodayQ()" style="display:none;margin-top:12px">Next Question →</button>
+      </div>
+    </div>
+    <div id="qz-today-result" style="display:none"></div>
+    <div id="qz-today-retest" style="display:none">
+      <div class="sec-hdr" style="margin-top:0"><h2>🔁 <span>Today's Retest</span></h2></div>
+      <div class="qz-progress-bar"><div class="qz-progress-fill" id="qztr-prog"></div></div>
+      <div style="font-size:10px;font-family:var(--mono);color:var(--text3);margin-bottom:12px" id="qztr-counter"></div>
+      <div class="quiz-card" id="qz-today-retest-card" style="display:none">
+        <div style="font-size:9px;font-family:var(--mono);color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px" id="qztr-topic-tag"></div>
+        <div class="quiz-q" id="qztr-q"></div>
+        <div class="quiz-opts" id="qztr-opts"></div>
+        <div class="quiz-expl" id="qztr-expl" style="display:none"></div>
+        <button class="btn btn-ghost" id="qztr-next" onclick="nextTodayRetestQ()" style="display:none;margin-top:12px">Next →</button>
+      </div>
+      <div id="qz-today-retest-result" style="display:none"></div>
+    </div>
   </div>
 </div>
 
@@ -1076,8 +1209,8 @@ function getIST(){const now=new Date();return new Date(now.getTime()+(now.getTim
 function isOpen(ist){const d=ist.getDay();if(d===0||d===6)return false;const m=ist.getHours()*60+ist.getMinutes();return m>=555&&m<930;}
 function isPre(ist){const d=ist.getDay();if(d===0||d===6)return false;const m=ist.getHours()*60+ist.getMinutes();return m>=540&&m<555;}
 function nextOpen(ist){let d=new Date(ist);d.setHours(9,15,0,0);if(ist.getHours()*60+ist.getMinutes()>=930)d.setDate(d.getDate()+1);while(d.getDay()===0||d.getDay()===6)d.setDate(d.getDate()+1);return d;}
-const NSE_HOLIDAYS_2025=['2025-01-26','2025-02-26','2025-03-14','2025-03-31','2025-04-10','2025-04-14','2025-04-18','2025-05-01','2025-08-15','2025-08-27','2025-10-02','2025-10-24','2025-10-25','2025-11-05','2025-12-25'];
-const HOLIDAY_NAMES={'2025-01-26':'Republic Day','2025-02-26':'Mahashivratri','2025-03-14':'Holi','2025-03-31':'Eid-Ul-Fitr','2025-04-10':'Ram Navami','2025-04-14':'Ambedkar Jayanti','2025-04-18':'Good Friday','2025-05-01':'Maharashtra Day','2025-08-15':'Independence Day','2025-08-27':'Ganesh Chaturthi','2025-10-02':'Gandhi Jayanti','2025-10-24':'Diwali (Laxmi Pujan)','2025-10-25':'Diwali (Balipratipada)','2025-11-05':'Guru Nanak Jayanti','2025-12-25':'Christmas'};
+const NSE_HOLIDAYS_2025=['2026-01-26','2026-03-20','2026-04-02','2026-04-06','2026-04-10','2026-04-14','2026-04-17','2026-05-01','2026-08-15','2026-09-17','2026-10-02','2026-10-22','2026-10-23','2026-11-03','2026-12-25'];
+const HOLIDAY_NAMES={'2026-01-26':'Republic Day','2026-03-20':'Holi','2026-04-02':'Ram Navami','2026-04-06':'Eid-Ul-Fitr','2026-04-10':'Good Friday','2026-04-14':'Ambedkar Jayanti','2026-04-17':'Shree Ram Navami','2026-05-01':'Maharashtra Day','2026-08-15':'Independence Day','2026-09-17':'Ganesh Chaturthi','2026-10-02':'Gandhi Jayanti','2026-10-22':'Diwali (Laxmi Pujan)','2026-10-23':'Diwali (Balipratipada)','2026-11-03':'Guru Nanak Jayanti','2026-12-25':'Christmas'};
 
 function updateClock(){
   const ist=getIST();
@@ -1183,7 +1316,7 @@ const TF_MAP={'1D':'D','1W':'W','1M':'M','3M':'3M','6M':'6M','1Y':'12M'};
 function updateChartSymbols(){const mkt=document.getElementById('chartMarket').value;const sel=document.getElementById('chartSymbol');sel.innerHTML='';(CHART_SYMBOLS[mkt]||[]).forEach(s=>{const o=document.createElement('option');o.value=s.v;o.textContent=s.l;sel.appendChild(o);});loadTVChart();}
 function setTF(tf,btn){S.chartTF=tf;document.querySelectorAll('#tfBtns .chart-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');loadTVChart();}
 function loadTVChart(){const sym=document.getElementById('chartSymbol')?.value||'NSE:NIFTY';const tf=TF_MAP[S.chartTF]||'W';const wrap=document.getElementById('tvChartWrap');if(!wrap)return;wrap.innerHTML=`<iframe src="https://www.tradingview.com/widgetembed/?frameElementId=tv_chart&symbol=${encodeURIComponent(sym)}&interval=${tf}&theme=dark&style=1&locale=en&toolbar_bg=%23161B22&enable_publishing=0&hide_side_toolbar=0&allow_symbol_change=1&save_image=0&hideideas=1&withdateranges=1&backgroundColor=rgba(13,17,23,1)&gridColor=rgba(33,38,45,0.5)" style="width:100%;height:500px;border:none;display:block" allowtransparency="true" scrolling="no" allowfullscreen></iframe>`;}
-function initMktCharts(){updateChartSymbols();const hl=document.getElementById('holidayList');if(hl&&!hl.innerHTML.trim()){const today=new Date();const futureHolidays=NSE_HOLIDAYS_2025.filter(h=>new Date(h)>=today);hl.innerHTML=futureHolidays.slice(0,8).map(h=>{const d=new Date(h);return `<span class="badge b-purple" style="margin:2px">${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} — ${HOLIDAY_NAMES[h]}</span>`;}).join('');if(!futureHolidays.length)hl.innerHTML='<span style="font-size:11px;color:var(--text3)">No more 2025 holidays remaining.</span>';}}
+function initMktCharts(){updateChartSymbols();const hl=document.getElementById('holidayList');if(hl&&!hl.innerHTML.trim()){const today=new Date();const futureHolidays=NSE_HOLIDAYS_2025.filter(h=>new Date(h)>=today);hl.innerHTML=futureHolidays.slice(0,8).map(h=>{const d=new Date(h);return `<span class="badge b-purple" style="margin:2px">${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS[d.getMonth()]} — ${HOLIDAY_NAMES[h]}</span>`;}).join('');if(!futureHolidays.length)hl.innerHTML='<span style="font-size:11px;color:var(--text3)">Koi 2026 holiday baaki nahi hai.</span>';}}
 
 // NEWS
 const NEWS_FEEDS={mc:'https://www.moneycontrol.com/rss/latestnews.xml',mint:'https://www.livemint.com/rss/markets',bl:'https://www.thehindubusinessline.com/markets/feeder/default.rss',ndtv:'https://feeds.feedburner.com/ndtvprofit-latest-business-news',bs:'https://www.business-standard.com/rss/markets-106.rss'};
@@ -1446,7 +1579,17 @@ function toggleFav(sym){if(S.favs.includes(sym))S.favs=S.favs.filter(f=>f!==sym)
 renderWL();
 
 // CHECKLIST
-function toggleCheck(li,phase,pid){li.classList.toggle('done');if(phase)updatePhaseProgress(pid);}
+function toggleCheck(li,phase,pid){
+  var wasDone = li.classList.contains('done');
+  li.classList.toggle('done');
+  if(phase)updatePhaseProgress(pid);
+  if(!wasDone && li.classList.contains('done')){
+    var txt = li.textContent.trim();
+    if(!todayTicks.includes(txt))todayTicks.push(txt);
+    localStorage.setItem('ts-today-ticks-'+todayDate,JSON.stringify(todayTicks));
+    updateTodayQuizStatus();
+  }
+}
 function updatePhaseProgress(pid){const list=document.getElementById(pid+'-topics');if(!list)return;const all=list.querySelectorAll('li');const done=list.querySelectorAll('li.done');const pct=all.length?Math.round(done.length/all.length*100):0;const bar=document.getElementById(pid+'-prog');if(bar)bar.style.width=pct+'%';const lbl=document.getElementById(pid+'-pct');if(lbl)lbl.textContent=pct+'% complete';}
 
 // QUIZ
@@ -1636,6 +1779,551 @@ function buildAbbrevGrid() {
   g.innerHTML = html;
 }
 buildAbbrevGrid();
+
+// ══════════════════════════════════════════════
+// QUIZ ENGINE
+// ══════════════════════════════════════════════
+
+// ── Video watched tracking ──
+var watchedVids = JSON.parse(localStorage.getItem('ts-watched-vids') || '[]');
+var todayWatchedVids = JSON.parse(localStorage.getItem('ts-today-watched-' + new Date().toDateString()) || '[]');
+
+function markWatched(e, btn, vidId) {
+  e.preventDefault(); e.stopPropagation();
+  if (!watchedVids.includes(vidId)) watchedVids.push(vidId);
+  if (!todayWatchedVids.includes(vidId)) todayWatchedVids.push(vidId);
+  localStorage.setItem('ts-watched-vids', JSON.stringify(watchedVids));
+  localStorage.setItem('ts-today-watched-' + new Date().toDateString(), JSON.stringify(todayWatchedVids));
+  btn.textContent = '✓ Done';
+  btn.classList.add('watched');
+  var row = btn.closest('a');
+  if (row) row.classList.add('vid-watched');
+  updateTodayQuizStatus();
+}
+
+function initWatchedState() {
+  watchedVids.forEach(function(id) {
+    var btn = document.getElementById('wb-' + id);
+    if (btn) { btn.textContent = '✓ Done'; btn.classList.add('watched'); var row = btn.closest('a'); if (row) row.classList.add('vid-watched'); }
+  });
+}
+
+// ── Topic tick tracking for today ──
+var todayDate = new Date().toDateString();
+var todayTicks = JSON.parse(localStorage.getItem('ts-today-ticks-' + todayDate) || '[]');
+
+// Hook into existing toggleCheck via monkey-patch after definition
+// (patched below after initWatchedState)
+
+// ══════════════════════════════════════════════
+// QUESTION BANK
+// ══════════════════════════════════════════════
+
+var QB = {
+
+  // PHASE 1 — Foundation
+  p1: [
+    { topic:'NSE & Stock Market Basics', q:'Tum Reliance ke shares kharidna chahte ho. India mein sabse zyada volume kahan trade hota hai?', opts:['NYSE','Sirf BSE','NSE (aur/ya BSE)','MCX'], ans:2, exp:'NSE (National Stock Exchange) India ka sabse bada exchange hai trading volume ke hisaab se. Zerodha pe tum NSE aur BSE dono pe buy kar sakte ho. Most big companies dono jagah listed hain.' },
+    { topic:'Investing vs Trading', q:'Ek swing trader 5 din mein stock khareed ke target pe bech deta hai. Ek investor wahi stock 3 saal rakhta hai. Ek single position mein ZYADA risk kiska hai?', opts:['Investor ka — zyada time','Swing trader ka — active hai','Dono ka barabar','Compare nahi ho sakta'], ans:1, exp:'Swing trader apna paisa short-term price move pe laga raha hai with a defined SL. Investor ke paas recover karne ka time hai. Per trade active risk trader ka zyada hota hai.' },
+    { topic:'Candlestick Basics', q:'Ek candle ₹100 pe open hoti hai aur ₹105 pe close. Candle ka colour kya hoga aur matlab kya hai?', opts:['Red — sellers jeet gaye','Green — buyers jeet gaye','Blue — koi change nahi','Grey — confusion'], ans:1, exp:'GREEN candle: Close (₹105) > Open (₹100). Buyers ne price upar push ki. Is time period mein buyers ka control tha.' },
+    { topic:'Candlestick Patterns', q:'Downtrend ke bottom pe ek candle hai — choti si body, bahut lamba lower wick, upar kuch nahi. Ye kaunsa pattern hai?', opts:['Shooting Star','Hammer','Doji','Bearish Engulfing'], ans:1, exp:'HAMMER: Lamba lower wick matlab sellers ne price neeche push karne ki koshish ki lekin buyers ne strongly reject kar diya. Downtrend ke bottom pe potential reversal signal hai.' },
+    { topic:'Candlestick Patterns', q:'Downtrend ke bottom pe ek badi green candle pichli red candle ko poora dhak leti hai. Is pattern ko kya kehte hain?', opts:['Evening Star','Bearish Engulfing','Bullish Engulfing','Marubozu'], ans:2, exp:'BULLISH ENGULFING: Badi green body ne pichli poori red candle ko cover kar liya. Strong reversal signal — buyers ne poora control le liya.' },
+    { topic:'Candlestick Patterns', q:'Ek Doji candle banti hai. Market ke baare mein kya samajh aata hai?', opts:['Strong buyers hain','Strong sellers hain','Complete confusion — buyers aur sellers barabar hain','Hamesha buy karo'], ans:2, exp:'DOJI: Open aur Close almost equal. Dono taraf wicks hain. Na buyers jeet sake na sellers. INDECISION. Context bahut zaroori hai — Doji se pehle kya hua tha.' },
+    { topic:'Support & Resistance', q:'₹500 pe price 2 mahine mein 3 baar bounce hua. ₹500 kya hai?', opts:['Resistance','Random level','Support','Target'], ans:2, exp:'SUPPORT: Woh price level jahan buyers consistently aate hain aur girna rok dete hain. Teen baar bounce = ek strong, well-established support level.' },
+    { topic:'Support & Resistance', q:'₹200 pe 4 baar resistance tha. Phir price high volume ke saath ₹200 ke upar close ho gayi. Ab ₹200 kya ban gaya?', opts:['Abhi bhi resistance','Naya support','Koi matlab nahi','Target'], ans:1, exp:'ROLE REVERSAL: Jab resistance clearly break ho jaata hai, woh support ban jaata hai. Ye technical analysis ka sabse reliable concept hai. Yaad rakho.' },
+    { topic:'Volume Analysis', q:'Price resistance ke upar break karti hai, lekin breakout candle ka volume BELOW average hai. Kya karein?', opts:['Turant kharid lo','Ruko — low volume breakout reliable nahi hota','Short becho','Volume ignore karo'], ans:1, exp:'LOW VOLUME BREAKOUT = likely fake. Bade institutions (FII/DII) ki buying high volume create karti hai. Unke bina breakout mein dum nahi hota.' },
+    { topic:'Trend Lines', q:'Ek stock ke lows 4 mahine mein: ₹100, ₹115, ₹130, ₹142. Isko kya kehte hain?', opts:['Downtrend','Sideways','Uptrend — higher lows','Random'], ans:2, exp:'UPTREND: Har low pichle se ZYADA hai. Higher highs ke saath milao toh solid uptrend confirm hoti hai. Swing traders sirf uptrend mein buy karte hain.' },
+    { topic:'Moving Averages', q:'Price 20 EMA ke upar hai, aur 20 EMA 50 EMA ke upar hai. Ye setup kya batata hai?', opts:['Bearish — becho','Bullish alignment — uptrend theek hai','Koi matlab nahi','Overbought hai'], ans:1, exp:'BULLISH ALIGNMENT: Price > 20EMA > 50EMA = strong uptrend. Best swing trade entries tab milte hain jab tum is alignment mein pullback pe buy karte ho.' },
+    { topic:'OHLC', q:'Ek candle: Open ₹150, High ₹160, Low ₹145, Close ₹148. Is candle period mein kaun jeeta?', opts:['Buyers — close > open','Sellers — close < open','Draw','Pata nahi'], ans:1, exp:'Close (₹148) < Open (₹150) = RED candle = sellers jeet gaye. High ₹160 dikhata hai buyers ne try kiya lekin sellers ne wapas push kar diya.' },
+    { topic:'Support & Resistance', q:'Ek stock mein ₹300 pe very strong resistance hai, 5 baar test ho chuka hai. Tum kya karoge?', opts:['Kharido — itni baar test hua toh break hoga','Ruko — clearly ₹300 ke upar close aur volume ke baad entry lo','Short becho','Resistance ignore karo'], ans:1, exp:'KABHI BHI resistance mein seedha mat ghuso. Wait karo jab tak price break karke CLOSE ho jaaye ₹300 ke upar with volume. Confirmation ke bina entry = jua.' },
+    { topic:'20 EMA & 50 EMA', q:'Uptrend mein price 50 EMA pe pullback karti hai aur wahan Hammer candle banta hai. Ye kya hai?', opts:['Sell signal','Random price action','High quality pullback setup — 50 EMA + reversal candle','Guaranteed reversal'], ans:2, exp:'PERFECT SETUP: Uptrend intact + 50 EMA support (dynamic support) + Hammer (reversal confirmation). Ye exactly woh setup hai jo Phase 2 mein seekhoge.' },
+    { topic:'Candlestick Patterns', q:'Uptrend ke TOP pe Shooting Star banti hai. Lamba upper wick, choti si body. Kya signal hai?', opts:['Continue karega upar','Sellers ne upar jaane se roka — potential reversal neeche','Buy karo','Sirf confusion'], ans:1, exp:'SHOOTING STAR: Buyers ne try kiya (lamba upper wick) lekin sellers ne reject kar diya aur close near open. Uptrend ke top pe = reversal warning. Agla candle dekho.' }
+  ],
+
+  // PHASE 2 — Setups
+  p2: [
+    { topic:'Breakout Setup', q:'Ek stock ₹200–₹210 ke beech 3 hafte se consolidate kar raha hai, volume bhi low tha. Aaj ₹215 pe close hua, volume 3× average. Kya karein?', opts:['Pullback ka wait karo','Entry lo — confirmed breakout hai','Short becho','Ignore karo'], ans:0, exp:'Sabse safe approach: pullback ka wait karo. Ya next day open pe entry valid hai kyunki volume ne breakout confirm kar diya. Kabhi bhi 5% move ke baad stock chase mat karo.' },
+    { topic:'Breakout Setup', q:'₹210 ke upar breakout hua, entry le li. Stop loss kahan lagega?', opts:['₹200 pe (range ke bottom pe)','₹210 ke thoda neeche (purana resistance, naya support)','₹190 pe','Stop loss ki zaroorat nahi'], ans:1, exp:'SL jaata hai ₹210 ke BILKUL NEECHE — kyunki ab ₹210 support hai. Agar price wapas ₹210 ke neeche close ho, breakout fail ho gaya. ₹200 zyada wide hai chhote capital ke liye.' },
+    { topic:'Fake Breakout', q:'Breakout pe entry li. Agla candle wapas resistance ke NEECHE close ho gaya. Matlab kya hai?', opts:['Normal hai — hold karo','Fake breakout — turant exit karo','Aur shares kharido','SL neeche le jao'], ans:1, exp:'FAKE BREAKOUT confirm: Jab price wapas resistance ke neeche close ho. TURANT EXIT karo. Chota loss abhi, ya bada loss baad mein. No holding, no hoping.' },
+    { topic:'Pullback Setup', q:'Stock clear uptrend mein hai. 3 din se pullback aa raha hai low volume pe, 20 EMA pe aake ruka. Wahan Bullish Engulfing bani. Kya karein?', opts:['Becho — gir raha hai','Kharido — textbook pullback to 20 EMA with confirmation','Pehle new high ka wait karo','EMA ignore karo'], ans:1, exp:'PERFECT PULLBACK SETUP: Uptrend intact + low volume pullback (koi panic nahi) + 20 EMA pe ruka (dynamic support) + Bullish Engulfing (reversal confirmation). Ye exactly woh setup hai.' },
+    { topic:'Pullback Setup', q:'Pullback setup mein reversal candle KAHAN banni chahiye?', opts:['Kahin bhi chale','Kisi defined support level pe — S&R, EMA, ya trendline','Pichle high ke upar','Pichle low ke neeche'], ans:1, exp:'Reversal candle tabhi meaningful hoti hai jab wo kisi defined support pe bane. Beech mein random green candle ka koi matlab nahi.' },
+    { topic:'Entry & Target', q:'₹150 pe buy kiya. SL ₹145 (₹5 risk). 1:2 R:R ke liye minimum target kya hoga?', opts:['₹155','₹160','₹170','₹152'], ans:1, exp:'1:2 R:R = Risk ₹5 toh reward minimum ₹10. Entry ₹150 + ₹10 = ₹160 minimum target. Is se kam pe koi trade mat lena.' },
+    { topic:'Breakout Setup', q:'Consolidation ke dauran volume kaisa hona chahiye?', opts:['Bahut high — interest dikhata hai','Ghatna chahiye — dry up hona chahiye','Constant rehna chahiye','Volume ka koi role nahi'], ans:1, exp:'VOLUME DRY UP during consolidation = na buyers excited, na sellers. Jab breakout high volume ke saath aata hai, wo institutional buying ka sign hota hai — woh genuine breakout hota hai.' },
+    { topic:'Pullback vs Reversal', q:'Stock downtrend mein hai. 2 din se upar bounce kar raha hai. Kya ye pullback buy setup hai?', opts:['Haan — bounce ho raha hai','Nahi — tum pullback sirf UPTREND mein hi kharidoge','Shayad','Hamesha bounce pe kharido'], ans:1, exp:'CRITICAL RULE: Pullback buy entry SIRF uptrend mein. Downtrend mein bounce sirf temporary relief hai — price aage phir gir sakti hai. Trend ke against mat jao.' },
+    { topic:'Finding Setups', q:'Zerodha Kite khola. Swing trade candidate dhundne ke liye PEHLE kya check karoge?', opts:['P/E ratio','Daily chart pe uptrend check karo','News dekho','Intraday chart dekho'], ans:1, exp:'TREND PEHLE. Daily chart pe uptrend (higher highs, higher lows, price above EMAs) = woh ground jahan tum khelte ho. Trend nahi = setup nahi.' },
+    { topic:'Breakout vs Pullback', q:'Do setups mile: Stock A — 52-week high todte hua breakout. Stock B — uptrend mein support pe pullback. Ek hi trade ke liye capital hai. Beginner ke liye kaun better hai?', opts:['Stock A — momentum hai','Stock B — pullback mein better entry aur defined risk','Dono equal','Dono mat lo'], ans:1, exp:'PULLBACK better hai beginner ke liye: Lower entry price, tighter SL at support, risk clearly defined. Breakouts mein slippage zyada hoti hai. Pullback to support = apna dost.' }
+  ],
+
+  // PHASE 3 — Risk Management
+  p3: [
+    { topic:'Position Sizing', q:'Capital ₹12,000. Risk per trade: 2%. Entry ₹150. SL ₹144. Kitne shares kharidoge?', opts:['10 shares','40 shares','20 shares','30 shares'], ans:1, exp:'Max risk = 2% × ₹12,000 = ₹240. SL distance = ₹150 − ₹144 = ₹6. Shares = ₹240 ÷ ₹6 = 40 shares. 40 × ₹150 = ₹6,000 — capital ke andar hai. Correct answer 40 hai.' },
+    { topic:'Position Sizing', q:'Capital ₹10,000. Risk 2%. Entry ₹500. SL ₹490. Formula se kitne shares bante hain, aur kya lene chahiye?', opts:['Formula se 20, lekin 20 × ₹500 = full capital — yeh galat hai, 2 shares lo','Formula se 20, lo bhi 20','10 shares','5 shares'], ans:0, exp:'Max risk ₹200. SL distance ₹10. Formula: 20 shares. Lekin 20 × ₹500 = ₹10,000 = poora capital ek trade mein. GALAT. Capital constraint formula se zyada important hai.' },
+    { topic:'Stop Loss', q:'SL ₹145 pe laga hai. Price ₹146 tak gaya, bounce kiya, phir upar gaya. SL ka kya karoge?', opts:['Hata do — almost hit hua tha','Exactly ₹145 pe rehne do','₹148 pe le jao','₹142 pe le jao'], ans:1, exp:'REHNE DO. SL technical level pe based hai (support ke neeche), is baat pe nahi ki kitna close gaya. SL move karna emotional trading hai. Plan nahi badlega.' },
+    { topic:'Risk-Reward', q:'Trade: Entry ₹200, SL ₹194, Target ₹206. Lena chahiye?', opts:['Haan','Nahi — R:R 1:1 hai, minimum 1:2 chahiye','Sirf agar market strong ho','Volume pe depend karta hai'], ans:1, exp:'Risk = ₹6. Reward = ₹6. R:R = 1:1. MINIMUM 1:2 SE NEECHE HAI. Ye trade mat lo. Target kam se kam ₹212 hona chahiye (₹12 reward) 1:2 ke liye.' },
+    { topic:'Trailing Stop Loss', q:'₹100 pe buy kiya, SL ₹94 pe. Price ₹115 pe pahunch gaya (target ₹112 se upar). SL ka kya karo?', opts:['₹115 pe poora exit karo','SL ₹94 pe rehne do','SL trail karke ₹109 pe le jao (profit protect karo)','Kuch mat karo'], ans:2, exp:'SL TRAIL karo. ₹109 pe le jaane se minimum ₹9 profit lock ho jaata hai. Agar price aur upar jaye — tum winner mein raho. Agar reverse ho — profit ke saath niklo, loss mein nahi.' },
+    { topic:'Brokerage Impact', q:'50 shares ₹100 pe kharide, ₹102 pe beche. ₹100 gross profit. Zerodha charges ~₹55 (brokerage + STT + taxes). Net profit kya hua?', opts:['₹100','₹80','₹45','₹55'], ans:2, exp:'NET = ₹100 − ₹55 = ₹45. Chhote capital pe brokerage bahut bada cut leta hai. Isliye 1:2+ R:R ZAROORI hai aur bahut chote targets pe trade karna avoid karo.' },
+    { topic:'2% Rule', q:'₹10,000 se shuru kiya. 3 consecutive trades mein 2% each loss. Kitna bacha?', opts:['₹9,400','₹9,412','₹9,800','₹9,000'], ans:1, exp:'Trade 1: ₹200 loss → ₹9,800. Trade 2: ₹196 loss → ₹9,604. Trade 3: ₹192 loss → ₹9,412. 2% rule ka fayda: losing streak mein bhi capital protected rehta hai.' },
+    { topic:'Risk Management Mindset', q:'Trade mein ho. SL hit hua. Turant baad stock upar bounce kar gaya. Lagta hai galat stop out hua. Kya karoge?', opts:['Turant re-enter karo','Aur shares lo — pata hai upar jayega','SL accept karo, plan review karo, aage badho','Hold karo — SL tight tha'], ans:2, exp:'ACCEPT KARO AUR AAGE BADHO. Kabhi kabhi SL hit hote hain aur price reverse karti hai — ye trading ka hissa hai. Tumhara kaam rules follow karna hai, hamesha sahi hona nahi. Emotional re-entry se accounts toot te hain.' }
+  ]
+};
+
+// ── Flatten questions for phase quiz ──
+function getPhaseQs(phases) {
+  var all = [];
+  if (phases.includes(1)) QB.p1.forEach(function(q) { var nq = Object.assign({}, q); nq.phase = 1; all.push(nq); });
+  if (phases.includes(2)) QB.p2.forEach(function(q) { var nq = Object.assign({}, q); nq.phase = 2; all.push(nq); });
+  if (phases.includes(3)) QB.p3.forEach(function(q) { var nq = Object.assign({}, q); nq.phase = 3; all.push(nq); });
+  return all;
+}
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+
+// ── Phase completion detection ──
+function getCompletedPhases() {
+  var phases = [];
+  for (var p = 1; p <= 3; p++) {
+    var items = document.querySelectorAll('#p' + p + '-topics li');
+    if (!items.length) continue;
+    var checked = document.querySelectorAll('#p' + p + '-topics li.checked');
+    if (checked.length === items.length && items.length > 0) phases.push(p);
+  }
+  return phases;
+}
+
+// ── Tab switching ──
+function switchQzTab(tab, btn) {
+  document.querySelectorAll('.qz-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.qz-panel').forEach(function(p) { p.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('qzpanel-' + tab).classList.add('active');
+  if (tab === 'phase') refreshPhaseQuizStart();
+  if (tab === 'today') updateTodayQuizStatus();
+}
+
+// ══════════════════════════════════════════════
+// PHASE QUIZ ENGINE
+// ══════════════════════════════════════════════
+var PQ = { qs:[], cur:0, correct:0, wrong:[], answers:[], active:false };
+var PR = { qs:[], cur:0, correct:0, active:false }; // retest
+
+function refreshPhaseQuizStart() {
+  var completed = getCompletedPhases();
+  var el = document.getElementById('qz-phase-eligibility');
+  var btn = document.getElementById('qz-phase-start-btn');
+  if (!el || !btn) return;
+  if (completed.length === 0) {
+    el.textContent = 'Pehle Phase 1 ke saare 10 topics tick karo (Seekho tab mein).';
+    btn.disabled = true; btn.style.opacity = '0.4';
+  } else {
+    el.innerHTML = '✅ <strong>Phase' + (completed.length > 1 ? 's' : '') + ' ' + completed.join(', ') + ' complete</strong> — quiz will cover ' + completed.map(function(p){return 'Phase '+p;}).join(' + ');
+    btn.disabled = false; btn.style.opacity = '1';
+  }
+}
+
+function startPhaseQuiz() {
+  var completed = getCompletedPhases();
+  if (!completed.length) { alert('Pehle Phase 1 complete karo.'); return; }
+  var pool = shuffle(getPhaseQs(completed));
+  PQ.qs = pool.slice(0, Math.min(15, pool.length));
+  PQ.cur = 0; PQ.correct = 0; PQ.wrong = []; PQ.answers = []; PQ.active = true;
+  document.getElementById('qz-phase-start').style.display = 'none';
+  document.getElementById('qz-phase-result').style.display = 'none';
+  document.getElementById('qz-phase-retest').style.display = 'none';
+  document.getElementById('qz-phase-question').style.display = 'block';
+  renderPhaseQ();
+}
+
+function renderPhaseQ() {
+  var q = PQ.qs[PQ.cur];
+  var total = PQ.qs.length;
+  var pct = Math.round((PQ.cur / total) * 100);
+  document.getElementById('qzp-prog').style.width = pct + '%';
+  document.getElementById('qzp-counter').textContent = 'Q' + (PQ.cur + 1) + ' / ' + total;
+  document.getElementById('qzp-topic-tag').textContent = 'Phase ' + q.phase + '  ·  ' + q.topic;
+  document.getElementById('qzp-q').textContent = q.q;
+  document.getElementById('qzp-expl').style.display = 'none';
+  document.getElementById('qzp-next').style.display = 'none';
+  var opts = document.getElementById('qzp-opts');
+  opts.innerHTML = '';
+  q.opts.forEach(function(o, i) {
+    var b = document.createElement('button');
+    b.className = 'quiz-opt';
+    b.textContent = o;
+    b.onclick = function() { answerPhaseQ(i); };
+    opts.appendChild(b);
+  });
+}
+
+function answerPhaseQ(chosen) {
+  var q = PQ.qs[PQ.cur];
+  var allOpts = document.querySelectorAll('#qzp-opts .quiz-opt');
+  allOpts.forEach(function(b) { b.onclick = null; });
+  allOpts[q.ans].classList.add('correct');
+  if (chosen !== q.ans) {
+    allOpts[chosen].classList.add('wrong');
+    PQ.wrong.push(q);
+  } else {
+    PQ.correct++;
+  }
+  PQ.answers.push({ q: q, chosen: chosen });
+  var expl = document.getElementById('qzp-expl');
+  expl.innerHTML = '<strong>' + (chosen === q.ans ? '✅ Correct!' : '❌ Galat.') + '</strong> ' + q.exp;
+  expl.style.display = 'block';
+  document.getElementById('qzp-next').style.display = 'inline-block';
+}
+
+function nextPhaseQ() {
+  PQ.cur++;
+  if (PQ.cur < PQ.qs.length) { renderPhaseQ(); return; }
+  // Quiz over
+  document.getElementById('qz-phase-question').style.display = 'none';
+  showPhaseResult();
+}
+
+function showPhaseResult() {
+  var total = PQ.qs.length;
+  var pct = Math.round((PQ.correct / total) * 100);
+  var pass = pct >= 90;
+  var rd = document.getElementById('qz-phase-result');
+  rd.style.display = 'block';
+
+  var wrongHTML = '';
+  if (PQ.wrong.length) {
+    wrongHTML = '<div style="margin-top:14px"><div style="font-size:11px;font-family:var(--mono);color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">In topics pe dobara dhyan do:</div>';
+    var topics = {};
+    PQ.wrong.forEach(function(q) { if (!topics[q.topic]) topics[q.topic] = []; topics[q.topic].push(q); });
+    Object.keys(topics).forEach(function(t) {
+      wrongHTML += '<div class="wrong-topic-card"><div class="wtc-title">❌ ' + t + '</div><div class="wtc-body">' + topics[t].map(function(q){return '• ' + q.exp;}).join('<br>') + '</div></div>';
+    });
+    wrongHTML += '</div>';
+  }
+
+  rd.innerHTML = '<div class="qz-result-box ' + (pass ? 'pass' : 'fail') + '">' +
+    '<h3>' + (pass ? '🎉 PASSED! ' + pct + '%' : '❌ ' + pct + '% — Need 90%') + '</h3>' +
+    '<p>' + PQ.correct + ' sahi the kul ' + total + '  questions mein.' + (pass ? ' Bahut achha! Aage badh sakte ho.' : ' Neeche weak topics review karo, phir retest do.') + '</p>' +
+    '</div>' +
+    '<div class="qz-scoreboard">' +
+    '<div class="qz-stat"><div class="qz-stat-val">' + PQ.correct + '/' + total + '</div><div class="qz-stat-lbl">Score</div></div>' +
+    '<div class="qz-stat ' + (pass?'':'fail') + '"><div class="qz-stat-val">' + pct + '%</div><div class="qz-stat-lbl">Percentage</div></div>' +
+    '<div class="qz-stat"><div class="qz-stat-val">' + PQ.wrong.length + '</div><div class="qz-stat-lbl">Galat</div></div>' +
+    '</div>' +
+    wrongHTML +
+    (pass
+      ? '<button class="btn" onclick="resetPhaseQuiz()" style="width:100%;margin-top:12px">Dobara Quiz Do</button>'
+      : '<button class="btn" onclick="startPhaseRetest()" style="width:100%;margin-top:12px;background:rgba(255,71,87,0.15);border-color:var(--red)">Weak Topics Ka Retest Shuru Karo →</button>');
+}
+
+function resetPhaseQuiz() {
+  PQ = { qs:[], cur:0, correct:0, wrong:[], answers:[], active:false };
+  document.getElementById('qz-phase-result').style.display = 'none';
+  document.getElementById('qz-phase-retest').style.display = 'none';
+  document.getElementById('qz-phase-start').style.display = 'block';
+  refreshPhaseQuizStart();
+}
+
+// ── Phase Retest ──
+function startPhaseRetest() {
+  var wrongTopics = {};
+  PQ.wrong.forEach(function(q) { wrongTopics[q.topic] = true; });
+  // Get more questions from same topics across all phases
+  var allQs = QB.p1.concat(QB.p2).concat(QB.p3);
+  var retestPool = allQs.filter(function(q) { return wrongTopics[q.topic]; });
+  // Exclude already answered questions
+  var answered = PQ.answers.map(function(a) { return a.q.q; });
+  retestPool = retestPool.filter(function(q) { return !answered.includes(q.q); });
+  if (retestPool.length < 3) retestPool = allQs.filter(function(q) { return wrongTopics[q.topic]; });
+  PR.qs = shuffle(retestPool).slice(0, Math.min(10, retestPool.length));
+  PR.cur = 0; PR.correct = 0; PR.active = true;
+
+  document.getElementById('qz-phase-result').style.display = 'none';
+  var rt = document.getElementById('qz-phase-retest');
+  rt.style.display = 'block';
+  document.getElementById('qz-retest-intro').textContent = 'Retest cover karega: ' + Object.keys(wrongTopics).join(', ') + '. Pass hone ke liye 90% chahiye.';
+  document.getElementById('qz-retest-result').style.display = 'none';
+  document.getElementById('qz-retest-card').style.display = 'block';
+  renderRetestQ();
+}
+
+function renderRetestQ() {
+  var q = PR.qs[PR.cur];
+  var total = PR.qs.length;
+  document.getElementById('qzr-prog').style.width = Math.round((PR.cur/total)*100) + '%';
+  document.getElementById('qzr-counter').textContent = 'Retest Q' + (PR.cur+1) + ' / ' + total;
+  document.getElementById('qzr-topic-tag').textContent = '⚠ RETEST — ' + q.topic;
+  document.getElementById('qzr-q').textContent = q.q;
+  document.getElementById('qzr-expl').style.display = 'none';
+  document.getElementById('qzr-next').style.display = 'none';
+  var opts = document.getElementById('qzr-opts');
+  opts.innerHTML = '';
+  q.opts.forEach(function(o, i) {
+    var b = document.createElement('button');
+    b.className = 'quiz-opt';
+    b.textContent = o;
+    b.onclick = function() { answerRetestQ(i); };
+    opts.appendChild(b);
+  });
+}
+
+function answerRetestQ(chosen) {
+  var q = PR.qs[PR.cur];
+  var allOpts = document.querySelectorAll('#qzr-opts .quiz-opt');
+  allOpts.forEach(function(b) { b.onclick = null; });
+  allOpts[q.ans].classList.add('correct');
+  if (chosen !== q.ans) allOpts[chosen].classList.add('wrong');
+  else PR.correct++;
+  var expl = document.getElementById('qzr-expl');
+  expl.innerHTML = '<strong>' + (chosen === q.ans ? '✅ Correct!' : '❌ Galat.') + '</strong> ' + q.exp;
+  expl.style.display = 'block';
+  document.getElementById('qzr-next').style.display = 'inline-block';
+}
+
+function nextRetestQ() {
+  PR.cur++;
+  if (PR.cur < PR.qs.length) { renderRetestQ(); return; }
+  // Retest over
+  var total = PR.qs.length;
+  var pct = Math.round((PR.correct/total)*100);
+  var pass = pct >= 90;
+  document.getElementById('qz-retest-card').style.display = 'none';
+  var rr = document.getElementById('qz-retest-result');
+  rr.style.display = 'block';
+  rr.innerHTML = '<div class="qz-result-box ' + (pass?'pass':'fail') + '">' +
+    '<h3>' + (pass ? '✅ Retest Passed! ' + pct + '%' : '❌ Retest Failed — ' + pct + '%') + '</h3>' +
+    '<p>' + (pass ? 'Shandaar! Weak topics samajh aa gaye. Ab agle phase pe ja sakte ho.' : 'Thoda aur study karo. Learn tab mein explanations dobara padho, Kite pe practice karo, phir try karo.') + '</p>' +
+    '</div>' +
+    '<button class="btn" onclick="resetPhaseQuiz()" style="width:100%;margin-top:10px">' + (pass ? 'Quiz Home Pe Wapas Jao' : 'Dobara Try Karo') + '</button>';
+}
+
+// ══════════════════════════════════════════════
+// TODAY'S QUIZ ENGINE
+// ══════════════════════════════════════════════
+
+// Map topic keywords to question bank entries
+var TOPIC_MAP = {
+  'candlestick': ['Candlestick Basics','Candlestick Patterns'],
+  'ohlc': ['OHLC'],
+  'support': ['Support & Resistance'],
+  'resistance': ['Support & Resistance'],
+  'volume': ['Volume Analysis'],
+  'trend': ['Trend Lines'],
+  'moving average': ['Moving Averages','20 EMA & 50 EMA'],
+  'ema': ['Moving Averages','20 EMA & 50 EMA'],
+  'breakout': ['Breakout Setup','Fake Breakout'],
+  'pullback': ['Pullback Setup','Pullback vs Reversal'],
+  'entry': ['Entry & Target'],
+  'stop loss': ['Stop Loss'],
+  'position size': ['Position Sizing'],
+  'risk': ['Risk-Reward','2% Rule','Risk Management Mindset'],
+  'trailing': ['Trailing Stop Loss'],
+  'brokerage': ['Brokerage Impact'],
+  'investing': ['Investing vs Trading'],
+  'nse': ['NSE & Stock Market Basics'],
+  'market': ['NSE & Stock Market Basics'],
+  'finding': ['Finding Setups']
+};
+
+var TQ = { qs:[], cur:0, correct:0, wrong:[], active:false };
+var TR = { qs:[], cur:0, correct:0, active:false };
+
+function getTodayTopics() {
+  var topics = [];
+  todayTicks.forEach(function(tick) {
+    var tickLower = tick.toLowerCase();
+    Object.keys(TOPIC_MAP).forEach(function(keyword) {
+      if (tickLower.includes(keyword)) {
+        TOPIC_MAP[keyword].forEach(function(t) { if (!topics.includes(t)) topics.push(t); });
+      }
+    });
+  });
+  // Also add from watched videos today
+  todayWatchedVids.forEach(function() {
+    // Videos cover basics — include foundational topics
+    ['Candlestick Basics','Volume Analysis','Support & Resistance'].forEach(function(t) {
+      if (!topics.includes(t)) topics.push(t);
+    });
+  });
+  return topics;
+}
+
+function updateTodayQuizStatus() {
+  var topics = getTodayTopics();
+  var el = document.getElementById('qz-today-status');
+  var btn = document.getElementById('qz-today-start-btn');
+  if (!el || !btn) return;
+  if (topics.length === 0) {
+    el.textContent = 'Pehle Seekho tab mein topics tick karo ya videos dekho.';
+    btn.disabled = true; btn.style.opacity = '0.4';
+  } else {
+    el.innerHTML = '✅ Today\'s topics detected: <strong>' + topics.join(', ') + '</strong>';
+    btn.disabled = false; btn.style.opacity = '1';
+  }
+}
+
+function startTodayQuiz() {
+  var topics = getTodayTopics();
+  if (!topics.length) { alert('Pehle kuch topics tick karo ya videos dekho.'); return; }
+  var allQs = QB.p1.concat(QB.p2).concat(QB.p3);
+  var pool = allQs.filter(function(q) { return topics.includes(q.topic); });
+  if (pool.length < 3) pool = allQs.filter(function(q) { return topics.some(function(t) { return q.topic.toLowerCase().includes(t.toLowerCase()) || t.toLowerCase().includes(q.topic.toLowerCase()); }); });
+  TQ.qs = shuffle(pool).slice(0, Math.min(10, pool.length));
+  TQ.cur = 0; TQ.correct = 0; TQ.wrong = []; TQ.active = true;
+  document.getElementById('qz-today-start').style.display = 'none';
+  document.getElementById('qz-today-result').style.display = 'none';
+  document.getElementById('qz-today-retest').style.display = 'none';
+  document.getElementById('qz-today-question').style.display = 'block';
+  renderTodayQ();
+}
+
+function renderTodayQ() {
+  var q = TQ.qs[TQ.cur];
+  var total = TQ.qs.length;
+  document.getElementById('qzt-prog').style.width = Math.round((TQ.cur/total)*100) + '%';
+  document.getElementById('qzt-counter').textContent = 'Q' + (TQ.cur+1) + ' / ' + total;
+  document.getElementById('qzt-topic-tag').textContent = 'Today\'s Topic  ·  ' + q.topic;
+  document.getElementById('qzt-q').textContent = q.q;
+  document.getElementById('qzt-expl').style.display = 'none';
+  document.getElementById('qzt-next').style.display = 'none';
+  var opts = document.getElementById('qzt-opts');
+  opts.innerHTML = '';
+  q.opts.forEach(function(o, i) {
+    var b = document.createElement('button');
+    b.className = 'quiz-opt';
+    b.textContent = o;
+    b.onclick = function() { answerTodayQ(i); };
+    opts.appendChild(b);
+  });
+}
+
+function answerTodayQ(chosen) {
+  var q = TQ.qs[TQ.cur];
+  var allOpts = document.querySelectorAll('#qzt-opts .quiz-opt');
+  allOpts.forEach(function(b) { b.onclick = null; });
+  allOpts[q.ans].classList.add('correct');
+  if (chosen !== q.ans) { allOpts[chosen].classList.add('wrong'); TQ.wrong.push(q); }
+  else TQ.correct++;
+  var expl = document.getElementById('qzt-expl');
+  expl.innerHTML = '<strong>' + (chosen === q.ans ? '✅ Correct!' : '❌ Galat.') + '</strong> ' + q.exp;
+  expl.style.display = 'block';
+  document.getElementById('qzt-next').style.display = 'inline-block';
+}
+
+function nextTodayQ() {
+  TQ.cur++;
+  if (TQ.cur < TQ.qs.length) { renderTodayQ(); return; }
+  document.getElementById('qz-today-question').style.display = 'none';
+  showTodayResult();
+}
+
+function showTodayResult() {
+  var total = TQ.qs.length;
+  var pct = Math.round((TQ.correct/total)*100);
+  var pass = pct >= 90;
+  var rd = document.getElementById('qz-today-result');
+  rd.style.display = 'block';
+  var wrongHTML = '';
+  if (TQ.wrong.length) {
+    wrongHTML = '<div style="margin-top:12px"><div style="font-size:11px;font-family:var(--mono);color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Revisit these:</div>';
+    TQ.wrong.forEach(function(q) {
+      wrongHTML += '<div class="wrong-topic-card"><div class="wtc-title">❌ ' + q.topic + '</div><div class="wtc-body">' + q.exp + '</div></div>';
+    });
+    wrongHTML += '</div>';
+  }
+  rd.innerHTML = '<div class="qz-result-box ' + (pass?'pass':'fail') + '">' +
+    '<h3>' + (pass ? '🎉 ' + pct + '% — Great Day!' : '❌ ' + pct + '% — Need 90%') + '</h3>' +
+    '<p>' + TQ.correct + '/' + total + ' correct. ' + (pass ? 'Today\'s learning is solid.' : 'Retest pehle do, tab today complete tick karo.') + '</p>' +
+    '</div>' +
+    '<div class="qz-scoreboard">' +
+    '<div class="qz-stat"><div class="qz-stat-val">' + TQ.correct + '/' + total + '</div><div class="qz-stat-lbl">Score</div></div>' +
+    '<div class="qz-stat ' + (pass?'':'fail') + '"><div class="qz-stat-val">' + pct + '%</div><div class="qz-stat-lbl">Result</div></div>' +
+    '</div>' + wrongHTML +
+    (pass
+      ? '<button class="btn" onclick="resetTodayQuiz()" style="width:100%;margin-top:12px">Retake</button>'
+      : '<button class="btn" onclick="startTodayRetest()" style="width:100%;margin-top:12px;background:rgba(255,71,87,0.15);border-color:var(--red)">Start Retest on Galat Topics →</button>');
+}
+
+function resetTodayQuiz() {
+  TQ = { qs:[], cur:0, correct:0, wrong:[], active:false };
+  document.getElementById('qz-today-result').style.display = 'none';
+  document.getElementById('qz-today-question').style.display = 'none';
+  document.getElementById('qz-today-retest').style.display = 'none';
+  document.getElementById('qz-today-start').style.display = 'block';
+  updateTodayQuizStatus();
+}
+
+function startTodayRetest() {
+  var wrongTopics = {};
+  TQ.wrong.forEach(function(q) { wrongTopics[q.topic] = true; });
+  var allQs = QB.p1.concat(QB.p2).concat(QB.p3);
+  var answered = TQ.qs.map(function(q) { return q.q; });
+  var pool = allQs.filter(function(q) { return wrongTopics[q.topic] && !answered.includes(q.q); });
+  if (pool.length < 3) pool = allQs.filter(function(q) { return wrongTopics[q.topic]; });
+  TR.qs = shuffle(pool).slice(0, Math.min(10, pool.length));
+  TR.cur = 0; TR.correct = 0; TR.active = true;
+  document.getElementById('qz-today-result').style.display = 'none';
+  var rt = document.getElementById('qz-today-retest');
+  rt.style.display = 'block';
+  document.getElementById('qz-today-retest-result').style.display = 'none';
+  document.getElementById('qz-today-retest-card').style.display = 'block';
+  renderTodayRetestQ();
+}
+
+function renderTodayRetestQ() {
+  var q = TR.qs[TR.cur];
+  var total = TR.qs.length;
+  document.getElementById('qztr-prog').style.width = Math.round((TR.cur/total)*100) + '%';
+  document.getElementById('qztr-counter').textContent = 'Retest Q' + (TR.cur+1) + ' / ' + total;
+  document.getElementById('qztr-topic-tag').textContent = '⚠ RETEST — ' + q.topic;
+  document.getElementById('qztr-q').textContent = q.q;
+  document.getElementById('qztr-expl').style.display = 'none';
+  document.getElementById('qztr-next').style.display = 'none';
+  var opts = document.getElementById('qztr-opts');
+  opts.innerHTML = '';
+  q.opts.forEach(function(o, i) {
+    var b = document.createElement('button');
+    b.className = 'quiz-opt';
+    b.textContent = o;
+    b.onclick = function() { answerTodayRetestQ(i); };
+    opts.appendChild(b);
+  });
+}
+
+function answerTodayRetestQ(chosen) {
+  var q = TR.qs[TR.cur];
+  var allOpts = document.querySelectorAll('#qztr-opts .quiz-opt');
+  allOpts.forEach(function(b) { b.onclick = null; });
+  allOpts[q.ans].classList.add('correct');
+  if (chosen !== q.ans) allOpts[chosen].classList.add('wrong');
+  else TR.correct++;
+  var expl = document.getElementById('qztr-expl');
+  expl.innerHTML = '<strong>' + (chosen === q.ans ? '✅ Correct!' : '❌ Galat.') + '</strong> ' + q.exp;
+  expl.style.display = 'block';
+  document.getElementById('qztr-next').style.display = 'inline-block';
+}
+
+function nextTodayRetestQ() {
+  TR.cur++;
+  if (TR.cur < TR.qs.length) { renderTodayRetestQ(); return; }
+  var total = TR.qs.length;
+  var pct = Math.round((TR.correct/total)*100);
+  var pass = pct >= 90;
+  document.getElementById('qz-today-retest-card').style.display = 'none';
+  var rr = document.getElementById('qz-today-retest-result');
+  rr.style.display = 'block';
+  rr.innerHTML = '<div class="qz-result-box ' + (pass?'pass':'fail') + '">' +
+    '<h3>' + (pass ? '✅ Retest Passed! ' + pct + '%' : '❌ Retest Failed — ' + pct + '%') + '</h3>' +
+    '<p>' + (pass ? 'Today\'s learning confirmed. Move on.' : 'Learn tab mein explanations dhyan se dobara padho. Phir try karo.') + '</p>' +
+    '</div>' +
+    '<button class="btn" onclick="resetTodayQuiz()" style="width:100%;margin-top:10px">' + (pass?'Ho Gaya':'Dobara Try Karo') + '</button>';
+}
+
+// ── Init ──
+initWatchedState();
+refreshPhaseQuizStart();
+updateTodayQuizStatus();
 
 </script>
 </body>
