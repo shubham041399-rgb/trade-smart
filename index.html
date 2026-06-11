@@ -1694,775 +1694,69 @@ function renderNewsPeriod(items, period) {
 // Intelligent key points generator based on actual headline
 function generateNewsKP(title, desc, impact) {
   var t = (title + ' ' + desc).toLowerCase();
-
-  // Extract key entities from title
   var stocks = [];
-  var knownStocks = ['reliance','tcs','infosys','hdfc','icici','sbi','bajaj','wipro','adani','tata','maruti','axis','kotak','ltim','hcl','ongc','ntpc','ioc'];
+  var knownStocks = ['reliance','tcs','infosys','hdfc','icici','sbi','bajaj','wipro','adani','tata','maruti','axis','kotak','hcl','ongc','ntpc'];
   knownStocks.forEach(function(s) { if (t.includes(s)) stocks.push(s.toUpperCase()); });
-
   var what = '', pros = '', cons = '', action = '';
 
-  // ── Results / Earnings news ──
-  if (t.includes('profit') || t.includes('earnings') || t.includes('quarterly') || t.includes('q1') || t.includes('q2') || t.includes('q3') || t.includes('q4') || t.includes('results')) {
-    var isUp = t.includes('surge') || t.includes('jump') || t.includes('rise') || t.includes('grow') || t.includes('beat') || t.includes('strong') || t.includes('record');
-    var isDown = t.includes('fall') || t.includes('decline') || t.includes('drop') || t.includes('miss') || t.includes('weak') || t.includes('loss');
-    what = (stocks.length ? stocks[0] : 'Company') + ' ne apne quarterly results announce kiye hain. ' + (isUp ? 'Profits expected se zyada aaye hain — strong performance.' : isDown ? 'Profits expected se kam rahe — weak quarter.' : 'Results mix rahi hain.');
-    pros = isUp ? '• Quarterly earnings strong hain — management execution achhi
-• Stock price pe immediate upward reaction ho sakti hai
-• Institutional buying attract kar sakta hai' : '• Agar sector strong hai toh sirf ek weak quarter se panic nahi karna
-• Long-term investors ke liye accumulation opportunity ho sakti hai';
-    cons = isDown ? '• Weak results se stock pe selling pressure aayega
-• Short-term mein price neeche ja sakti hai
-• Fund managers position reduce kar sakte hain' : '• High expectations ke baad correction possible hai
-• "Buy the rumour, sell the news" effect ho sakta hai';
-    action = stocks.length ? 'Agar ' + stocks[0] + ' tumhari watchlist mein hai — results ke baad price reaction dekho. Pehle din volatile hota hai. Setup banne ka wait karo, turant mat kudo.' : 'Results ki direction dekho. Agar stock strong setup mein hai aur earnings achhe hain — pullback pe entry plan karo.';
+  if (t.includes('profit') || t.includes('earnings') || t.includes('quarterly') || t.includes('results') || t.includes('q1') || t.includes('q2') || t.includes('q3') || t.includes('q4')) {
+    var isUp = t.includes('surge') || t.includes('jump') || t.includes('rise') || t.includes('beat') || t.includes('strong') || t.includes('record');
+    var isDown = t.includes('fall') || t.includes('decline') || t.includes('drop') || t.includes('miss') || t.includes('weak');
+    what = (stocks.length ? stocks[0] : 'Company') + ' ne quarterly results announce kiye. ' + (isUp ? 'Profits expected se zyada — strong performance.' : isDown ? 'Profits expected se kam — weak quarter.' : 'Results mixed hain.');
+    pros = isUp ? '• Earnings strong — management execution achhi<br>• Stock pe immediate upward reaction ho sakti hai<br>• Institutional buying attract kar sakta hai' : '• Sirf ek weak quarter se panic nahi karna<br>• Long-term investors ke liye accumulation opportunity';
+    cons = isDown ? '• Weak results se stock pe selling pressure aayega<br>• Short-term mein price neeche ja sakti hai<br>• Fund managers position reduce kar sakte hain' : '• High expectations ke baad correction possible<br>• Buy the rumour, sell the news effect ho sakta hai';
+    action = (stocks.length ? stocks[0] : 'Is stock') + ' ka chart dekho. Pehle din volatile hota hai. Setup banne ka wait karo, turant entry mat lo.';
   }
-  // ── Buy / Target / Recommendation news ──
   else if (t.includes('target') || t.includes('buy') || t.includes('recommend') || t.includes('upgrade') || t.includes('outperform')) {
-    var broker = '';
-    if (t.includes('icici securities')) broker = 'ICICI Securities';
-    else if (t.includes('emkay')) broker = 'Emkay Global';
-    else if (t.includes('motilal')) broker = 'Motilal Oswal';
-    else if (t.includes('hdfc securities')) broker = 'HDFC Securities';
-    else broker = 'ek brokerage firm';
-    var targetMatch = title.match(/rs?\s*[\d,]+/i);
-    var targetPrice = targetMatch ? targetMatch[0].toUpperCase() : 'ek target price';
-    what = broker + ' ne ' + (stocks.length ? stocks[0] : 'is stock') + ' ke liye BUY recommendation diya hai with target ' + targetPrice + '. Matlab unhe lagta hai price yahan tak jayegi.';
-    pros = '• Professional research team ka analysis hai — strong fundamental basis
-• Target price clear hai — traders ke liye reference point milta hai
-• Recommendation se short-term buying interest increase ho sakta hai';
-    cons = '• Broker recommendations hamesha sahi nahi hoti — kisi ki bhi
-• Target kabhi kabhi 6-12 months ka hota hai, short-term nahi
-• Recommendation pe blindly mat jao — apna setup dhundo';
-    action = 'Ye recommendation ek reference point hai, signal nahi. ' + (stocks.length ? stocks[0] : 'Is stock') + ' ko apne Kite chart pe dekho — kya technical setup bhi bullish hai? Agar haan aur price support pe hai — tab plan karo.';
+    var broker = t.includes('icici') ? 'ICICI Securities' : t.includes('emkay') ? 'Emkay Global' : t.includes('motilal') ? 'Motilal Oswal' : t.includes('hdfc sec') ? 'HDFC Securities' : 'Ek brokerage firm';
+    what = broker + ' ne ' + (stocks.length ? stocks[0] : 'is stock') + ' ke liye BUY recommendation diya hai. Unhe lagta hai price target tak jayegi.';
+    pros = '• Professional research team ka analysis<br>• Target price clear hai — traders ke liye reference<br>• Recommendation se short-term buying interest badh sakta hai';
+    cons = '• Broker recommendations hamesha sahi nahi hoti<br>• Target 6-12 months ka hota hai, short-term nahi<br>• Blindly mat follow karo — apna setup dhundo';
+    action = 'Ye recommendation ek reference hai, trading signal nahi. ' + (stocks.length ? stocks[0] : 'Is stock') + ' ka chart check karo — technical setup bhi bullish hai toh plan karo.';
   }
-  // ── RBI / Interest rate / Policy news ──
-  else if (t.includes('rbi') || t.includes('repo rate') || t.includes('interest rate') || t.includes('monetary policy') || t.includes('fed') || t.includes('rate cut') || t.includes('rate hike')) {
+  else if (t.includes('rbi') || t.includes('repo rate') || t.includes('interest rate') || t.includes('fed') || t.includes('rate cut') || t.includes('rate hike')) {
     var isCut = t.includes('cut') || t.includes('reduce') || t.includes('lower') || t.includes('easing');
     var isHike = t.includes('hike') || t.includes('raise') || t.includes('increase') || t.includes('tightening');
-    what = 'RBI ya Federal Reserve ne interest rates ke baare mein decision liya hai. ' + (isCut ? 'Rate cut = borrowing sasta hoga — economy ke liye positive signal.' : isHike ? 'Rate hike = borrowing mehnga hoga — inflation control ke liye.' : 'Policy stance pe update hai — market closely watch kar raha hai.');
-    pros = isCut ? '• Rate cut se loans saste honge — businesses ke liye growth opportunity
-• Banking sector aur real estate stocks pe positive impact
-• Liquidity badega — market mein more money flow hoga' : '• Rate stability dikhata hai ki economy control mein hai
-• Disciplined monetary policy = long-term market stability';
-    cons = isHike ? '• EMI badhegi — consumer spending reduce hoga
-• High-debt companies pe margin pressure badega
-• Growth stocks pe valuation compress ho sakta hai' : '• Uncertainty remain karta hai agar decision expected nahi tha
-• Sectors like banking ka NIM impact ho sakta hai';
-    action = isCut ? 'Rate cut ke baad banking aur real estate stocks pe nazar rakho — yeh sectors seedha benefit lete hain. Inme se koi strong chart setup mein hai toh plan karo.' : 'Rate decision ke baad pehle 1-2 din market volatile rehti hai. Koi bhi naya trade karne se pehle dust settle hone do.';
+    what = 'RBI ya Fed ne interest rates pe decision liya. ' + (isCut ? 'Rate cut = borrowing sasta — economy ke liye positive.' : isHike ? 'Rate hike = borrowing mehnga — inflation control.' : 'Policy update — market closely watch kar raha hai.');
+    pros = isCut ? '• Rate cut se loans saste — businesses ke liye growth<br>• Banking aur real estate stocks pe positive impact<br>• Market mein liquidity badega' : '• Economy control mein hai<br>• Long-term market stability ke liye positive';
+    cons = isHike ? '• EMI badhegi — consumer spending reduce hoga<br>• High-debt companies pe margin pressure<br>• Growth stocks pe valuation compress ho sakta hai' : '• Agar decision unexpected tha toh uncertainty rahegi<br>• Banking sector NIM impact ho sakta hai';
+    action = isCut ? 'Rate cut ke baad Banking aur Real Estate stocks pe nazar rakho. Strong chart setup mein ho toh plan karo.' : 'Rate decision ke baad pehle 1-2 din volatile rehta hai. Dust settle hone do.';
   }
-  // ── FII / DII / Institutional flow news ──
   else if (t.includes('fii') || t.includes('dii') || t.includes('foreign') || t.includes('institutional') || t.includes('inflow') || t.includes('outflow')) {
-    var isBuy = t.includes('buy') || t.includes('inflow') || t.includes('purchase') || t.includes('invest');
-    what = (isBuy ? 'FII (Foreign Institutional Investors) ya DII' : 'Institutional investors') + ' ne ' + (isBuy ? 'Indian market mein paisa lagaya hai — strong buying dikhi.' : 'selling ki hai — market se paisa nikala gaya.');
-    pros = isBuy ? '• FII buying = strong confidence signal
-• Large inflows se index stocks mein rally aa sakti hai
-• Sentiment positive rehta hai jab bade players khareed rahe hain' : '• DII buying offset kar sakti hai — domestic investors strong hain
-• Long-term investors ke liye better prices mil sakti hain';
-    cons = isBuy ? '• Short-term mein prices already upar ja chuki hoti hain — chasers trap hote hain
-• FII kabhi bhi direction badal sakte hain — currency movements pe depend' : '• FII outflow se broad market pe selling pressure aata hai
-• Short-term mein volatility badti hai';
-    action = isBuy ? 'FII buying wale din broad market stocks pe nazar rakho. Agar tumhara setup already ready hai — entry ke liye favorable environment hai.' : 'FII outflow mein nayi long positions se bacho. Existing positions ka SL tight karo.';
+    var isBuy = t.includes('buy') || t.includes('inflow') || t.includes('purchase');
+    what = (isBuy ? 'FII/DII ne Indian market mein buying ki hai.' : 'Institutional investors ne selling ki hai — market se paisa nikala.');
+    pros = isBuy ? '• FII buying = strong confidence signal<br>• Index stocks mein rally aa sakti hai<br>• Overall sentiment positive' : '• DII buying offset kar sakti hai<br>• Better prices mil sakte hain long-term ke liye';
+    cons = isBuy ? '• Prices already upar ja chuki hoti hain<br>• FII kabhi bhi direction badal sakte hain' : '• Broad market pe selling pressure<br>• Short-term volatility badegi';
+    action = isBuy ? 'FII buying ke din broad market stocks mein existing setups ke liye favorable environment hai.' : 'FII outflow mein nayi long positions avoid karo. Existing SL tight karo.';
   }
-  // ── IPO / Listing news ──
-  else if (t.includes('ipo') || t.includes('listing') || t.includes('public issue') || t.includes('subscription')) {
-    what = 'Ek nayi company stock market mein list ho rahi hai ya IPO la rahi hai. Yeh primary market activity hai.';
-    pros = '• Nayi investment opportunity — ground floor entry
-• Strong IPO subscriptions dikhate hain market mein confidence hai
-• Listing gains possible agar demand strong hai';
-    cons = '• IPO pricing aksar premium pe hoti hai — valuations check karo
-• Listing ke pehle din extreme volatility hoti hai
-• Track record nahi hota — risk zyada hai';
-    action = 'Beginner hona ke hisaab se IPO se abhi door raho. Pehle secondary market mein established stocks seekho. IPO speculation beginners ke liye suitable nahi.';
+  else if (t.includes('ipo') || t.includes('listing') || t.includes('public issue')) {
+    what = 'Ek nayi company stock market mein list ho rahi hai ya IPO la rahi hai.';
+    pros = '• Nayi investment opportunity<br>• Strong subscriptions = market mein confidence<br>• Listing gains possible agar demand strong';
+    cons = '• IPO pricing aksar premium pe hoti hai<br>• Listing pe extreme volatility<br>• Track record nahi hota — risk zyada';
+    action = 'Beginner hona ke hisaab se abhi IPO se door raho. Pehle secondary market mein established stocks seekho.';
   }
-  // ── Merger / Acquisition news ──
   else if (t.includes('merger') || t.includes('acquisition') || t.includes('takeover') || t.includes('deal') || t.includes('stake')) {
-    what = 'Do companies ke beech merger ya acquisition ki khabar hai. ' + (stocks.length ? stocks.join(' aur ') + ' involved hain.' : 'Corporate restructuring ho raha hai.');
-    pros = '• Acquirer usually synergies aur growth unlock karta hai
-• Target company ke shareholders ko premium milta hai
-• Sector consolidation — remaining players stronger bante hain';
-    cons = '• Integration risk hoti hai — deals fail bhi ho sakti hain
-• Acquirer ke shares pe dilution pressure aa sakta hai
-• Regulatory approval risk hoti hai';
-    action = stocks.length ? stocks[0] + ' ka chart dekho. M&A news pe stocks volatile hoti hain. Without clear setup ke koi trade mat lo — wait for dust to settle.' : 'Involved stocks pe volatility expect karo. Clear setup bane bina entry avoid karo.';
+    what = 'Do companies ke beech merger ya acquisition ki khabar. ' + (stocks.length ? stocks.join(' aur ') + ' involved hain.' : '');
+    pros = '• Synergies aur growth unlock ho sakti hai<br>• Target company shareholders ko premium milta hai<br>• Sector consolidation — remaining players stronger';
+    cons = '• Integration risk hoti hai — deals fail bhi ho sakte hain<br>• Acquirer ke shares pe dilution pressure<br>• Regulatory approval risk';
+    action = (stocks.length ? stocks[0] : 'Involved stocks') + ' volatile honge. Clear setup bane bina entry avoid karo.';
   }
-  // ── Sector / Economy general news ──
-  else if (t.includes('gdp') || t.includes('economy') || t.includes('growth') || t.includes('inflation') || t.includes('iip') || t.includes('pmi')) {
-    var isPositive = t.includes('growth') || t.includes('strong') || t.includes('better') || t.includes('high') || t.includes('surge');
-    what = 'India ki economy ya ek specific sector ke baare mein macroeconomic data aaya hai. ' + (isPositive ? 'Numbers positive hain — economy strong momentum mein hai.' : 'Data mixed ya weak hai — growth concerns hain.');
-    pros = isPositive ? '• Strong macro data = corporate earnings ke liye positive environment
-• Foreign investors confidence badhta hai
-• Broad market rally ka support milta hai' : '• Weak data pe central bank rate cut consider kar sakta hai
-• Selective opportunities emerge hoti hain';
-    cons = isPositive ? '• High growth pe inflation ka risk — RBI rate hike ka darr
-• Valuations already stretched ho sakti hain' : '• Weak economy mein earnings pressure badta hai
-• Market sentiment negative rehta hai';
-    action = isPositive ? 'Macro positive hone pe cyclical sectors (Banking, Auto, Infra) pe nazar rakho. Strong trend mein pullback entries dhundo.' : 'Weak macro mein defensive stocks (FMCG, Pharma, IT) relatively better perform karte hain.';
+  else if (t.includes('gdp') || t.includes('economy') || t.includes('inflation') || t.includes('iip') || t.includes('pmi')) {
+    var isPos = t.includes('growth') || t.includes('strong') || t.includes('better') || t.includes('surge');
+    what = 'India ki economy ya sector ka macroeconomic data aaya. ' + (isPos ? 'Numbers positive — economy strong momentum mein.' : 'Data mixed ya weak — growth concerns hain.');
+    pros = isPos ? '• Strong macro = corporate earnings ke liye positive<br>• Foreign investor confidence badhta hai<br>• Broad market rally ka support' : '• Weak data pe RBI rate cut consider kar sakta hai<br>• Selective opportunities emerge hoti hain';
+    cons = isPos ? '• High growth pe inflation risk<br>• Valuations already stretched ho sakti hain' : '• Earnings pressure badta hai<br>• Market sentiment negative rehta hai';
+    action = isPos ? 'Cyclical sectors (Banking, Auto, Infra) pe nazar rakho. Pullback entries plan karo.' : 'Defensive stocks (FMCG, Pharma, IT) better perform karte hain weak macro mein.';
   }
-  // ── Default — generic but better than before ──
   else {
-    var headlineWords = title.split(' ').slice(0, 6).join(' ');
-    what = '"' + headlineWords + '..." — Yeh khabar ' + (stocks.length ? stocks.join(', ') + ' se related hai.' : 'market ya economy se related hai.') + ' Full article padho details ke liye.';
-    pros = impact === 'Bullish' ?
-      '• Market pe positive sentiment aa sakta hai
-• Related stocks mein buying interest badhega
-• Short-term momentum traders ke liye opportunity' :
-      '• Sector-specific impact limited ho sakta hai
-• Long-term investors ke liye entry points mil sakte hain';
-    cons = impact === 'Bearish' ?
-      '• Short-term mein selling pressure aa sakta hai
-• Related stocks pe negative impact possible
-• Market sentiment temporarily weak ho sakta hai' :
-      '• News pe immediate reaction ke baad reversal possible
-• Ek khabar se complete picture nahi milti';
-    action = stocks.length ?
-      stocks[0] + ' ka daily chart check karo Zerodha Kite pe. Kya koi setup ban raha hai? Agar haan — plan karo. Agar nahi — sideline raho.' :
-      'Is news ke baad related sector stocks pe nazar rakho. Setup bane bina koi action mat lo.';
+    what = '"' + title.split(' ').slice(0,7).join(' ') + '..." — ' + (stocks.length ? stocks.join(', ') + ' se related khabar.' : 'Market ya economy se related update.');
+    pros = impact === 'Bullish' ? '• Positive sentiment aa sakta hai<br>• Related stocks mein buying interest<br>• Short-term momentum opportunity' : '• Sector impact limited ho sakta hai<br>• Long-term entry points mil sakte hain';
+    cons = impact === 'Bearish' ? '• Selling pressure short-term mein<br>• Related stocks pe negative impact<br>• Sentiment temporarily weak' : '• News ke baad reversal possible<br>• Ek khabar se complete picture nahi milti';
+    action = (stocks.length ? stocks[0] + ' ka' : 'Related stocks ka') + ' daily chart check karo Kite pe. Setup bane bina koi action nahi.';
   }
 
-  return { what: what, pros: pros.replace(/
-/g, '<br>'), cons: cons.replace(/
-/g, '<br>'), action: action };
+  return { what:what, pros:pros, cons:cons, action:action };
 }
-function toggleNews(el) {
-  el.classList.toggle('expanded');
-}
-
-function showLearnSub(id, btn) {
-  ['phases','abbrev'].forEach(function(i) {
-    var el = document.getElementById('learn-' + i);
-    if (el) el.style.display = i === id ? 'block' : 'none';
-  });
-  if (btn) {
-    btn.parentElement.querySelectorAll('.sub-tab').forEach(function(b) { b.classList.remove('active'); });
-    btn.classList.add('active');
-  }
-}
-
-function showChartNote(id, btn) {
-  ['nifty','stocks','concepts'].forEach(function(i) {
-    var el = document.getElementById('cn-' + i);
-    if (el) el.style.display = i === id ? 'block' : 'none';
-  });
-  if (btn) {
-    btn.parentElement.querySelectorAll('.chart-btn').forEach(function(b) { b.classList.remove('active'); });
-    btn.classList.add('active');
-  }
-}
-
-function buildAbbrevGrid() {
-  var g = document.getElementById('abbrevGrid');
-  if (!g) return;
-  var ABBREV = [
-    {a:'NSE',f:'National Stock Exchange',d:'India largest stock exchange by trading volume'},
-    {a:'BSE',f:'Bombay Stock Exchange',d:'Asia oldest stock exchange, founded 1875'},
-    {a:'SEBI',f:'Securities and Exchange Board of India',d:'Regulator of Indian securities market'},
-    {a:'OHLC',f:'Open High Low Close',d:'The 4 price points in every candlestick bar'},
-    {a:'EMA',f:'Exponential Moving Average',d:'Weighted average giving more weight to recent prices'},
-    {a:'SMA',f:'Simple Moving Average',d:'Equal-weighted average of closing prices over N periods'},
-    {a:'RSI',f:'Relative Strength Index',d:'Momentum indicator showing overbought or oversold on 0-100 scale'},
-    {a:'MACD',f:'Moving Average Convergence Divergence',d:'Trend-following momentum indicator using two EMAs'},
-    {a:'SL',f:'Stop Loss',d:'Pre-set price to exit a losing trade to limit damage'},
-    {a:'TP',f:'Take Profit',d:'Pre-set price to exit a winning trade and book profit'},
-    {a:'R:R',f:'Risk to Reward Ratio',d:'How much you risk vs how much you stand to gain'},
-    {a:'FII',f:'Foreign Institutional Investor',d:'Foreign funds investing in Indian markets'},
-    {a:'DII',f:'Domestic Institutional Investor',d:'Indian funds like mutual funds and insurance companies'},
-    {a:'MF',f:'Mutual Fund',d:'Pooled investment vehicle managed by professional fund managers'},
-    {a:'IPO',f:'Initial Public Offering',d:'When a company lists shares on exchange for the first time'},
-    {a:'P/E',f:'Price to Earnings Ratio',d:'Stock price divided by earnings per share - key valuation metric'},
-    {a:'LTP',f:'Last Traded Price',d:'Most recent price at which a stock was bought or sold'},
-    {a:'CMP',f:'Current Market Price',d:'Same as LTP - current price of a stock right now'},
-    {a:'ATH',f:'All Time High',d:'Highest price a stock or index has ever reached'},
-    {a:'ATL',f:'All Time Low',d:'Lowest price a stock or index has ever reached'},
-    {a:'52WH',f:'52 Week High',d:'Highest price in the last 52 weeks or 1 year'},
-    {a:'52WL',f:'52 Week Low',d:'Lowest price in the last 52 weeks or 1 year'},
-    {a:'OI',f:'Open Interest',d:'Total outstanding derivative contracts not yet settled'},
-    {a:'F&O',f:'Futures and Options',d:'Derivative instruments to buy or sell at a future date'},
-    {a:'MIS',f:'Margin Intraday Square-off',d:'Zerodha order type for intraday trades with leverage'},
-    {a:'CNC',f:'Cash and Carry',d:'Zerodha order type for delivery trades held overnight'},
-    {a:'NRML',f:'Normal Order',d:'Zerodha order type for F&O positions held overnight'},
-    {a:'SLM',f:'Stop Loss Market Order',d:'Triggers a market order when price hits your stop loss'},
-    {a:'GTT',f:'Good Till Triggered',d:'Zerodha feature to place orders that trigger at future price'},
-    {a:'AMO',f:'After Market Order',d:'Order placed outside trading hours executed at market open'},
-    {a:'BTST',f:'Buy Today Sell Tomorrow',d:'Buying and selling shares within 2 days without delivery'},
-    {a:'PDH',f:'Previous Day High',d:'Highest price of the previous trading session'},
-    {a:'PDL',f:'Previous Day Low',d:'Lowest price of the previous trading session'},
-    {a:'RBI',f:'Reserve Bank of India',d:'Central bank of India - controls monetary policy and repo rate'},
-    {a:'Repo',f:'Repo Rate',d:'Rate at which RBI lends to banks - key monetary policy tool'},
-    {a:'CPI',f:'Consumer Price Index',d:'Measures inflation - higher CPI means higher inflation'},
-    {a:'GDP',f:'Gross Domestic Product',d:'Total value of goods and services produced in the economy'},
-    {a:'EPS',f:'Earnings Per Share',d:'Company profit divided by number of shares - key metric'},
-    {a:'MCap',f:'Market Capitalisation',d:'Total company value equals Share Price times Total Shares'},
-    {a:'LC',f:'Lower Circuit',d:'Maximum downside a stock can fall in one day - 5 10 or 20 percent'},
-    {a:'UC',f:'Upper Circuit',d:'Maximum upside a stock can rise in one day - 5 10 or 20 percent'},
-    {a:'T+1',f:'Trade Plus 1 Day',d:'Settlement cycle - shares delivered next trading day'},
-    {a:'STT',f:'Securities Transaction Tax',d:'Tax on every buy and sell transaction in Indian markets'},
-    {a:'QoQ',f:'Quarter on Quarter',d:'Comparing current quarter results with previous quarter'},
-    {a:'YoY',f:'Year on Year',d:'Comparing current period with same period last year'},
-    {a:'S&R',f:'Support and Resistance',d:'Key price levels where buying or selling pressure is strong'},
-    {a:'POC',f:'Point of Control',d:'Price level with highest trading volume in a range'},
-    {a:'BTST',f:'Buy Today Sell Tomorrow',d:'Trade settled in 2 days without taking actual delivery'},
-    {a:'VWAP',f:'Volume Weighted Average Price',d:'Average price weighted by volume - key intraday level'},
-    {a:'ATR',f:'Average True Range',d:'Measures market volatility - useful for setting stop losses'},
-  ];
-  var html = '';
-  ABBREV.forEach(function(ab) {
-    html += '<div style="background:var(--bg3);border:1px solid var(--border2);border-radius:var(--r);padding:10px;margin-bottom:6px">'
-      + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">'
-      + '<span style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--neon);min-width:60px">' + ab.a + '</span>'
-      + '<span style="font-size:11px;font-weight:600;color:var(--text)">' + ab.f + '</span>'
-      + '</div>'
-      + '<div style="font-size:11px;color:var(--text2)">' + ab.d + '</div>'
-      + '</div>';
-  });
-  g.innerHTML = html;
-}
-buildAbbrevGrid();
-
-// ══════════════════════════════════════════════
-// QUIZ ENGINE
-// ══════════════════════════════════════════════
-
-// ── Video watched tracking ──
-var watchedVids = JSON.parse(localStorage.getItem('ts-watched-vids') || '[]');
-var todayWatchedVids = JSON.parse(localStorage.getItem('ts-today-watched-' + new Date().toDateString()) || '[]');
-
-function markWatched(e, btn, vidId) {
-  e.preventDefault(); e.stopPropagation();
-  if (!watchedVids.includes(vidId)) watchedVids.push(vidId);
-  if (!todayWatchedVids.includes(vidId)) todayWatchedVids.push(vidId);
-  localStorage.setItem('ts-watched-vids', JSON.stringify(watchedVids));
-  localStorage.setItem('ts-today-watched-' + new Date().toDateString(), JSON.stringify(todayWatchedVids));
-  btn.textContent = '✓ Done';
-  btn.classList.add('watched');
-  var row = btn.closest('a');
-  if (row) row.classList.add('vid-watched');
-  updateTodayQuizStatus();
-}
-
-function initWatchedState() {
-  watchedVids.forEach(function(id) {
-    var btn = document.getElementById('wb-' + id);
-    if (btn) { btn.textContent = '✓ Done'; btn.classList.add('watched'); var row = btn.closest('a'); if (row) row.classList.add('vid-watched'); }
-  });
-}
-
-// ── Topic tick tracking for today ──
-var todayDate = new Date().toDateString();
-var todayTicks = JSON.parse(localStorage.getItem('ts-today-ticks-' + todayDate) || '[]');
-
-// Hook into existing toggleCheck via monkey-patch after definition
-// (patched below after initWatchedState)
-
-// ══════════════════════════════════════════════
-// QUESTION BANK
-// ══════════════════════════════════════════════
-
-var QB = {
-
-  // PHASE 1 — Foundation
-  p1: [
-    { topic:'NSE & Stock Market Basics', q:'You want to buy shares of Reliance. Which exchange will you most likely use in India?', opts:['NYSE','BSE only','NSE (and/or BSE)','MCX'], ans:2, exp:'NSE (National Stock Exchange) is India\'s largest exchange by trading volume. You can buy most large-cap stocks on both NSE and BSE via Zerodha.' },
-    { topic:'Investing vs Trading', q:'A swing trader holds a stock for 5 days and exits at target. An investor holds the same stock for 3 years. Who took MORE risk on a single position?', opts:['Investor — longer time','Swing trader — more active','Same risk','Cannot compare'], ans:1, exp:'Swing trader risks their capital on a short-term price move with a defined SL. Investor has more time for recovery. Per-trade active risk is higher for trader.' },
-    { topic:'Candlestick Basics', q:'A candle closes at ₹105. It opened at ₹100. What colour is the candle and what does it mean?', opts:['Red — sellers won','Green — buyers won','Blue — no change','Grey — indecision'], ans:1, exp:'GREEN: Close (₹105) > Open (₹100). Buyers pushed price up during this period. Buyers won.' },
-    { topic:'Candlestick Patterns', q:'You see a candle with a tiny body, very long lower wick, and almost no upper wick at the BOTTOM of a downtrend. What pattern is this?', opts:['Shooting Star','Hammer','Doji','Bearish Engulfing'], ans:1, exp:'HAMMER: Long lower wick = sellers tried to push down hard, buyers rejected it strongly. Potential reversal signal at bottom of downtrend.' },
-    { topic:'Candlestick Patterns', q:'A large green candle completely "swallows" the previous red candle at the bottom of a downtrend. What is this pattern called?', opts:['Evening Star','Bearish Engulfing','Bullish Engulfing','Marubozu'], ans:2, exp:'BULLISH ENGULFING: Large green body covers the entire previous red candle. Strong reversal signal — buyers took complete control.' },
-    { topic:'Candlestick Patterns', q:'A Doji candle forms. What does it tell you about the market?', opts:['Strong buyers in control','Strong sellers in control','Complete indecision — equal buyer and seller strength','Always a buy signal'], ans:2, exp:'DOJI: Open ≈ Close. Wicks on both sides. Neither buyers nor sellers won. INDECISION. Context matters — what came before the Doji.' },
-    { topic:'Support & Resistance', q:'Price has bounced off ₹500 three times over two months. What is ₹500?', opts:['Resistance','Random level','Support','Target'], ans:2, exp:'SUPPORT: A price level where buyers consistently step in and stop the fall. Three touches = well-established support level.' },
-    { topic:'Support & Resistance', q:'Price was resisted at ₹200 four times. Then it finally breaks above ₹200 with high volume. What does ₹200 now become?', opts:['Still resistance','New support','Irrelevant','Target'], ans:1, exp:'ROLE REVERSAL: Once resistance is broken convincingly, it flips to support. This is one of the most reliable concepts in technical analysis.' },
-    { topic:'Volume Analysis', q:'Price breaks above resistance, but volume on the breakout candle is BELOW average. What should you do?', opts:['Buy immediately','Wait — low volume breakout is unreliable','Sell short','Ignore volume'], ans:1, exp:'LOW VOLUME BREAKOUT = likely fake. Big money (institutions) creates high volume. Without them, the breakout has no strength behind it.' },
-    { topic:'Trend Lines', q:'A stock makes these lows over 4 months: ₹100, ₹115, ₹130, ₹142. What is this called?', opts:['Downtrend','Sideways','Uptrend — higher lows','Random'], ans:2, exp:'UPTREND: Each low is HIGHER than the previous low. Combined with higher highs, this confirms a solid uptrend structure.' },
-    { topic:'Moving Averages', q:'Price is above the 20 EMA and the 20 EMA is above the 50 EMA. What does this setup tell you?', opts:['Bearish — sell','Bullish alignment — uptrend intact','No meaning','Overbought'], ans:1, exp:'BULLISH ALIGNMENT: Price > 20EMA > 50EMA = strong uptrend. The best swing trade entries come when you buy pullbacks in this alignment.' },
-    { topic:'OHLC', q:'A candle has: Open ₹150, High ₹160, Low ₹145, Close ₹148. Who won this candle period?', opts:['Buyers — close above open','Sellers — close below open','Tie','Cannot tell'], ans:1, exp:'Close (₹148) < Open (₹150) = RED candle = sellers won this period. High of ₹160 shows buyers tried but sellers pushed back harder.' },
-    { topic:'Support & Resistance', q:'You are about to buy a stock. Price is at ₹300 which is a very strong resistance level tested 5 times. What should you do?', opts:['Buy — it has tested many times so will break','Wait for a clear break and close ABOVE ₹300','Short sell','Ignore resistance'], ans:1, exp:'NEVER buy into resistance. Wait for price to break AND CLOSE above it with volume. Resistance tested many times can break explosively — but only enter after confirmation.' },
-    { topic:'20 EMA & 50 EMA', q:'Price pulls back to the 50 EMA in an uptrend and forms a hammer candle. This is best described as...', opts:['A sell signal','Random price action','A high-quality pullback setup to 50 EMA','Guaranteed reversal'], ans:2, exp:'50 EMA pullback + reversal candle = textbook swing entry. Dynamic support (50 EMA) + confirmation candle (hammer) = your two requirements met.' },
-    { topic:'Candlestick Patterns', q:'A shooting star appears at the TOP of an uptrend. Long upper wick, tiny body. What does it signal?', opts:['Strong continuation up','Sellers rejected higher prices — potential reversal down','Buy signal','Indecision only'], ans:1, exp:'SHOOTING STAR: Buyers tried hard (long upper wick) but sellers rejected it and closed near open. At an uptrend top, this warns of reversal.' }
-  ],
-
-  // PHASE 2 — Setups
-  p2: [
-    { topic:'Breakout Setup', q:'A stock consolidates between ₹200–₹210 for 3 weeks with low volume. Today it closes at ₹215 with 3× average volume. What do you do?', opts:['Wait for pullback','Enter long — confirmed breakout','Short sell','Ignore it'], ans:0, exp:'WAIT for pullback is most conservative but entry on next day open after confirmed breakout close is also valid. Key: volume confirmed the move. Never chase a stock that has already moved 5% above breakout.' },
-    { topic:'Breakout Setup', q:'Same breakout above ₹210. Where do you place your stop loss?', opts:['At ₹200 (bottom of range)','Just below ₹210 (old resistance, new support)','At ₹190','No stop loss needed'], ans:1, exp:'SL goes JUST BELOW the broken resistance — now ₹210 is support. If price falls back below ₹210, the breakout has failed. ₹200 is too wide for small capital.' },
-    { topic:'Fake Breakout', q:'Price breaks above resistance, you enter. Next candle closes BACK below the resistance level. What does this mean?', opts:['Normal — hold on','Fake breakout — exit immediately','Add more shares','Move SL lower'], ans:1, exp:'FAKE BREAKOUT confirmed when price falls back below broken resistance. EXIT IMMEDIATELY. Small loss now vs large loss later. No holding, no hoping.' },
-    { topic:'Pullback Setup', q:'Stock is in a clear uptrend. It pulls back for 3 days on low volume and touches the 20 EMA. A bullish engulfing candle forms. What do you do?', opts:['Sell — it is falling','Buy — textbook pullback setup to 20 EMA with confirmation','Wait for new high first','Ignore EMA'], ans:1, exp:'PERFECT PULLBACK SETUP: Uptrend intact + pullback on low volume (no panic selling) + lands on 20 EMA (dynamic support) + bullish engulfing confirmation. This is what you study to find.' },
-    { topic:'Pullback Setup', q:'For a pullback setup, the reversal candle MUST form at...', opts:['Random location','Exactly at a support level (S&R, EMA, or trendline)','Above previous high','Below previous low'], ans:1, exp:'Reversal candle is only meaningful when it forms AT a defined support level. A random green candle in the middle of nowhere means nothing.' },
-    { topic:'Entry & Target', q:'You buy at ₹150. SL is at ₹145 (₹5 risk). What is the MINIMUM target for a 1:2 R:R?', opts:['₹155','₹160','₹170','₹152'], ans:1, exp:'1:2 R:R = Risk ₹5 → Target ₹10. Entry ₹150 + ₹10 = ₹160 minimum target. Never take a trade with less than 1:2.' },
-    { topic:'Breakout Setup', q:'During consolidation, volume should ideally be...', opts:['Very high — shows interest','Declining — drying up','Constant','Irrelevant'], ans:1, exp:'VOLUME DRIES UP during consolidation = neither buyers nor sellers interested at these prices. When breakout happens on HIGH volume, it is a strong signal of genuine interest.' },
-    { topic:'Pullback vs Reversal', q:'Stock is in downtrend. It bounces up for 2 days. Is this a pullback setup to buy?', opts:['Yes — bounced up','No — you only buy pullbacks in UPTRENDS','Maybe — depends','Always buy bounces'], ans:1, exp:'CRITICAL RULE: Only buy pullbacks in UPTRENDS. A bounce in a downtrend is just a temporary relief before continuation down. Trading against the trend is very risky for beginners.' },
-    { topic:'Finding Setups', q:'You open Zerodha Kite. What is the FIRST thing you check to decide if a stock is a swing trade candidate?', opts:['P/E ratio','Check if price is in uptrend on daily chart','Check news','Look at intraday chart'], ans:1, exp:'TREND FIRST. Daily chart uptrend (higher highs, higher lows, price above EMAs) = the field you play in. Without a trend, there is no setup to trade.' },
-    { topic:'Breakout vs Pullback', q:'You find two setups: Stock A is at a 52-week high breaking out. Stock B is pulling back to support in an uptrend. You have capital for ONE trade. Which is generally lower risk for a beginner?', opts:['Stock A — momentum','Stock B — pullback gives better entry price and defined risk','Same risk','Neither'], ans:1, exp:'PULLBACK gives better entry: lower price, tighter SL at support, risk is clearly defined. Breakouts have more slippage risk and require larger stop. Beginners: pullback to support is your friend.' }
-  ],
-
-  // PHASE 3 — Risk Management
-  p3: [
-    { topic:'Position Sizing', q:'Capital ₹12,000. Risk per trade: 2%. Entry ₹150. SL ₹144. How many shares do you buy?', opts:['10 shares','40 shares','20 shares','30 shares'], ans:2, exp:'Max risk = 2% × ₹12,000 = ₹240. SL distance = ₹150 − ₹144 = ₹6. Shares = ₹240 ÷ ₹6 = 40 shares. Wait — 40 × ₹150 = ₹6,000 (within capital). Correct answer is 40. If you chose 20, recheck the formula: MaxRisk ÷ SL distance.' },
-    { topic:'Position Sizing', q:'Capital ₹10,000. Risk 2%. Entry ₹500. SL ₹490. How many shares?', opts:['2 shares','20 shares','10 shares','5 shares'], ans:0, exp:'Max risk = 2% × ₹10,000 = ₹200. SL distance = ₹500 − ₹490 = ₹10. Shares = ₹200 ÷ ₹10 = 20... but 20 × ₹500 = ₹10,000 = your full capital. That is 100% in one stock — wrong. Reduce to 2 shares max (₹1,000 position is safer). Capital constraint overrides formula.' },
-    { topic:'Stop Loss', q:'You place SL at ₹145. Price drops to ₹146, bounces, and goes up. What should you do with your SL?', opts:['Remove it — it nearly triggered','Keep it exactly at ₹145','Move it higher to ₹148','Move it lower to ₹142'], ans:1, exp:'KEEP IT. SL is placed based on technical level (below support), not based on how close it came. Moving SL is emotional trading. The plan does not change because price came near.' },
-    { topic:'Risk-Reward', q:'Trade setup: Entry ₹200, SL ₹194, Target ₹206. Should you take this trade?', opts:['Yes','No — R:R is only 1:1, which is below minimum 1:2','Only if market is strong','Depends on volume'], ans:1, exp:'Risk = ₹200 − ₹194 = ₹6. Reward = ₹206 − ₹200 = ₹6. R:R = 1:1. BELOW MINIMUM 1:2. Do not take this trade. Wait for a target of ₹212 (₹12 reward) for 1:2.' },
-    { topic:'Trailing Stop Loss', q:'You bought at ₹100, SL at ₹94. Price rises to ₹115 (above target ₹112). What do you do with the SL?', opts:['Exit fully at ₹115','Keep SL at ₹94 — original plan','Trail SL up to ₹109 (below recent support) to protect profit','Do nothing'], ans:2, exp:'TRAIL the SL up as price rises. Moving SL to ₹109 locks in ₹9 profit minimum. If price continues up — you stay in the winner. If it reverses — you exit with profit, not loss.' },
-    { topic:'Brokerage Impact', q:'You buy 50 shares at ₹100 and sell at ₹102 (₹2 profit per share = ₹100 gross). Zerodha charges ~₹20 buy + ₹20 sell + STT + taxes = ~₹55 total. What is your NET profit?', opts:['₹100','₹80','₹45','₹55'], ans:2, exp:'NET = ₹100 gross − ₹55 costs = ₹45. On small capital, brokerage eats a massive chunk. This is why you ONLY trade setups with 1:2+ R:R and avoid very small targets.' },
-    { topic:'2% Rule', q:'You lose 3 trades in a row, each 2% of capital. Starting with ₹10,000, how much is left?', opts:['₹9,400','₹9,412','₹9,800','₹9,000'], ans:1, exp:'Trade 1: ₹10,000 × 2% = ₹200 loss → ₹9,800. Trade 2: ₹9,800 × 2% = ₹196 → ₹9,604. Trade 3: ₹9,604 × 2% = ₹192 → ₹9,412. The 2% rule preserves capital even through losing streaks.' },
-    { topic:'Risk Management Mindset', q:'You are in a trade. SL is hit. The stock immediately bounces back up. You feel like you were stopped out wrongly. What should you do?', opts:['Re-enter immediately','Add position — you know it will go up','Accept the SL, review if the plan was sound, move on','Hold — SL was too tight'], ans:2, exp:'ACCEPT AND MOVE ON. Stops will sometimes be hit and price reverses. That is part of trading. Your job is to follow rules, not be right every time. Re-entering emotionally after a stop is how traders blow accounts.' }
-  ]
-};
-
-// ── Flatten questions for phase quiz ──
-function getPhaseQs(phases) {
-  var all = [];
-  if (phases.includes(1)) QB.p1.forEach(function(q) { var nq = Object.assign({}, q); nq.phase = 1; all.push(nq); });
-  if (phases.includes(2)) QB.p2.forEach(function(q) { var nq = Object.assign({}, q); nq.phase = 2; all.push(nq); });
-  if (phases.includes(3)) QB.p3.forEach(function(q) { var nq = Object.assign({}, q); nq.phase = 3; all.push(nq); });
-  return all;
-}
-
-function shuffle(arr) {
-  var a = arr.slice();
-  for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
-  return a;
-}
-
-// ── Phase completion detection ──
-function getCompletedPhases() {
-  var phases = [];
-  for (var p = 1; p <= 3; p++) {
-    var items = document.querySelectorAll('#p' + p + '-topics li');
-    if (!items.length) continue;
-    var checked = document.querySelectorAll('#p' + p + '-topics li.checked');
-    if (checked.length === items.length && items.length > 0) phases.push(p);
-  }
-  return phases;
-}
-
-// ── Tab switching ──
-function switchQzTab(tab, btn) {
-  document.querySelectorAll('.qz-tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.querySelectorAll('.qz-panel').forEach(function(p) { p.classList.remove('active'); });
-  btn.classList.add('active');
-  document.getElementById('qzpanel-' + tab).classList.add('active');
-  if (tab === 'phase') refreshPhaseQuizStart();
-  if (tab === 'today') updateTodayQuizStatus();
-}
-
-// ══════════════════════════════════════════════
-// PHASE QUIZ ENGINE
-// ══════════════════════════════════════════════
-var PQ = { qs:[], cur:0, correct:0, wrong:[], answers:[], active:false };
-var PR = { qs:[], cur:0, correct:0, active:false }; // retest
-
-function refreshPhaseQuizStart() {
-  var completed = getCompletedPhases();
-  var el = document.getElementById('qz-phase-eligibility');
-  var btn = document.getElementById('qz-phase-start-btn');
-  if (!el || !btn) return;
-  if (completed.length === 0) {
-    el.textContent = 'Complete Phase 1 topics first (tick all 10 items in Learn tab).';
-    btn.disabled = true; btn.style.opacity = '0.4';
-  } else {
-    el.innerHTML = '✅ <strong>Phase' + (completed.length > 1 ? 's' : '') + ' ' + completed.join(', ') + ' complete</strong> — quiz will cover ' + completed.map(function(p){return 'Phase '+p;}).join(' + ');
-    btn.disabled = false; btn.style.opacity = '1';
-  }
-}
-
-function startPhaseQuiz() {
-  var completed = getCompletedPhases();
-  if (!completed.length) { alert('Complete at least Phase 1 first.'); return; }
-  var pool = shuffle(getPhaseQs(completed));
-  PQ.qs = pool.slice(0, Math.min(15, pool.length));
-  PQ.cur = 0; PQ.correct = 0; PQ.wrong = []; PQ.answers = []; PQ.active = true;
-  document.getElementById('qz-phase-start').style.display = 'none';
-  document.getElementById('qz-phase-result').style.display = 'none';
-  document.getElementById('qz-phase-retest').style.display = 'none';
-  document.getElementById('qz-phase-question').style.display = 'block';
-  renderPhaseQ();
-}
-
-function renderPhaseQ() {
-  var q = PQ.qs[PQ.cur];
-  var total = PQ.qs.length;
-  var pct = Math.round((PQ.cur / total) * 100);
-  document.getElementById('qzp-prog').style.width = pct + '%';
-  document.getElementById('qzp-counter').textContent = 'Q' + (PQ.cur + 1) + ' / ' + total;
-  document.getElementById('qzp-topic-tag').textContent = 'Phase ' + q.phase + '  ·  ' + q.topic;
-  document.getElementById('qzp-q').textContent = q.q;
-  document.getElementById('qzp-expl').style.display = 'none';
-  document.getElementById('qzp-next').style.display = 'none';
-  var opts = document.getElementById('qzp-opts');
-  opts.innerHTML = '';
-  q.opts.forEach(function(o, i) {
-    var b = document.createElement('button');
-    b.className = 'quiz-opt';
-    b.textContent = o;
-    b.onclick = function() { answerPhaseQ(i); };
-    opts.appendChild(b);
-  });
-}
-
-function answerPhaseQ(chosen) {
-  var q = PQ.qs[PQ.cur];
-  var allOpts = document.querySelectorAll('#qzp-opts .quiz-opt');
-  allOpts.forEach(function(b) { b.onclick = null; });
-  allOpts[q.ans].classList.add('correct');
-  if (chosen !== q.ans) {
-    allOpts[chosen].classList.add('wrong');
-    PQ.wrong.push(q);
-  } else {
-    PQ.correct++;
-  }
-  PQ.answers.push({ q: q, chosen: chosen });
-  var expl = document.getElementById('qzp-expl');
-  expl.innerHTML = '<strong>' + (chosen === q.ans ? '✅ Correct!' : '❌ Wrong.') + '</strong> ' + q.exp;
-  expl.style.display = 'block';
-  document.getElementById('qzp-next').style.display = 'inline-block';
-}
-
-function nextPhaseQ() {
-  PQ.cur++;
-  if (PQ.cur < PQ.qs.length) { renderPhaseQ(); return; }
-  // Quiz over
-  document.getElementById('qz-phase-question').style.display = 'none';
-  showPhaseResult();
-}
-
-function showPhaseResult() {
-  var total = PQ.qs.length;
-  var pct = Math.round((PQ.correct / total) * 100);
-  var pass = pct >= 90;
-  var rd = document.getElementById('qz-phase-result');
-  rd.style.display = 'block';
-
-  var wrongHTML = '';
-  if (PQ.wrong.length) {
-    wrongHTML = '<div style="margin-top:14px"><div style="font-size:11px;font-family:var(--mono);color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Topics to revisit:</div>';
-    var topics = {};
-    PQ.wrong.forEach(function(q) { if (!topics[q.topic]) topics[q.topic] = []; topics[q.topic].push(q); });
-    Object.keys(topics).forEach(function(t) {
-      wrongHTML += '<div class="wrong-topic-card"><div class="wtc-title">❌ ' + t + '</div><div class="wtc-body">' + topics[t].map(function(q){return '• ' + q.exp;}).join('<br>') + '</div></div>';
-    });
-    wrongHTML += '</div>';
-  }
-
-  rd.innerHTML = '<div class="qz-result-box ' + (pass ? 'pass' : 'fail') + '">' +
-    '<h3>' + (pass ? '🎉 PASSED! ' + pct + '%' : '❌ ' + pct + '% — Need 90%') + '</h3>' +
-    '<p>' + PQ.correct + ' correct out of ' + total + ' questions.' + (pass ? ' Excellent understanding. You can proceed.' : ' Review weak topics below, then take the retest.') + '</p>' +
-    '</div>' +
-    '<div class="qz-scoreboard">' +
-    '<div class="qz-stat"><div class="qz-stat-val">' + PQ.correct + '/' + total + '</div><div class="qz-stat-lbl">Score</div></div>' +
-    '<div class="qz-stat ' + (pass?'':'fail') + '"><div class="qz-stat-val">' + pct + '%</div><div class="qz-stat-lbl">Percentage</div></div>' +
-    '<div class="qz-stat"><div class="qz-stat-val">' + PQ.wrong.length + '</div><div class="qz-stat-lbl">Wrong</div></div>' +
-    '</div>' +
-    wrongHTML +
-    (pass
-      ? '<button class="btn" onclick="resetPhaseQuiz()" style="width:100%;margin-top:12px">Retake Quiz</button>'
-      : '<button class="btn" onclick="startPhaseRetest()" style="width:100%;margin-top:12px;background:rgba(255,71,87,0.15);border-color:var(--red)">Start Retest on Weak Topics →</button>');
-}
-
-function resetPhaseQuiz() {
-  PQ = { qs:[], cur:0, correct:0, wrong:[], answers:[], active:false };
-  document.getElementById('qz-phase-result').style.display = 'none';
-  document.getElementById('qz-phase-retest').style.display = 'none';
-  document.getElementById('qz-phase-start').style.display = 'block';
-  refreshPhaseQuizStart();
-}
-
-// ── Phase Retest ──
-function startPhaseRetest() {
-  var wrongTopics = {};
-  PQ.wrong.forEach(function(q) { wrongTopics[q.topic] = true; });
-  // Get more questions from same topics across all phases
-  var allQs = QB.p1.concat(QB.p2).concat(QB.p3);
-  var retestPool = allQs.filter(function(q) { return wrongTopics[q.topic]; });
-  // Exclude already answered questions
-  var answered = PQ.answers.map(function(a) { return a.q.q; });
-  retestPool = retestPool.filter(function(q) { return !answered.includes(q.q); });
-  if (retestPool.length < 3) retestPool = allQs.filter(function(q) { return wrongTopics[q.topic]; });
-  PR.qs = shuffle(retestPool).slice(0, Math.min(10, retestPool.length));
-  PR.cur = 0; PR.correct = 0; PR.active = true;
-
-  document.getElementById('qz-phase-result').style.display = 'none';
-  var rt = document.getElementById('qz-phase-retest');
-  rt.style.display = 'block';
-  document.getElementById('qz-retest-intro').textContent = 'Retest covers ' + Object.keys(wrongTopics).join(', ') + '. You need 90% to pass.';
-  document.getElementById('qz-retest-result').style.display = 'none';
-  document.getElementById('qz-retest-card').style.display = 'block';
-  renderRetestQ();
-}
-
-function renderRetestQ() {
-  var q = PR.qs[PR.cur];
-  var total = PR.qs.length;
-  document.getElementById('qzr-prog').style.width = Math.round((PR.cur/total)*100) + '%';
-  document.getElementById('qzr-counter').textContent = 'Retest Q' + (PR.cur+1) + ' / ' + total;
-  document.getElementById('qzr-topic-tag').textContent = '⚠ RETEST — ' + q.topic;
-  document.getElementById('qzr-q').textContent = q.q;
-  document.getElementById('qzr-expl').style.display = 'none';
-  document.getElementById('qzr-next').style.display = 'none';
-  var opts = document.getElementById('qzr-opts');
-  opts.innerHTML = '';
-  q.opts.forEach(function(o, i) {
-    var b = document.createElement('button');
-    b.className = 'quiz-opt';
-    b.textContent = o;
-    b.onclick = function() { answerRetestQ(i); };
-    opts.appendChild(b);
-  });
-}
-
-function answerRetestQ(chosen) {
-  var q = PR.qs[PR.cur];
-  var allOpts = document.querySelectorAll('#qzr-opts .quiz-opt');
-  allOpts.forEach(function(b) { b.onclick = null; });
-  allOpts[q.ans].classList.add('correct');
-  if (chosen !== q.ans) allOpts[chosen].classList.add('wrong');
-  else PR.correct++;
-  var expl = document.getElementById('qzr-expl');
-  expl.innerHTML = '<strong>' + (chosen === q.ans ? '✅ Correct!' : '❌ Wrong.') + '</strong> ' + q.exp;
-  expl.style.display = 'block';
-  document.getElementById('qzr-next').style.display = 'inline-block';
-}
-
-function nextRetestQ() {
-  PR.cur++;
-  if (PR.cur < PR.qs.length) { renderRetestQ(); return; }
-  // Retest over
-  var total = PR.qs.length;
-  var pct = Math.round((PR.correct/total)*100);
-  var pass = pct >= 90;
-  document.getElementById('qz-retest-card').style.display = 'none';
-  var rr = document.getElementById('qz-retest-result');
-  rr.style.display = 'block';
-  rr.innerHTML = '<div class="qz-result-box ' + (pass?'pass':'fail') + '">' +
-    '<h3>' + (pass ? '✅ Retest Passed! ' + pct + '%' : '❌ Retest Failed — ' + pct + '%') + '</h3>' +
-    '<p>' + (pass ? 'Well done. You have demonstrated understanding of the weak topics. You can now proceed to the next phase.' : 'You need to study these topics more. Re-read the explanations in Learn tab, practice on Kite charts, then try again.') + '</p>' +
-    '</div>' +
-    '<button class="btn" onclick="resetPhaseQuiz()" style="width:100%;margin-top:10px">' + (pass ? 'Back to Quiz Home' : 'Try Again') + '</button>';
-}
-
-// ══════════════════════════════════════════════
-// TODAY'S QUIZ ENGINE
-// ══════════════════════════════════════════════
-
-// Map topic keywords to question bank entries
-var TOPIC_MAP = {
-  'candlestick': ['Candlestick Basics','Candlestick Patterns'],
-  'ohlc': ['OHLC'],
-  'support': ['Support & Resistance'],
-  'resistance': ['Support & Resistance'],
-  'volume': ['Volume Analysis'],
-  'trend': ['Trend Lines'],
-  'moving average': ['Moving Averages','20 EMA & 50 EMA'],
-  'ema': ['Moving Averages','20 EMA & 50 EMA'],
-  'breakout': ['Breakout Setup','Fake Breakout'],
-  'pullback': ['Pullback Setup','Pullback vs Reversal'],
-  'entry': ['Entry & Target'],
-  'stop loss': ['Stop Loss'],
-  'position size': ['Position Sizing'],
-  'risk': ['Risk-Reward','2% Rule','Risk Management Mindset'],
-  'trailing': ['Trailing Stop Loss'],
-  'brokerage': ['Brokerage Impact'],
-  'investing': ['Investing vs Trading'],
-  'nse': ['NSE & Stock Market Basics'],
-  'market': ['NSE & Stock Market Basics'],
-  'finding': ['Finding Setups']
-};
-
-var TQ = { qs:[], cur:0, correct:0, wrong:[], active:false };
-var TR = { qs:[], cur:0, correct:0, active:false };
-
-function getTodayTopics() {
-  var topics = [];
-  todayTicks.forEach(function(tick) {
-    var tickLower = tick.toLowerCase();
-    Object.keys(TOPIC_MAP).forEach(function(keyword) {
-      if (tickLower.includes(keyword)) {
-        TOPIC_MAP[keyword].forEach(function(t) { if (!topics.includes(t)) topics.push(t); });
-      }
-    });
-  });
-  // Also add from watched videos today
-  todayWatchedVids.forEach(function() {
-    // Videos cover basics — include foundational topics
-    ['Candlestick Basics','Volume Analysis','Support & Resistance'].forEach(function(t) {
-      if (!topics.includes(t)) topics.push(t);
-    });
-  });
-  return topics;
-}
-
-function updateTodayQuizStatus() {
-  var topics = getTodayTopics();
-  var el = document.getElementById('qz-today-status');
-  var btn = document.getElementById('qz-today-start-btn');
-  if (!el || !btn) return;
-  if (topics.length === 0) {
-    el.textContent = 'Tick topics or mark videos as watched in Learn tab first.';
-    btn.disabled = true; btn.style.opacity = '0.4';
-  } else {
-    el.innerHTML = '✅ Today\'s topics detected: <strong>' + topics.join(', ') + '</strong>';
-    btn.disabled = false; btn.style.opacity = '1';
-  }
-}
-
-function startTodayQuiz() {
-  var topics = getTodayTopics();
-  if (!topics.length) { alert('Tick some topics or watch videos first.'); return; }
-  var allQs = QB.p1.concat(QB.p2).concat(QB.p3);
-  var pool = allQs.filter(function(q) { return topics.includes(q.topic); });
-  if (pool.length < 3) pool = allQs.filter(function(q) { return topics.some(function(t) { return q.topic.toLowerCase().includes(t.toLowerCase()) || t.toLowerCase().includes(q.topic.toLowerCase()); }); });
-  TQ.qs = shuffle(pool).slice(0, Math.min(10, pool.length));
-  TQ.cur = 0; TQ.correct = 0; TQ.wrong = []; TQ.active = true;
-  document.getElementById('qz-today-start').style.display = 'none';
-  document.getElementById('qz-today-result').style.display = 'none';
-  document.getElementById('qz-today-retest').style.display = 'none';
-  document.getElementById('qz-today-question').style.display = 'block';
-  renderTodayQ();
-}
-
-function renderTodayQ() {
-  var q = TQ.qs[TQ.cur];
-  var total = TQ.qs.length;
-  document.getElementById('qzt-prog').style.width = Math.round((TQ.cur/total)*100) + '%';
-  document.getElementById('qzt-counter').textContent = 'Q' + (TQ.cur+1) + ' / ' + total;
-  document.getElementById('qzt-topic-tag').textContent = 'Today\'s Topic  ·  ' + q.topic;
-  document.getElementById('qzt-q').textContent = q.q;
-  document.getElementById('qzt-expl').style.display = 'none';
-  document.getElementById('qzt-next').style.display = 'none';
-  var opts = document.getElementById('qzt-opts');
-  opts.innerHTML = '';
-  q.opts.forEach(function(o, i) {
-    var b = document.createElement('button');
-    b.className = 'quiz-opt';
-    b.textContent = o;
-    b.onclick = function() { answerTodayQ(i); };
-    opts.appendChild(b);
-  });
-}
-
-function answerTodayQ(chosen) {
-  var q = TQ.qs[TQ.cur];
-  var allOpts = document.querySelectorAll('#qzt-opts .quiz-opt');
-  allOpts.forEach(function(b) { b.onclick = null; });
-  allOpts[q.ans].classList.add('correct');
-  if (chosen !== q.ans) { allOpts[chosen].classList.add('wrong'); TQ.wrong.push(q); }
-  else TQ.correct++;
-  var expl = document.getElementById('qzt-expl');
-  expl.innerHTML = '<strong>' + (chosen === q.ans ? '✅ Correct!' : '❌ Wrong.') + '</strong> ' + q.exp;
-  expl.style.display = 'block';
-  document.getElementById('qzt-next').style.display = 'inline-block';
-}
-
-function nextTodayQ() {
-  TQ.cur++;
-  if (TQ.cur < TQ.qs.length) { renderTodayQ(); return; }
-  document.getElementById('qz-today-question').style.display = 'none';
-  showTodayResult();
-}
-
-function showTodayResult() {
-  var total = TQ.qs.length;
-  var pct = Math.round((TQ.correct/total)*100);
-  var pass = pct >= 90;
-  var rd = document.getElementById('qz-today-result');
-  rd.style.display = 'block';
-  var wrongHTML = '';
-  if (TQ.wrong.length) {
-    wrongHTML = '<div style="margin-top:12px"><div style="font-size:11px;font-family:var(--mono);color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Revisit these:</div>';
-    TQ.wrong.forEach(function(q) {
-      wrongHTML += '<div class="wrong-topic-card"><div class="wtc-title">❌ ' + q.topic + '</div><div class="wtc-body">' + q.exp + '</div></div>';
-    });
-    wrongHTML += '</div>';
-  }
-  rd.innerHTML = '<div class="qz-result-box ' + (pass?'pass':'fail') + '">' +
-    '<h3>' + (pass ? '🎉 ' + pct + '% — Great Day!' : '❌ ' + pct + '% — Need 90%') + '</h3>' +
-    '<p>' + TQ.correct + '/' + total + ' correct. ' + (pass ? 'Today\'s learning is solid.' : 'Do the retest before ticking today complete.') + '</p>' +
-    '</div>' +
-    '<div class="qz-scoreboard">' +
-    '<div class="qz-stat"><div class="qz-stat-val">' + TQ.correct + '/' + total + '</div><div class="qz-stat-lbl">Score</div></div>' +
-    '<div class="qz-stat ' + (pass?'':'fail') + '"><div class="qz-stat-val">' + pct + '%</div><div class="qz-stat-lbl">Result</div></div>' +
-    '</div>' + wrongHTML +
-    (pass
-      ? '<button class="btn" onclick="resetTodayQuiz()" style="width:100%;margin-top:12px">Retake</button>'
-      : '<button class="btn" onclick="startTodayRetest()" style="width:100%;margin-top:12px;background:rgba(255,71,87,0.15);border-color:var(--red)">Start Retest on Wrong Topics →</button>');
-}
-
-function resetTodayQuiz() {
-  TQ = { qs:[], cur:0, correct:0, wrong:[], active:false };
-  document.getElementById('qz-today-result').style.display = 'none';
-  document.getElementById('qz-today-question').style.display = 'none';
-  document.getElementById('qz-today-retest').style.display = 'none';
-  document.getElementById('qz-today-start').style.display = 'block';
-  updateTodayQuizStatus();
-}
-
-function startTodayRetest() {
-  var wrongTopics = {};
-  TQ.wrong.forEach(function(q) { wrongTopics[q.topic] = true; });
-  var allQs = QB.p1.concat(QB.p2).concat(QB.p3);
-  var answered = TQ.qs.map(function(q) { return q.q; });
-  var pool = allQs.filter(function(q) { return wrongTopics[q.topic] && !answered.includes(q.q); });
-  if (pool.length < 3) pool = allQs.filter(function(q) { return wrongTopics[q.topic]; });
-  TR.qs = shuffle(pool).slice(0, Math.min(10, pool.length));
-  TR.cur = 0; TR.correct = 0; TR.active = true;
-  document.getElementById('qz-today-result').style.display = 'none';
-  var rt = document.getElementById('qz-today-retest');
-  rt.style.display = 'block';
-  document.getElementById('qz-today-retest-result').style.display = 'none';
-  document.getElementById('qz-today-retest-card').style.display = 'block';
-  renderTodayRetestQ();
-}
-
-function renderTodayRetestQ() {
-  var q = TR.qs[TR.cur];
-  var total = TR.qs.length;
-  document.getElementById('qztr-prog').style.width = Math.round((TR.cur/total)*100) + '%';
-  document.getElementById('qztr-counter').textContent = 'Retest Q' + (TR.cur+1) + ' / ' + total;
-  document.getElementById('qztr-topic-tag').textContent = '⚠ RETEST — ' + q.topic;
-  document.getElementById('qztr-q').textContent = q.q;
-  document.getElementById('qztr-expl').style.display = 'none';
-  document.getElementById('qztr-next').style.display = 'none';
-  var opts = document.getElementById('qztr-opts');
-  opts.innerHTML = '';
-  q.opts.forEach(function(o, i) {
-    var b = document.createElement('button');
-    b.className = 'quiz-opt';
-    b.textContent = o;
-    b.onclick = function() { answerTodayRetestQ(i); };
-    opts.appendChild(b);
-  });
-}
-
-function answerTodayRetestQ(chosen) {
-  var q = TR.qs[TR.cur];
-  var allOpts = document.querySelectorAll('#qztr-opts .quiz-opt');
-  allOpts.forEach(function(b) { b.onclick = null; });
-  allOpts[q.ans].classList.add('correct');
-  if (chosen !== q.ans) allOpts[chosen].classList.add('wrong');
-  else TR.correct++;
-  var expl = document.getElementById('qztr-expl');
-  expl.innerHTML = '<strong>' + (chosen === q.ans ? '✅ Correct!' : '❌ Wrong.') + '</strong> ' + q.exp;
-  expl.style.display = 'block';
-  document.getElementById('qztr-next').style.display = 'inline-block';
-}
-
-function nextTodayRetestQ() {
-  TR.cur++;
-  if (TR.cur < TR.qs.length) { renderTodayRetestQ(); return; }
-  var total = TR.qs.length;
-  var pct = Math.round((TR.correct/total)*100);
-  var pass = pct >= 90;
-  document.getElementById('qz-today-retest-card').style.display = 'none';
-  var rr = document.getElementById('qz-today-retest-result');
-  rr.style.display = 'block';
-  rr.innerHTML = '<div class="qz-result-box ' + (pass?'pass':'fail') + '">' +
-    '<h3>' + (pass ? '✅ Retest Passed! ' + pct + '%' : '❌ Retest Failed — ' + pct + '%') + '</h3>' +
-    '<p>' + (pass ? 'Today\'s learning confirmed. Move on.' : 'Re-read the topic explanations in Learn tab carefully. Then try again.') + '</p>' +
-    '</div>' +
-    '<button class="btn" onclick="resetTodayQuiz()" style="width:100%;margin-top:10px">' + (pass?'Done':'Try Again') + '</button>';
-}
-
-// ── Init ──
-initWatchedState();
-refreshPhaseQuizStart();
-updateTodayQuizStatus();
 
 // ══════════════════════════════════════════
 // TRADE SETUP ENGINE
@@ -2591,6 +1885,421 @@ function generateTradeSetup() {
 
   container.innerHTML = html;
 }
+
+// ══════════════════════════════════════════════
+// QUIZ ENGINE
+// ══════════════════════════════════════════════
+
+var watchedVids = JSON.parse(localStorage.getItem('ts-watched-vids') || '[]');
+var todayDate = new Date().toDateString();
+var todayTicks = JSON.parse(localStorage.getItem('ts-today-ticks-' + todayDate) || '[]');
+var todayWatchedVids = JSON.parse(localStorage.getItem('ts-today-watched-' + todayDate) || '[]');
+
+function markWatched(e, btn, vidId) {
+  e.preventDefault(); e.stopPropagation();
+  if (!watchedVids.includes(vidId)) watchedVids.push(vidId);
+  if (!todayWatchedVids.includes(vidId)) todayWatchedVids.push(vidId);
+  localStorage.setItem('ts-watched-vids', JSON.stringify(watchedVids));
+  localStorage.setItem('ts-today-watched-' + todayDate, JSON.stringify(todayWatchedVids));
+  btn.textContent = '✓ Done';
+  btn.classList.add('watched');
+  var row = btn.closest('a');
+  if (row) row.classList.add('vid-watched');
+  updateTodayQuizStatus();
+}
+
+function initWatchedState() {
+  watchedVids.forEach(function(id) {
+    var btn = document.getElementById('wb-' + id);
+    if (btn) { btn.textContent = '✓ Done'; btn.classList.add('watched'); var row = btn.closest('a'); if (row) row.classList.add('vid-watched'); }
+  });
+}
+
+function toggleCheck(li, phase, pid) {
+  var wasDone = li.classList.contains('done');
+  li.classList.toggle('done');
+  if (phase) updatePhaseProgress(pid);
+  if (!wasDone && li.classList.contains('done')) {
+    var txt = li.textContent.trim();
+    if (!todayTicks.includes(txt)) todayTicks.push(txt);
+    localStorage.setItem('ts-today-ticks-' + todayDate, JSON.stringify(todayTicks));
+    updateTodayQuizStatus();
+  }
+}
+
+var QB = {
+  p1: [
+    { topic:'NSE & Stock Market Basics', q:'Tum Reliance ke shares kharidna chahte ho. India mein sabse zyada volume kahan trade hota hai?', opts:['NYSE','Sirf BSE','NSE (aur/ya BSE)','MCX'], ans:2, exp:'NSE India ka sabse bada exchange hai trading volume ke hisaab se. Zerodha pe NSE aur BSE dono pe buy kar sakte ho.' },
+    { topic:'Candlestick Basics', q:'Ek candle Rs 100 pe open hoti hai aur Rs 105 pe close. Candle ka colour kya hoga?', opts:['Red — sellers jeet gaye','Green — buyers jeet gaye','Blue — koi change nahi','Grey — confusion'], ans:1, exp:'GREEN candle: Close (105) > Open (100). Buyers ne price upar push ki. Is period mein buyers ka control tha.' },
+    { topic:'Candlestick Patterns', q:'Downtrend ke bottom pe — choti body, bahut lamba lower wick, upar kuch nahi. Ye kaunsa pattern hai?', opts:['Shooting Star','Hammer','Doji','Bearish Engulfing'], ans:1, exp:'HAMMER: Lamba lower wick = sellers ne push kiya lekin buyers ne reject kar diya. Downtrend ke bottom pe potential reversal.' },
+    { topic:'Candlestick Patterns', q:'Ek Doji candle banti hai. Matlab kya hai?', opts:['Strong buyers','Strong sellers','Indecision — buyers aur sellers barabar','Hamesha buy karo'], ans:2, exp:'DOJI: Open aur Close almost equal. Dono taraf wicks. Na buyers jeet sake na sellers — INDECISION.' },
+    { topic:'Support & Resistance', q:'Rs 500 pe price 2 mahine mein 3 baar bounce hua. Rs 500 kya hai?', opts:['Resistance','Random level','Support','Target'], ans:2, exp:'SUPPORT: Woh price level jahan buyers consistently aate hain aur girna rok dete hain. Teen bounces = strong support.' },
+    { topic:'Support & Resistance', q:'Rs 200 pe 4 baar resistance tha. High volume ke saath Rs 200 ke upar close. Ab Rs 200 kya ban gaya?', opts:['Abhi bhi resistance','Naya support','Koi matlab nahi','Target'], ans:1, exp:'ROLE REVERSAL: Resistance break hone ke baad woh support ban jaata hai. Technical analysis ka sabse reliable concept.' },
+    { topic:'Volume Analysis', q:'Price resistance ke upar break karti hai, lekin volume BELOW average hai. Kya karein?', opts:['Turant kharido','Ruko — low volume breakout reliable nahi hota','Short becho','Volume ignore karo'], ans:1, exp:'LOW VOLUME BREAKOUT = likely fake. Institutions ki buying high volume create karti hai. Unke bina breakout mein dum nahi.' },
+    { topic:'Trend Lines', q:'Ek stock ke lows: Rs 100, Rs 115, Rs 130, Rs 142. Isko kya kehte hain?', opts:['Downtrend','Sideways','Uptrend — higher lows','Random'], ans:2, exp:'UPTREND: Har low pichle se ZYADA hai. Higher highs ke saath milao toh solid uptrend confirm hoti hai.' },
+    { topic:'Moving Averages', q:'Price 20 EMA ke upar hai, aur 20 EMA 50 EMA ke upar hai. Ye setup kya batata hai?', opts:['Bearish — becho','Bullish alignment — uptrend theek hai','Koi matlab nahi','Overbought'], ans:1, exp:'BULLISH ALIGNMENT: Price > 20EMA > 50EMA = strong uptrend. Best swing entries yahaan pullback pe milti hain.' },
+    { topic:'OHLC', q:'Candle: Open Rs 150, High Rs 160, Low Rs 145, Close Rs 148. Kaun jeeta?', opts:['Buyers — close > open','Sellers — close < open','Draw','Pata nahi'], ans:1, exp:'Close (148) < Open (150) = RED = sellers jeet gaye. High of 160 dikhata hai buyers ne try kiya lekin fail rahe.' },
+    { topic:'Support & Resistance', q:'Rs 300 pe bahut strong resistance hai, 5 baar test ho chuka. Kya karoge?', opts:['Kharido — break hoga','Ruko — Rs 300 ke upar close + volume ke baad entry lo','Short becho','Resistance ignore karo'], ans:1, exp:'KABHI BHI resistance mein seedha mat ghuso. Confirmation ke bina entry = gambling.' },
+    { topic:'20 EMA & 50 EMA', q:'Uptrend mein price 50 EMA pe pullback karti hai aur wahan Hammer banta hai. Ye kya hai?', opts:['Sell signal','Random','High quality pullback setup — 50 EMA + reversal candle','Guaranteed reversal'], ans:2, exp:'PERFECT SETUP: 50 EMA support + Hammer confirmation. Yahi Phase 2 mein seekhoge.' }
+  ],
+  p2: [
+    { topic:'Breakout Setup', q:'Stock Rs 200-210 mein 3 hafte consolidate. Aaj Rs 215 pe close, volume 3x average. Kya karein?', opts:['Pullback ka wait karo','Entry lo — confirmed breakout','Short becho','Ignore karo'], ans:0, exp:'Safest: pullback ka wait karo. Ya next day open pe entry valid hai kyunki volume ne confirm kiya. Kabhi bhi 5% move ke baad chase mat karo.' },
+    { topic:'Breakout Setup', q:'Rs 210 ke upar breakout hua. Stop loss kahan lagega?', opts:['Rs 200 pe','Rs 210 ke thoda neeche (naya support)','Rs 190 pe','SL ki zaroorat nahi'], ans:1, exp:'SL Rs 210 ke NEECHE — ab woh support hai. Wapas Rs 210 ke neeche close = breakout fail.' },
+    { topic:'Fake Breakout', q:'Breakout pe entry li. Agla candle wapas resistance ke NEECHE close. Matlab?', opts:['Normal — hold karo','Fake breakout — turant exit karo','Aur shares lo','SL neeche le jao'], ans:1, exp:'FAKE BREAKOUT: Turant exit. Chota loss abhi, bada loss baad mein. No holding, no hoping.' },
+    { topic:'Pullback Setup', q:'Uptrend mein price 3 din se pullback aa raha low volume pe, 20 EMA pe ruka. Bullish Engulfing bani. Kya karein?', opts:['Becho — gir raha hai','Kharido — textbook pullback to 20 EMA + confirmation','Pehle new high ka wait','EMA ignore karo'], ans:1, exp:'PERFECT PULLBACK: Uptrend intact + low volume pullback + 20 EMA support + Bullish Engulfing. Yahi tumhara Setup #2 hai.' },
+    { topic:'Entry & Target', q:'Rs 150 pe buy. SL Rs 145 (Rs 5 risk). 1:2 R:R ke liye minimum target?', opts:['Rs 155','Rs 160','Rs 170','Rs 152'], ans:1, exp:'1:2 R:R = Risk Rs 5 toh reward Rs 10. Entry Rs 150 + Rs 10 = Rs 160 minimum.' },
+    { topic:'Breakout Setup', q:'Consolidation ke dauran volume kaisa hona chahiye?', opts:['Bahut high','Declining — dry up hona chahiye','Constant','Irrelevant'], ans:1, exp:'Volume dry up during consolidation = energy store ho rahi hai. High volume breakout = institutional participation.' },
+    { topic:'Pullback vs Reversal', q:'Stock downtrend mein hai. 2 din se upar bounce. Kya ye pullback buy setup hai?', opts:['Haan — bounce ho raha hai','Nahi — sirf UPTREND mein pullback buy karo','Shayad','Hamesha bounce pe kharido'], ans:1, exp:'CRITICAL: Pullback buy SIRF uptrend mein. Downtrend mein bounce = temporary relief. Trend ke against mat jao.' },
+    { topic:'Finding Setups', q:'Zerodha Kite khola. Swing candidate dhundne ke liye PEHLE kya check karoge?', opts:['P/E ratio','Daily chart pe uptrend check karo','News dekho','Intraday chart'], ans:1, exp:'TREND PEHLE. Daily chart pe uptrend = woh ground jahan tum khelte ho. Trend nahi = setup nahi.' }
+  ],
+  p3: [
+    { topic:'Position Sizing', q:'Capital Rs 12,000. Risk 2%. Entry Rs 150. SL Rs 144. Kitne shares?', opts:['10 shares','40 shares','20 shares','30 shares'], ans:1, exp:'Max risk = 2% x Rs 12,000 = Rs 240. SL distance = Rs 6. Shares = Rs 240 / Rs 6 = 40 shares.' },
+    { topic:'Stop Loss', q:'SL Rs 145 pe laga. Price Rs 146 tak gaya, bounce kiya, upar gaya. SL ka kya karo?', opts:['Hata do','Exactly Rs 145 pe rehne do','Rs 148 pe le jao','Rs 142 pe le jao'], ans:1, exp:'REHNE DO. SL technical level pe based hai, proximity pe nahi. Plan nahi badlega.' },
+    { topic:'Risk-Reward', q:'Trade: Entry Rs 200, SL Rs 194, Target Rs 206. Lena chahiye?', opts:['Haan','Nahi — R:R 1:1 hai, minimum 1:2 chahiye','Sirf agar market strong ho','Volume pe depend'], ans:1, exp:'Risk = Rs 6. Reward = Rs 6. R:R = 1:1. MINIMUM 1:2 se neeche hai. Target Rs 212 hona chahiye.' },
+    { topic:'Trailing Stop Loss', q:'Rs 100 pe buy, SL Rs 94. Price Rs 115 pe. SL ka kya karo?', opts:['Rs 115 pe exit','SL Rs 94 pe rakho','SL trail karke Rs 109 pe le jao','Kuch mat karo'], ans:2, exp:'TRAIL karo. Rs 109 pe le jaane se minimum Rs 9 profit lock. Winner mein raho ya profit ke saath niklo.' },
+    { topic:'2% Rule', q:'Rs 10,000 se shuru. 3 trades mein 2% each loss. Kitna bacha?', opts:['Rs 9,400','Rs 9,412','Rs 9,800','Rs 9,000'], ans:1, exp:'Trade 1: Rs 200 loss = Rs 9,800. Trade 2: Rs 196 = Rs 9,604. Trade 3: Rs 192 = Rs 9,412. 2% rule capital protect karta hai.' },
+    { topic:'Risk Management Mindset', q:'SL hit hua. Turant baad stock bounce. Kya karoge?', opts:['Turant re-enter','Aur shares lo','Accept karo, review karo, aage badho','Hold karo'], ans:2, exp:'ACCEPT AND MOVE ON. SL ka hit hona trading ka hissa hai. Emotional re-entry se accounts toot te hain.' }
+  ]
+};
+
+function getCompletedPhases() {
+  var phases = [];
+  for (var p = 1; p <= 3; p++) {
+    var items = document.querySelectorAll('#p' + p + '-topics li');
+    if (!items.length) continue;
+    var checked = document.querySelectorAll('#p' + p + '-topics li.done');
+    if (checked.length === items.length && items.length > 0) phases.push(p);
+  }
+  return phases;
+}
+
+function getPhaseQs(phases) {
+  var all = [];
+  if (phases.includes(1)) QB.p1.forEach(function(q) { var nq = Object.assign({}, q); nq.phase = 1; all.push(nq); });
+  if (phases.includes(2)) QB.p2.forEach(function(q) { var nq = Object.assign({}, q); nq.phase = 2; all.push(nq); });
+  if (phases.includes(3)) QB.p3.forEach(function(q) { var nq = Object.assign({}, q); nq.phase = 3; all.push(nq); });
+  return all;
+}
+
+function shuffle(arr) {
+  var a = arr.slice();
+  for (var i = a.length-1; i > 0; i--) { var j = Math.floor(Math.random()*(i+1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+
+function switchQzTab(tab, btn) {
+  document.querySelectorAll('.qz-tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.querySelectorAll('.qz-panel').forEach(function(p) { p.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('qzpanel-' + tab).classList.add('active');
+  if (tab === 'phase') refreshPhaseQuizStart();
+  if (tab === 'today') updateTodayQuizStatus();
+}
+
+var PQ = { qs:[], cur:0, correct:0, wrong:[], answers:[], active:false };
+var PR = { qs:[], cur:0, correct:0, active:false };
+
+function refreshPhaseQuizStart() {
+  var completed = getCompletedPhases();
+  var el = document.getElementById('qz-phase-eligibility');
+  var btn = document.getElementById('qz-phase-start-btn');
+  if (!el || !btn) return;
+  if (completed.length === 0) {
+    el.textContent = 'Complete Phase 1 topics first (tick all items in Learn tab).';
+    btn.disabled = true; btn.style.opacity = '0.4';
+  } else {
+    el.innerHTML = 'Phase ' + completed.join(', ') + ' complete — quiz will cover these phases.';
+    btn.disabled = false; btn.style.opacity = '1';
+  }
+}
+
+function startPhaseQuiz() {
+  var completed = getCompletedPhases();
+  if (!completed.length) { alert('Complete at least Phase 1 first.'); return; }
+  var pool = shuffle(getPhaseQs(completed));
+  PQ.qs = pool.slice(0, Math.min(15, pool.length));
+  PQ.cur = 0; PQ.correct = 0; PQ.wrong = []; PQ.answers = []; PQ.active = true;
+  document.getElementById('qz-phase-start').style.display = 'none';
+  document.getElementById('qz-phase-result').style.display = 'none';
+  document.getElementById('qz-phase-retest').style.display = 'none';
+  document.getElementById('qz-phase-question').style.display = 'block';
+  renderPhaseQ();
+}
+
+function renderPhaseQ() {
+  var q = PQ.qs[PQ.cur]; var total = PQ.qs.length;
+  document.getElementById('qzp-prog').style.width = Math.round((PQ.cur/total)*100) + '%';
+  document.getElementById('qzp-counter').textContent = 'Q' + (PQ.cur+1) + ' / ' + total;
+  document.getElementById('qzp-topic-tag').textContent = 'Phase ' + q.phase + '  ·  ' + q.topic;
+  document.getElementById('qzp-q').textContent = q.q;
+  document.getElementById('qzp-expl').style.display = 'none';
+  document.getElementById('qzp-next').style.display = 'none';
+  var opts = document.getElementById('qzp-opts'); opts.innerHTML = '';
+  q.opts.forEach(function(o, i) {
+    var b = document.createElement('button'); b.className = 'quiz-opt'; b.textContent = o;
+    b.onclick = function() { answerPhaseQ(i); }; opts.appendChild(b);
+  });
+}
+
+function answerPhaseQ(chosen) {
+  var q = PQ.qs[PQ.cur];
+  var allOpts = document.querySelectorAll('#qzp-opts .quiz-opt');
+  allOpts.forEach(function(b) { b.onclick = null; });
+  allOpts[q.ans].classList.add('correct');
+  if (chosen !== q.ans) { allOpts[chosen].classList.add('wrong'); PQ.wrong.push(q); } else { PQ.correct++; }
+  PQ.answers.push({ q:q, chosen:chosen });
+  var expl = document.getElementById('qzp-expl');
+  expl.innerHTML = '<strong>' + (chosen===q.ans?'Correct!':'Wrong.') + '</strong> ' + q.exp;
+  expl.style.display = 'block';
+  document.getElementById('qzp-next').style.display = 'inline-block';
+}
+
+function nextPhaseQ() {
+  PQ.cur++;
+  if (PQ.cur < PQ.qs.length) { renderPhaseQ(); return; }
+  document.getElementById('qz-phase-question').style.display = 'none';
+  showPhaseResult();
+}
+
+function showPhaseResult() {
+  var total = PQ.qs.length; var pct = Math.round((PQ.correct/total)*100); var pass = pct >= 90;
+  var rd = document.getElementById('qz-phase-result'); rd.style.display = 'block';
+  var wrongHTML = '';
+  if (PQ.wrong.length) {
+    wrongHTML = '<div style="margin-top:14px"><div style="font-size:11px;font-family:var(--mono);color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Topics to revisit:</div>';
+    var topics = {};
+    PQ.wrong.forEach(function(q) { if (!topics[q.topic]) topics[q.topic] = []; topics[q.topic].push(q); });
+    Object.keys(topics).forEach(function(t) {
+      wrongHTML += '<div class="wrong-topic-card"><div class="wtc-title">❌ ' + t + '</div><div class="wtc-body">' + topics[t].map(function(q){return '• ' + q.exp;}).join('<br>') + '</div></div>';
+    });
+    wrongHTML += '</div>';
+  }
+  rd.innerHTML = '<div class="qz-result-box ' + (pass?'pass':'fail') + '"><h3>' + (pass?'PASSED! ' + pct + '%':'Failed — ' + pct + '% (Need 90%)') + '</h3><p>' + PQ.correct + ' correct out of ' + total + '.</p></div>' +
+    '<div class="qz-scoreboard"><div class="qz-stat"><div class="qz-stat-val">' + PQ.correct + '/' + total + '</div><div class="qz-stat-lbl">Score</div></div><div class="qz-stat ' + (pass?'':'fail') + '"><div class="qz-stat-val">' + pct + '%</div><div class="qz-stat-lbl">Result</div></div></div>' +
+    wrongHTML + (pass ? '<button class="btn" onclick="resetPhaseQuiz()" style="width:100%;margin-top:12px">Retake Quiz</button>' : '<button class="btn" onclick="startPhaseRetest()" style="width:100%;margin-top:12px;background:rgba(255,71,87,0.15);border-color:var(--red)">Start Retest on Weak Topics →</button>');
+}
+
+function resetPhaseQuiz() {
+  PQ = { qs:[], cur:0, correct:0, wrong:[], answers:[], active:false };
+  document.getElementById('qz-phase-result').style.display = 'none';
+  document.getElementById('qz-phase-retest').style.display = 'none';
+  document.getElementById('qz-phase-start').style.display = 'block';
+  refreshPhaseQuizStart();
+}
+
+function startPhaseRetest() {
+  var wrongTopics = {};
+  PQ.wrong.forEach(function(q) { wrongTopics[q.topic] = true; });
+  var allQs = QB.p1.concat(QB.p2).concat(QB.p3);
+  var answered = PQ.answers.map(function(a) { return a.q.q; });
+  var pool = allQs.filter(function(q) { return wrongTopics[q.topic] && !answered.includes(q.q); });
+  if (pool.length < 3) pool = allQs.filter(function(q) { return wrongTopics[q.topic]; });
+  PR.qs = shuffle(pool).slice(0, Math.min(10, pool.length));
+  PR.cur = 0; PR.correct = 0; PR.active = true;
+  document.getElementById('qz-phase-result').style.display = 'none';
+  var rt = document.getElementById('qz-phase-retest'); rt.style.display = 'block';
+  document.getElementById('qz-retest-intro').textContent = 'Retest: ' + Object.keys(wrongTopics).join(', ') + '. Need 90% to pass.';
+  document.getElementById('qz-retest-result').style.display = 'none';
+  document.getElementById('qz-retest-card').style.display = 'block';
+  renderRetestQ();
+}
+
+function renderRetestQ() {
+  var q = PR.qs[PR.cur]; var total = PR.qs.length;
+  document.getElementById('qzr-prog').style.width = Math.round((PR.cur/total)*100) + '%';
+  document.getElementById('qzr-counter').textContent = 'Retest Q' + (PR.cur+1) + ' / ' + total;
+  document.getElementById('qzr-topic-tag').textContent = 'RETEST — ' + q.topic;
+  document.getElementById('qzr-q').textContent = q.q;
+  document.getElementById('qzr-expl').style.display = 'none';
+  document.getElementById('qzr-next').style.display = 'none';
+  var opts = document.getElementById('qzr-opts'); opts.innerHTML = '';
+  q.opts.forEach(function(o, i) {
+    var b = document.createElement('button'); b.className = 'quiz-opt'; b.textContent = o;
+    b.onclick = function() { answerRetestQ(i); }; opts.appendChild(b);
+  });
+}
+
+function answerRetestQ(chosen) {
+  var q = PR.qs[PR.cur];
+  var allOpts = document.querySelectorAll('#qzr-opts .quiz-opt');
+  allOpts.forEach(function(b) { b.onclick = null; });
+  allOpts[q.ans].classList.add('correct');
+  if (chosen !== q.ans) allOpts[chosen].classList.add('wrong'); else PR.correct++;
+  var expl = document.getElementById('qzr-expl');
+  expl.innerHTML = '<strong>' + (chosen===q.ans?'Correct!':'Wrong.') + '</strong> ' + q.exp;
+  expl.style.display = 'block';
+  document.getElementById('qzr-next').style.display = 'inline-block';
+}
+
+function nextRetestQ() {
+  PR.cur++;
+  if (PR.cur < PR.qs.length) { renderRetestQ(); return; }
+  var total = PR.qs.length; var pct = Math.round((PR.correct/total)*100); var pass = pct >= 90;
+  document.getElementById('qz-retest-card').style.display = 'none';
+  var rr = document.getElementById('qz-retest-result'); rr.style.display = 'block';
+  rr.innerHTML = '<div class="qz-result-box ' + (pass?'pass':'fail') + '"><h3>' + (pass?'Retest Passed! ' + pct + '%':'Retest Failed — ' + pct + '%') + '</h3><p>' + (pass?'You can now proceed to next phase.':'Re-study these topics in Learn tab, then try again.') + '</p></div><button class="btn" onclick="resetPhaseQuiz()" style="width:100%;margin-top:10px">' + (pass?'Back to Quiz Home':'Try Again') + '</button>';
+}
+
+var TQ = { qs:[], cur:0, correct:0, wrong:[], active:false };
+var TR = { qs:[], cur:0, correct:0, active:false };
+
+var TOPIC_MAP = {
+  'candlestick':['Candlestick Basics','Candlestick Patterns'],
+  'ohlc':['OHLC'],'support':['Support & Resistance'],'resistance':['Support & Resistance'],
+  'volume':['Volume Analysis'],'trend':['Trend Lines'],'moving average':['Moving Averages','20 EMA & 50 EMA'],
+  'ema':['Moving Averages','20 EMA & 50 EMA'],'breakout':['Breakout Setup','Fake Breakout'],
+  'pullback':['Pullback Setup','Pullback vs Reversal'],'entry':['Entry & Target'],
+  'stop loss':['Stop Loss'],'position size':['Position Sizing'],'risk':['Risk-Reward','2% Rule','Risk Management Mindset'],
+  'trailing':['Trailing Stop Loss'],'brokerage':['Brokerage Impact']
+};
+
+function getTodayTopics() {
+  var topics = [];
+  todayTicks.forEach(function(tick) {
+    var tickLower = tick.toLowerCase();
+    Object.keys(TOPIC_MAP).forEach(function(keyword) {
+      if (tickLower.includes(keyword)) TOPIC_MAP[keyword].forEach(function(t) { if (!topics.includes(t)) topics.push(t); });
+    });
+  });
+  if (todayWatchedVids.length) ['Candlestick Basics','Volume Analysis','Support & Resistance'].forEach(function(t) { if (!topics.includes(t)) topics.push(t); });
+  return topics;
+}
+
+function updateTodayQuizStatus() {
+  var topics = getTodayTopics();
+  var el = document.getElementById('qz-today-status');
+  var btn = document.getElementById('qz-today-start-btn');
+  if (!el || !btn) return;
+  if (!topics.length) { el.textContent = 'Tick topics or mark videos as watched in Learn tab first.'; btn.disabled = true; btn.style.opacity = '0.4'; }
+  else { el.innerHTML = "Today's topics: <strong>" + topics.join(', ') + '</strong>'; btn.disabled = false; btn.style.opacity = '1'; }
+}
+
+function startTodayQuiz() {
+  var topics = getTodayTopics();
+  if (!topics.length) { alert('Tick some topics or watch videos first.'); return; }
+  var allQs = QB.p1.concat(QB.p2).concat(QB.p3);
+  var pool = allQs.filter(function(q) { return topics.includes(q.topic); });
+  if (pool.length < 3) pool = allQs;
+  TQ.qs = shuffle(pool).slice(0, Math.min(10, pool.length));
+  TQ.cur = 0; TQ.correct = 0; TQ.wrong = []; TQ.active = true;
+  document.getElementById('qz-today-start').style.display = 'none';
+  document.getElementById('qz-today-result').style.display = 'none';
+  document.getElementById('qz-today-retest').style.display = 'none';
+  document.getElementById('qz-today-question').style.display = 'block';
+  renderTodayQ();
+}
+
+function renderTodayQ() {
+  var q = TQ.qs[TQ.cur]; var total = TQ.qs.length;
+  document.getElementById('qzt-prog').style.width = Math.round((TQ.cur/total)*100) + '%';
+  document.getElementById('qzt-counter').textContent = 'Q' + (TQ.cur+1) + ' / ' + total;
+  document.getElementById('qzt-topic-tag').textContent = "Today's Topic  ·  " + q.topic;
+  document.getElementById('qzt-q').textContent = q.q;
+  document.getElementById('qzt-expl').style.display = 'none';
+  document.getElementById('qzt-next').style.display = 'none';
+  var opts = document.getElementById('qzt-opts'); opts.innerHTML = '';
+  q.opts.forEach(function(o, i) {
+    var b = document.createElement('button'); b.className = 'quiz-opt'; b.textContent = o;
+    b.onclick = function() { answerTodayQ(i); }; opts.appendChild(b);
+  });
+}
+
+function answerTodayQ(chosen) {
+  var q = TQ.qs[TQ.cur];
+  var allOpts = document.querySelectorAll('#qzt-opts .quiz-opt');
+  allOpts.forEach(function(b) { b.onclick = null; });
+  allOpts[q.ans].classList.add('correct');
+  if (chosen !== q.ans) { allOpts[chosen].classList.add('wrong'); TQ.wrong.push(q); } else TQ.correct++;
+  var expl = document.getElementById('qzt-expl');
+  expl.innerHTML = '<strong>' + (chosen===q.ans?'Correct!':'Wrong.') + '</strong> ' + q.exp;
+  expl.style.display = 'block';
+  document.getElementById('qzt-next').style.display = 'inline-block';
+}
+
+function nextTodayQ() {
+  TQ.cur++;
+  if (TQ.cur < TQ.qs.length) { renderTodayQ(); return; }
+  document.getElementById('qz-today-question').style.display = 'none';
+  showTodayResult();
+}
+
+function showTodayResult() {
+  var total = TQ.qs.length; var pct = Math.round((TQ.correct/total)*100); var pass = pct >= 90;
+  var rd = document.getElementById('qz-today-result'); rd.style.display = 'block';
+  var wrongHTML = '';
+  if (TQ.wrong.length) {
+    wrongHTML = '<div style="margin-top:12px">';
+    TQ.wrong.forEach(function(q) { wrongHTML += '<div class="wrong-topic-card"><div class="wtc-title">❌ ' + q.topic + '</div><div class="wtc-body">' + q.exp + '</div></div>'; });
+    wrongHTML += '</div>';
+  }
+  rd.innerHTML = '<div class="qz-result-box ' + (pass?'pass':'fail') + '"><h3>' + (pass?'Great Day! ' + pct + '%':pct + '% — Need 90%') + '</h3><p>' + TQ.correct + '/' + total + ' correct.</p></div>' + wrongHTML +
+    (pass ? '<button class="btn" onclick="resetTodayQuiz()" style="width:100%;margin-top:12px">Retake</button>' : '<button class="btn" onclick="startTodayRetest()" style="width:100%;margin-top:12px;background:rgba(255,71,87,0.15);border-color:var(--red)">Start Retest →</button>');
+}
+
+function resetTodayQuiz() {
+  TQ = { qs:[], cur:0, correct:0, wrong:[], active:false };
+  document.getElementById('qz-today-result').style.display = 'none';
+  document.getElementById('qz-today-question').style.display = 'none';
+  document.getElementById('qz-today-retest').style.display = 'none';
+  document.getElementById('qz-today-start').style.display = 'block';
+  updateTodayQuizStatus();
+}
+
+function startTodayRetest() {
+  var wrongTopics = {};
+  TQ.wrong.forEach(function(q) { wrongTopics[q.topic] = true; });
+  var allQs = QB.p1.concat(QB.p2).concat(QB.p3);
+  var answered = TQ.qs.map(function(q) { return q.q; });
+  var pool = allQs.filter(function(q) { return wrongTopics[q.topic] && !answered.includes(q.q); });
+  if (pool.length < 3) pool = allQs.filter(function(q) { return wrongTopics[q.topic]; });
+  TR.qs = shuffle(pool).slice(0, Math.min(10, pool.length));
+  TR.cur = 0; TR.correct = 0; TR.active = true;
+  document.getElementById('qz-today-result').style.display = 'none';
+  var rt = document.getElementById('qz-today-retest'); rt.style.display = 'block';
+  document.getElementById('qz-today-retest-result').style.display = 'none';
+  document.getElementById('qz-today-retest-card').style.display = 'block';
+  renderTodayRetestQ();
+}
+
+function renderTodayRetestQ() {
+  var q = TR.qs[TR.cur]; var total = TR.qs.length;
+  document.getElementById('qztr-prog').style.width = Math.round((TR.cur/total)*100) + '%';
+  document.getElementById('qztr-counter').textContent = 'Retest Q' + (TR.cur+1) + ' / ' + total;
+  document.getElementById('qztr-topic-tag').textContent = 'RETEST — ' + q.topic;
+  document.getElementById('qztr-q').textContent = q.q;
+  document.getElementById('qztr-expl').style.display = 'none';
+  document.getElementById('qztr-next').style.display = 'none';
+  var opts = document.getElementById('qztr-opts'); opts.innerHTML = '';
+  q.opts.forEach(function(o, i) {
+    var b = document.createElement('button'); b.className = 'quiz-opt'; b.textContent = o;
+    b.onclick = function() { answerTodayRetestQ(i); }; opts.appendChild(b);
+  });
+}
+
+function answerTodayRetestQ(chosen) {
+  var q = TR.qs[TR.cur];
+  var allOpts = document.querySelectorAll('#qztr-opts .quiz-opt');
+  allOpts.forEach(function(b) { b.onclick = null; });
+  allOpts[q.ans].classList.add('correct');
+  if (chosen !== q.ans) allOpts[chosen].classList.add('wrong'); else TR.correct++;
+  var expl = document.getElementById('qztr-expl');
+  expl.innerHTML = '<strong>' + (chosen===q.ans?'Correct!':'Wrong.') + '</strong> ' + q.exp;
+  expl.style.display = 'block';
+  document.getElementById('qztr-next').style.display = 'inline-block';
+}
+
+function nextTodayRetestQ() {
+  TR.cur++;
+  if (TR.cur < TR.qs.length) { renderTodayRetestQ(); return; }
+  var total = TR.qs.length; var pct = Math.round((TR.correct/total)*100); var pass = pct >= 90;
+  document.getElementById('qz-today-retest-card').style.display = 'none';
+  var rr = document.getElementById('qz-today-retest-result'); rr.style.display = 'block';
+  rr.innerHTML = '<div class="qz-result-box ' + (pass?'pass':'fail') + '"><h3>' + (pass?'Retest Passed! ' + pct + '%':'Retest Failed — ' + pct + '%') + '</h3><p>' + (pass?'Today confirmed. Move on.':'Re-read Learn tab explanations carefully. Then try again.') + '</p></div><button class="btn" onclick="resetTodayQuiz()" style="width:100%;margin-top:10px">' + (pass?'Done':'Try Again') + '</button>';
+}
+
+initWatchedState();
+refreshPhaseQuizStart();
+updateTodayQuizStatus();
 
 </script>
 </body>
