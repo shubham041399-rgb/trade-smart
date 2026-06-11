@@ -188,6 +188,14 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
 .news-meta{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9px;color:var(--text3);margin-bottom:6px;flex-wrap:wrap}
 .news-body{display:none;font-size:12px;color:var(--text2);line-height:1.7;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
 .news-item.expanded .news-body{display:block}
+.news-img-wrap{width:72px;height:56px;flex-shrink:0;border-radius:6px;overflow:hidden;background:var(--bg3);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center}
+.news-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.news-img-ph{font-size:9px;font-family:var(--mono);color:var(--text3);text-align:center;padding:4px;line-height:1.4;font-weight:700;letter-spacing:0.5px}
+.news-kp-box{background:var(--bg3);border-radius:var(--r);padding:10px 12px;margin-top:8px;font-size:11px;line-height:1.8}
+.news-kp-box .kp-what{color:var(--text);margin-bottom:6px}
+.news-kp-box .kp-pros{color:var(--neon);margin-bottom:4px}
+.news-kp-box .kp-cons{color:var(--red);margin-bottom:4px}
+.news-kp-box .kp-action{color:var(--amber)}
 .saved-vid{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--bg3);border:1px solid var(--amber);border-radius:var(--r);margin-bottom:5px;font-size:11px;color:var(--text2)}
 .saved-vid .sv-title{flex:1}
 .saved-vid .sv-rm{background:none;border:none;color:var(--text3);cursor:pointer;font-size:13px}
@@ -255,6 +263,19 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
 .retry-box{text-align:center;padding:18px 12px;color:var(--text3);font-size:11px;line-height:1.8}
 .retry-btn{display:inline-block;margin-top:8px;padding:7px 18px;background:rgba(0,255,148,0.08);border:1px solid rgba(0,255,148,0.3);border-radius:50px;color:var(--neon);font-size:11px;font-family:var(--mono);cursor:pointer;letter-spacing:0.5px}
 .retry-btn:hover{background:rgba(0,255,148,0.15)}
+.setup-engine{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r2);padding:16px;margin-top:14px}
+.setup-engine .se-title{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.se-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.se-box{background:var(--bg3);border-radius:var(--r);padding:10px 12px}
+.se-box .se-lbl{font-size:9px;font-family:var(--mono);color:var(--text3);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px}
+.se-box .se-val{font-size:16px;font-weight:800;font-family:var(--mono)}
+.se-box.entry .se-val{color:var(--neon)}
+.se-box.sl .se-val{color:var(--red)}
+.se-box.t1 .se-val{color:var(--amber)}
+.se-box.t2 .se-val{color:var(--purple)}
+.se-note{font-size:11px;color:var(--text2);line-height:1.7;padding:10px 12px;background:var(--bg3);border-radius:var(--r);border-left:3px solid var(--amber)}
+.se-rr{font-size:10px;font-family:var(--mono);color:var(--text3);margin-top:8px;text-align:center}
+.se-rr span{color:var(--neon);font-weight:700}
 .cached-badge{display:inline-block;font-size:9px;font-family:var(--mono);color:var(--text3);background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:4px;padding:1px 6px;margin-left:4px;vertical-align:middle}
 .zerodha-notice{background:rgba(88,166,255,0.06);border:1px solid rgba(88,166,255,0.2);border-radius:var(--r2);padding:16px}
 .sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;gap:12px;flex-wrap:wrap}
@@ -789,6 +810,15 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
     </div>
   </div>
   <div class="tv-container" id="tvChartWrap"></div>
+
+  <!-- TRADE SETUP ENGINE -->
+  <div class="setup-engine" id="tradeSetupEngine">
+    <div class="se-title">🎯 Trade Setup Engine <span style="color:var(--text3);font-size:8px;font-weight:400">— Based on selected chart</span></div>
+    <div id="seContent">
+      <div style="text-align:center;padding:20px;color:var(--text3);font-size:11px">Select a symbol and timeframe above, then click<br><button class="btn" style="margin-top:8px;padding:6px 16px;font-size:11px" onclick="generateTradeSetup()">⚡ Generate Setup</button></div>
+    </div>
+  </div>
+
   <div class="card" style="margin-top:14px">
     <div class="card-title">Official Market Status Today <div class="nl"></div></div>
     <div style="font-size:12px;color:var(--text2);line-height:1.9">
@@ -1606,255 +1636,194 @@ function fetchNews() {
   xhr.send();
 }
 function renderNewsPeriod(items, period) {
-  var c = document.getElementById('newsContainer');
-  if (!c) return;
-  var src = S.newsSource;
-  var srcLabel = src === 'mc' ? 'MC' : src === 'mint' ? 'Mint' : src === 'bl' ? 'BL' : src === 'ndtv' ? 'NDTV' : 'BS';
-  var showFull = (period === '1d' || period === '1w');
-  if (!items.length) {
-    c.innerHTML = '<div style="text-align:center;padding:30px;color:var(--text3);font-size:12px">No stored news yet for this period.<br><br><button class="btn btn-ghost" onclick="fetchNews()" style="margin-top:8px">Fetch Now</button></div>';
+  var container = document.getElementById('newsContainer');
+  if (!container) return;
+
+  var now = new Date();
+  var filtered = items.filter(function(n) {
+    if (period === '1D') return (now - new Date(n.ts)) < 86400000;
+    if (period === '1W') return (now - new Date(n.ts)) < 7*86400000;
+    if (period === '1M') return (now - new Date(n.ts)) < 30*86400000;
+    return true;
+  });
+
+  if (!filtered.length) {
+    container.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);font-size:12px">No news for this period. Try a wider range or refresh.</div>';
     return;
   }
-  c.innerHTML = items.map(function(n) {
-    var badge = '<span class="badge ' + (n.sent === 'bull' ? 'b-neon' : n.sent === 'bear' ? 'b-red' : 'b-gray') + '">' + (n.sent === 'bull' ? 'Bullish' : n.sent === 'bear' ? 'Bearish' : 'Neutral') + '</span>';
-    if (!showFull) {
-      return '<div class="news-item" style="padding:10px 12px"><div class="news-meta">' + n.ago + ' | ' + srcLabel + ' <a href="' + n.link + '" target="_blank" onclick="event.stopPropagation()" style="color:var(--neon);font-size:9px;text-decoration:none">Open</a></div><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><div style="flex:1;font-size:12px;font-weight:600;color:var(--text)">' + n.title + '</div>' + badge + '</div></div>';
-    }
-    return '<div class="news-item" onclick="toggleNews(this)"><div class="news-meta"><span style="width:5px;height:5px;background:var(--red);border-radius:50%;display:inline-block;margin-right:4px"></span>' + n.ago + ' | ' + srcLabel + ' <a href="' + n.link + '" target="_blank" onclick="event.stopPropagation()" style="color:var(--neon);font-size:9px;text-decoration:none">Open</a></div><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px"><div class="news-headline" style="flex:1">' + n.title + '</div><div class="info-wrap" style="flex-shrink:0"><span class="info-icon" tabindex="0" onclick="event.stopPropagation()">i</span><div class="info-popup right" style="width:220px"><h4>Key Points</h4><div class="ip-row"><strong>Simple:</strong> ' + n.simple + '</div><div class="ip-row"><strong>Impact:</strong> <span style="color:' + n.sentColor + '">' + n.impact + '</span></div><div class="ip-row"><strong>Action:</strong> ' + n.action + '</div></div></div></div><div class="news-body">' + (n.desc || 'Open full article for details.') + '</div><div style="margin-top:6px">' + badge + '</div></div>';
+
+  var src = S.newsSource || 'mc';
+  var srcLabel = src === 'mc' ? 'MC' : src === 'mint' ? 'Mint' : src === 'bl' ? 'BL' : src === 'ndtv' ? 'NDTV' : 'BS';
+
+  container.innerHTML = filtered.map(function(n) {
+    var badge = '<span class="badge ' + (n.impact==='Bullish'?'b-neon':n.impact==='Bearish'?'b-red':'b-grey') + '">' + (n.impact||'NEUTRAL') + '</span>';
+
+    // Image block with fallback placeholder
+    var srcBadge = src.toUpperCase();
+    var imgBlock = '<div class="news-img-wrap"><div class="news-img-ph">[' + srcBadge + ']<br>NEWS</div></div>';
+
+    // Generate intelligent key points from actual headline + description
+    var kp = generateNewsKP(n.title, n.desc || '', n.impact || 'Neutral');
+
+    return '<div class="news-item" onclick="toggleNews(this)">' +
+      '<div class="news-meta">' +
+        '<span style="width:5px;height:5px;background:var(--red);border-radius:50%;display:inline-block;margin-right:4px"></span>' +
+        n.ago + ' | ' + srcLabel + ' ' +
+        '<a href="' + n.link + '" target="_blank" onclick="event.stopPropagation()" style="color:var(--neon);font-size:9px;text-decoration:none">Open ↗</a>' +
+      '</div>' +
+      '<div style="display:flex;align-items:flex-start;gap:10px;margin-top:6px">' +
+        imgBlock +
+        '<div style="flex:1;min-width:0">' +
+          '<div class="news-headline">' + n.title + '</div>' +
+          '<div style="margin-top:4px">' + badge + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="news-body">' +
+        (n.desc ? '<div style="color:var(--text2);font-size:11px;line-height:1.7;margin-bottom:8px">' + n.desc + '</div>' : '') +
+        '<div class="news-kp-box">' +
+          '<div class="kp-what"><strong>📌 Kya hua:</strong> ' + kp.what + '</div>' +
+          '<div class="kp-pros"><strong>🟢 Fayda (Pros):</strong><br>' + kp.pros + '</div>' +
+          '<div class="kp-cons"><strong>🔴 Nuksan (Cons):</strong><br>' + kp.cons + '</div>' +
+          '<div class="kp-action"><strong>⚡ Tumhare liye action:</strong> ' + kp.action + '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
   }).join('');
 }
-function showNewsFallback() {
-  var c = document.getElementById('newsContainer');
-  if (!c) return;
-  c.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);font-size:12px">Could not fetch news. Read directly:<br><br><a href="https://www.moneycontrol.com/news/business/markets/" target="_blank" style="color:var(--neon);display:block;margin:5px 0">MoneyControl</a><a href="https://www.livemint.com/market" target="_blank" style="color:var(--neon);display:block;margin:5px 0">LiveMint</a><a href="https://www.thehindubusinessline.com/markets/" target="_blank" style="color:var(--neon);display:block;margin:5px 0">Business Line</a><a href="https://www.ndtvprofit.com/markets" target="_blank" style="color:var(--neon);display:block;margin:5px 0">NDTV Profit</a><a href="https://www.business-standard.com/markets" target="_blank" style="color:var(--neon);display:block;margin:5px 0">Business Standard</a></div>';
-}
-function timeAgo(d) {
-  var diff = Date.now() - d.getTime();
-  var m = Math.floor(diff / 60000);
-  if (m < 1) return 'Just now';
-  if (m < 60) return m + 'm ago';
-  var h = Math.floor(m / 60);
-  if (h < 24) return h + 'h ago';
-  return Math.floor(h / 24) + 'd ago';
-}
-var newsCD = 60;
-fetchNews();
-setInterval(function() {
-  newsCD--;
-  if (newsCD <= 0) { newsCD = 120; fetchNews(); }
-  var el = document.getElementById('newsTimer');
-  if (el) el.textContent = 'Refresh in ' + Math.floor(newsCD / 60) + 'm ' + (newsCD % 60) + 's';
-},1000);
 
-// SECTORS
-const SECTOR_DATA={
-  nse:{sectors:{it:{name:'IT/Technology',perf:4.2,trend:'Strong ▲',reason:'US tech rally + weak INR boosts export revenues',pros:['Strong earnings','Dollar revenue','Clear chart patterns'],cons:['High valuations','US slowdown risk'],rec:'STRONG — Best sector for breakout setups now',stocks:['TCS','INFY','WIPRO','HCL Tech']},auto:{name:'Auto & EV',perf:3.1,trend:'Strong ▲',reason:'Rural recovery + EV transition + festive demand',pros:['Volume growth consistent','EV transition'],cons:['Raw material costs'],rec:'GOOD — Mid-cap auto suits your capital',stocks:['TATAMOTORS','M&M','ASHOKLEY']},capgoods:{name:'Capital Goods',perf:5.8,trend:'Very Strong ▲',reason:'Government infrastructure capex cycle',pros:['Order book visibility','FII buying'],cons:['High PE','Cyclical'],rec:'STRONG MOMENTUM — Best breakout potential',stocks:['LT','BHEL','SIEMENS']},banking:{name:'Banking',perf:1.2,trend:'Neutral ↔',reason:'NIM compression + RBI caution',pros:['FII favourite'],cons:['Rate sensitivity'],rec:'WAIT — Trade only on clear setups',stocks:['HDFCBANK','ICICIBANK']},pharma:{name:'Pharma',perf:-0.4,trend:'Weak ↓',reason:'USFDA warnings + pricing pressure',pros:['Defensive'],cons:['Regulatory risk','Choppy'],rec:'AVOID for now',stocks:['SUNPHARMA','CIPLA']},fmcg:{name:'FMCG',perf:0.8,trend:'Neutral ↔',reason:'Urban slowdown offsetting rural recovery',pros:['Defensive'],cons:['Too slow for swing trading'],rec:'SKIP — Too slow for ₹10K capital',stocks:['HUL','ITC']}}},
-  bse:{sectors:{midcap:{name:'BSE Midcap',perf:4.5,trend:'Strong ▲',reason:'Domestic growth + better valuations',pros:['Affordable prices','Higher returns'],cons:['More volatile'],rec:'BEST FOR YOU — ₹200-800 range stocks',stocks:['POLYCAB','DIXON','PERSISTENT']},sensex:{name:'Sensex Large Caps',perf:1.8,trend:'Moderate ▲',reason:'FII inflows',pros:['Stable'],cons:['Too expensive for ₹10K'],rec:'Study charts here. Too expensive to trade.',stocks:['RELIANCE','TCS']},smallcap:{name:'Smallcap',perf:2.1,trend:'Moderate ▲',reason:'Retail interest',pros:['High growth potential'],cons:['Volatile','Low liquidity'],rec:'AVOID until Phase 5+',stocks:['Various']}}},
-  forex:{sectors:{usdinr:{name:'USD/INR',perf:-0.1,trend:'Stable ↔',reason:'RBI intervention keeping rupee stable',pros:['Predictable range'],cons:['RBI caps upside'],rec:'Monitor for IT sector context. Not for trading.',info:'RBI actively buys dollars to prevent sharp INR fall.'},eurinr:{name:'EUR/INR',perf:0.3,trend:'Slight ▲',reason:'Euro zone recovery',pros:['Less RBI intervention'],cons:['European political risk'],rec:'Reference only.',info:'Follow ECB rate decisions.'},gbpinr:{name:'GBP/INR',perf:0.5,trend:'Moderate ▲',reason:'UK inflation normalising',pros:['Clear trend'],cons:['Volatile'],rec:'Reference only. Trade NSE stocks first.',info:'BoE rate cuts expected ahead.'}}},
-  crypto:{sectors:{bitcoin:{name:'Bitcoin (BTC)',perf:2.3,trend:'Strong ▲',reason:'ETF inflows + halving effect',pros:['Liquid','Clear patterns'],cons:['Extreme volatility','24/7 exhausting'],rec:'NOT for beginner swing trading. Study charts only.',info:'Halving in April 2024 reduced supply significantly.'},altcoins:{name:'Altcoins (ETH/SOL)',perf:3.8,trend:'Strong ▲',reason:'DeFi growth',pros:['High return potential'],cons:['Extremely volatile','Scam risk'],rec:'AVOID until 1+ year trading experience.',info:'Alt season follows Bitcoin rally.'}}},
-  commodities:{sectors:{gold:{name:'Gold (XAU)',perf:0.3,trend:'Moderate ▲',reason:'Safe haven demand + central bank buying',pros:['Hedge against fall'],cons:['Slow mover'],rec:'Context indicator. Gold rising = global fear.',info:'Central banks globally accumulating gold since 2022.'},crude:{name:'Crude Oil (WTI)',perf:-0.5,trend:'Weak ↓',reason:'China demand concerns',pros:['India benefits from falling crude'],cons:['Geopolitical spikes'],rec:'Falling crude = positive for India. Watch OMC stocks.',info:'Every $10 fall saves India ~$15B in annual imports.'}}}
-};
-let scInst=null;
-function updateSectorDropdown(){const mkt=document.getElementById('mktSelect').value;const sec=document.getElementById('sectorSelect');sec.innerHTML='';const sectors=SECTOR_DATA[mkt]?.sectors||{};Object.entries(sectors).forEach(([k,v])=>{const o=document.createElement('option');o.value=k;o.textContent=v.name;sec.appendChild(o);});renderSectorDetail();}
-function renderSectorDetail(){
-  var mkt=document.getElementById('mktSelect').value;
-  var sec=document.getElementById('sectorSelect').value;
-  var d=SECTOR_DATA[mkt]&&SECTOR_DATA[mkt].sectors?SECTOR_DATA[mkt].sectors[sec]:null;
-  if(!d){document.getElementById('sectorDetail').innerHTML='';return;}
-  var cls=d.perf>=3?'neon':d.perf>0?'amber':'red';
-  var bc=d.perf>=3?'rgba(0,255,148,0.06)':d.perf>0?'rgba(244,166,35,0.06)':'rgba(255,71,87,0.06)';
-  var bc2=d.perf>=3?'rgba(0,255,148,0.2)':d.perf>0?'rgba(244,166,35,0.2)':'rgba(255,71,87,0.2)';
-  var rc=d.perf>=3?'var(--neon)':d.perf>0?'var(--amber)':'var(--red)';
-  var bb=d.perf>=3?'b-neon':d.perf>0?'b-amber':'b-red';
-  var pros=(d.pros||[]).map(function(p){return '<div class="ip-row">&#10003; '+p+'</div>';}).join('');
-  var cons=(d.cons||[]).map(function(c){return '<div class="ip-row">&#9888; '+c+'</div>';}).join('');
-  var stocks=d.stocks?'<div style="margin-bottom:12px">'+d.stocks.map(function(s){return '<span class="badge b-blue" style="margin:2px">'+s+'</span>';}).join('')+'</div>':'';
-  var info=d.info?'<div style="padding:10px;background:rgba(88,166,255,0.05);border-radius:var(--r);border-left:3px solid var(--blue);font-size:12px;color:var(--text2);margin-bottom:12px">'+d.info+'</div>':'';
-  var h='<div class="card">';
-  h+='<div class="card-title">'+d.name+'<div class="nl"></div></div>';
-  h+='<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px">';
-  h+='<div><div style="font-family:var(--mono);font-size:26px;font-weight:700;color:var(--'+cls+')">';
-  h+=(d.perf>=0?'+':'')+d.perf+'%</div>';
-  h+='<div style="font-size:10px;color:var(--text3)">1-MONTH</div></div>';
-  h+='<span class="badge '+bb+'">'+d.trend+'</span>';
-  h+='<div style="flex:1;font-size:12px;color:var(--text2)">'+d.reason+'</div></div>';
-  h+=stocks+info;
-  h+='<div style="padding:12px;background:'+bc+';border-radius:var(--r);border:1px solid '+bc2+'">';
-  h+='<div style="font-size:9px;color:'+rc+';font-family:var(--mono);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Recommendation</div>';
-  h+='<div style="font-size:12px;color:var(--text2)">'+d.rec+'</div></div></div>';
-  document.getElementById('sectorDetail').innerHTML=h;
-  var d2=SECTOR_DATA[mkt]?SECTOR_DATA[mkt].sectors:{};
-  var labels=Object.values(d2).map(function(s){return s.name.slice(0,12);});
-  var perf=Object.values(d2).map(function(s){return s.perf;});
-  var colors=perf.map(function(p){return p>=3?'rgba(0,255,148,0.8)':p>0?'rgba(244,166,35,0.8)':'rgba(255,71,87,0.8)';});
-  var ctx=document.getElementById('sectorChart');
-  if(!ctx)return;
-  if(scInst)scInst.destroy();
-  scInst=new Chart(ctx,{
-    type:'bar',
-    data:{labels:labels,datasets:[{data:perf,backgroundColor:colors,borderRadius:4,borderSkipped:false}]},
-    options:{
-      responsive:true,
-      maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{
-        x:{ticks:{color:'#8B949E',font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}},
-        y:{ticks:{color:'#8B949E',callback:function(v){return v+'%';},font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}}
-      }
-    }
-  });
-}
-function initSectors(){updateSectorDropdown();}
+// Intelligent key points generator based on actual headline
+function generateNewsKP(title, desc, impact) {
+  var t = (title + ' ' + desc).toLowerCase();
 
-// WATCHLIST
-function renderWL(){const chips=document.getElementById('wlChips');const empty=document.getElementById('wlEmpty');const favs=document.getElementById('wlFavs');const wlc=document.getElementById('wlCount');if(wlc)wlc.textContent=S.wl.length+' stocks';if(!chips)return;if(!S.wl.length){empty.style.display='block';chips.innerHTML='';favs.innerHTML='<div style="color:var(--text3);font-size:12px;padding:8px 0">No favourites yet.</div>';return;}empty.style.display='none';chips.innerHTML=S.wl.map(w=>{const isFav=S.favs.includes(w.sym);return `<div class="wl-chip${isFav?' fav':''}"><span class="ws">${w.sym}</span><span class="wp">${w.price&&w.price!=='—'?'₹'+w.price:''}</span><button onclick="toggleFav('${w.sym}')" style="background:none;border:none;cursor:pointer;font-size:12px;padding:0">${isFav?'⭐':'☆'}</button><button class="rm-chip" onclick="removeWL('${w.sym}')">×</button></div>`;}).join('');const fi=S.wl.filter(w=>S.favs.includes(w.sym));favs.innerHTML=fi.length?fi.map(w=>`<div class="wl-chip fav"><span class="ws">⭐ ${w.sym}</span><span class="wp">${w.price&&w.price!=='—'?'₹'+w.price:''}</span></div>`).join(''):'<div style="color:var(--text3);font-size:12px;padding:8px 0">No favourites yet.</div>';save();}
-function addToWatchlist(sym,price){if(!S.wl.find(w=>w.sym===sym)){S.wl.push({sym,price:price||'—'});renderWL();}}
-function addWLManual(){const sym=document.getElementById('wlSym').value.trim().toUpperCase();const price=document.getElementById('wlPrice').value||'—';if(!sym)return;addToWatchlist(sym,price);document.getElementById('wlSym').value='';document.getElementById('wlPrice').value='';}
-function removeWL(sym){S.wl=S.wl.filter(w=>w.sym!==sym);S.favs=S.favs.filter(f=>f!==sym);renderWL();}
-function toggleFav(sym){if(S.favs.includes(sym))S.favs=S.favs.filter(f=>f!==sym);else S.favs.push(sym);renderWL();}
-renderWL();
+  // Extract key entities from title
+  var stocks = [];
+  var knownStocks = ['reliance','tcs','infosys','hdfc','icici','sbi','bajaj','wipro','adani','tata','maruti','axis','kotak','ltim','hcl','ongc','ntpc','ioc'];
+  knownStocks.forEach(function(s) { if (t.includes(s)) stocks.push(s.toUpperCase()); });
 
-// CHECKLIST
-function toggleCheck(li,phase,pid){
-  var wasDone = li.classList.contains('done');
-  li.classList.toggle('done');
-  if(phase)updatePhaseProgress(pid);
-  if(!wasDone && li.classList.contains('done')){
-    var txt = li.textContent.trim();
-    if(!todayTicks.includes(txt))todayTicks.push(txt);
-    localStorage.setItem('ts-today-ticks-'+todayDate,JSON.stringify(todayTicks));
-    updateTodayQuizStatus();
+  var what = '', pros = '', cons = '', action = '';
+
+  // ── Results / Earnings news ──
+  if (t.includes('profit') || t.includes('earnings') || t.includes('quarterly') || t.includes('q1') || t.includes('q2') || t.includes('q3') || t.includes('q4') || t.includes('results')) {
+    var isUp = t.includes('surge') || t.includes('jump') || t.includes('rise') || t.includes('grow') || t.includes('beat') || t.includes('strong') || t.includes('record');
+    var isDown = t.includes('fall') || t.includes('decline') || t.includes('drop') || t.includes('miss') || t.includes('weak') || t.includes('loss');
+    what = (stocks.length ? stocks[0] : 'Company') + ' ne apne quarterly results announce kiye hain. ' + (isUp ? 'Profits expected se zyada aaye hain — strong performance.' : isDown ? 'Profits expected se kam rahe — weak quarter.' : 'Results mix rahi hain.');
+    pros = isUp ? '• Quarterly earnings strong hain — management execution achhi
+• Stock price pe immediate upward reaction ho sakti hai
+• Institutional buying attract kar sakta hai' : '• Agar sector strong hai toh sirf ek weak quarter se panic nahi karna
+• Long-term investors ke liye accumulation opportunity ho sakti hai';
+    cons = isDown ? '• Weak results se stock pe selling pressure aayega
+• Short-term mein price neeche ja sakti hai
+• Fund managers position reduce kar sakte hain' : '• High expectations ke baad correction possible hai
+• "Buy the rumour, sell the news" effect ho sakta hai';
+    action = stocks.length ? 'Agar ' + stocks[0] + ' tumhari watchlist mein hai — results ke baad price reaction dekho. Pehle din volatile hota hai. Setup banne ka wait karo, turant mat kudo.' : 'Results ki direction dekho. Agar stock strong setup mein hai aur earnings achhe hain — pullback pe entry plan karo.';
   }
+  // ── Buy / Target / Recommendation news ──
+  else if (t.includes('target') || t.includes('buy') || t.includes('recommend') || t.includes('upgrade') || t.includes('outperform')) {
+    var broker = '';
+    if (t.includes('icici securities')) broker = 'ICICI Securities';
+    else if (t.includes('emkay')) broker = 'Emkay Global';
+    else if (t.includes('motilal')) broker = 'Motilal Oswal';
+    else if (t.includes('hdfc securities')) broker = 'HDFC Securities';
+    else broker = 'ek brokerage firm';
+    var targetMatch = title.match(/rs?\s*[\d,]+/i);
+    var targetPrice = targetMatch ? targetMatch[0].toUpperCase() : 'ek target price';
+    what = broker + ' ne ' + (stocks.length ? stocks[0] : 'is stock') + ' ke liye BUY recommendation diya hai with target ' + targetPrice + '. Matlab unhe lagta hai price yahan tak jayegi.';
+    pros = '• Professional research team ka analysis hai — strong fundamental basis
+• Target price clear hai — traders ke liye reference point milta hai
+• Recommendation se short-term buying interest increase ho sakta hai';
+    cons = '• Broker recommendations hamesha sahi nahi hoti — kisi ki bhi
+• Target kabhi kabhi 6-12 months ka hota hai, short-term nahi
+• Recommendation pe blindly mat jao — apna setup dhundo';
+    action = 'Ye recommendation ek reference point hai, signal nahi. ' + (stocks.length ? stocks[0] : 'Is stock') + ' ko apne Kite chart pe dekho — kya technical setup bhi bullish hai? Agar haan aur price support pe hai — tab plan karo.';
+  }
+  // ── RBI / Interest rate / Policy news ──
+  else if (t.includes('rbi') || t.includes('repo rate') || t.includes('interest rate') || t.includes('monetary policy') || t.includes('fed') || t.includes('rate cut') || t.includes('rate hike')) {
+    var isCut = t.includes('cut') || t.includes('reduce') || t.includes('lower') || t.includes('easing');
+    var isHike = t.includes('hike') || t.includes('raise') || t.includes('increase') || t.includes('tightening');
+    what = 'RBI ya Federal Reserve ne interest rates ke baare mein decision liya hai. ' + (isCut ? 'Rate cut = borrowing sasta hoga — economy ke liye positive signal.' : isHike ? 'Rate hike = borrowing mehnga hoga — inflation control ke liye.' : 'Policy stance pe update hai — market closely watch kar raha hai.');
+    pros = isCut ? '• Rate cut se loans saste honge — businesses ke liye growth opportunity
+• Banking sector aur real estate stocks pe positive impact
+• Liquidity badega — market mein more money flow hoga' : '• Rate stability dikhata hai ki economy control mein hai
+• Disciplined monetary policy = long-term market stability';
+    cons = isHike ? '• EMI badhegi — consumer spending reduce hoga
+• High-debt companies pe margin pressure badega
+• Growth stocks pe valuation compress ho sakta hai' : '• Uncertainty remain karta hai agar decision expected nahi tha
+• Sectors like banking ka NIM impact ho sakta hai';
+    action = isCut ? 'Rate cut ke baad banking aur real estate stocks pe nazar rakho — yeh sectors seedha benefit lete hain. Inme se koi strong chart setup mein hai toh plan karo.' : 'Rate decision ke baad pehle 1-2 din market volatile rehti hai. Koi bhi naya trade karne se pehle dust settle hone do.';
+  }
+  // ── FII / DII / Institutional flow news ──
+  else if (t.includes('fii') || t.includes('dii') || t.includes('foreign') || t.includes('institutional') || t.includes('inflow') || t.includes('outflow')) {
+    var isBuy = t.includes('buy') || t.includes('inflow') || t.includes('purchase') || t.includes('invest');
+    what = (isBuy ? 'FII (Foreign Institutional Investors) ya DII' : 'Institutional investors') + ' ne ' + (isBuy ? 'Indian market mein paisa lagaya hai — strong buying dikhi.' : 'selling ki hai — market se paisa nikala gaya.');
+    pros = isBuy ? '• FII buying = strong confidence signal
+• Large inflows se index stocks mein rally aa sakti hai
+• Sentiment positive rehta hai jab bade players khareed rahe hain' : '• DII buying offset kar sakti hai — domestic investors strong hain
+• Long-term investors ke liye better prices mil sakti hain';
+    cons = isBuy ? '• Short-term mein prices already upar ja chuki hoti hain — chasers trap hote hain
+• FII kabhi bhi direction badal sakte hain — currency movements pe depend' : '• FII outflow se broad market pe selling pressure aata hai
+• Short-term mein volatility badti hai';
+    action = isBuy ? 'FII buying wale din broad market stocks pe nazar rakho. Agar tumhara setup already ready hai — entry ke liye favorable environment hai.' : 'FII outflow mein nayi long positions se bacho. Existing positions ka SL tight karo.';
+  }
+  // ── IPO / Listing news ──
+  else if (t.includes('ipo') || t.includes('listing') || t.includes('public issue') || t.includes('subscription')) {
+    what = 'Ek nayi company stock market mein list ho rahi hai ya IPO la rahi hai. Yeh primary market activity hai.';
+    pros = '• Nayi investment opportunity — ground floor entry
+• Strong IPO subscriptions dikhate hain market mein confidence hai
+• Listing gains possible agar demand strong hai';
+    cons = '• IPO pricing aksar premium pe hoti hai — valuations check karo
+• Listing ke pehle din extreme volatility hoti hai
+• Track record nahi hota — risk zyada hai';
+    action = 'Beginner hona ke hisaab se IPO se abhi door raho. Pehle secondary market mein established stocks seekho. IPO speculation beginners ke liye suitable nahi.';
+  }
+  // ── Merger / Acquisition news ──
+  else if (t.includes('merger') || t.includes('acquisition') || t.includes('takeover') || t.includes('deal') || t.includes('stake')) {
+    what = 'Do companies ke beech merger ya acquisition ki khabar hai. ' + (stocks.length ? stocks.join(' aur ') + ' involved hain.' : 'Corporate restructuring ho raha hai.');
+    pros = '• Acquirer usually synergies aur growth unlock karta hai
+• Target company ke shareholders ko premium milta hai
+• Sector consolidation — remaining players stronger bante hain';
+    cons = '• Integration risk hoti hai — deals fail bhi ho sakti hain
+• Acquirer ke shares pe dilution pressure aa sakta hai
+• Regulatory approval risk hoti hai';
+    action = stocks.length ? stocks[0] + ' ka chart dekho. M&A news pe stocks volatile hoti hain. Without clear setup ke koi trade mat lo — wait for dust to settle.' : 'Involved stocks pe volatility expect karo. Clear setup bane bina entry avoid karo.';
+  }
+  // ── Sector / Economy general news ──
+  else if (t.includes('gdp') || t.includes('economy') || t.includes('growth') || t.includes('inflation') || t.includes('iip') || t.includes('pmi')) {
+    var isPositive = t.includes('growth') || t.includes('strong') || t.includes('better') || t.includes('high') || t.includes('surge');
+    what = 'India ki economy ya ek specific sector ke baare mein macroeconomic data aaya hai. ' + (isPositive ? 'Numbers positive hain — economy strong momentum mein hai.' : 'Data mixed ya weak hai — growth concerns hain.');
+    pros = isPositive ? '• Strong macro data = corporate earnings ke liye positive environment
+• Foreign investors confidence badhta hai
+• Broad market rally ka support milta hai' : '• Weak data pe central bank rate cut consider kar sakta hai
+• Selective opportunities emerge hoti hain';
+    cons = isPositive ? '• High growth pe inflation ka risk — RBI rate hike ka darr
+• Valuations already stretched ho sakti hain' : '• Weak economy mein earnings pressure badta hai
+• Market sentiment negative rehta hai';
+    action = isPositive ? 'Macro positive hone pe cyclical sectors (Banking, Auto, Infra) pe nazar rakho. Strong trend mein pullback entries dhundo.' : 'Weak macro mein defensive stocks (FMCG, Pharma, IT) relatively better perform karte hain.';
+  }
+  // ── Default — generic but better than before ──
+  else {
+    var headlineWords = title.split(' ').slice(0, 6).join(' ');
+    what = '"' + headlineWords + '..." — Yeh khabar ' + (stocks.length ? stocks.join(', ') + ' se related hai.' : 'market ya economy se related hai.') + ' Full article padho details ke liye.';
+    pros = impact === 'Bullish' ?
+      '• Market pe positive sentiment aa sakta hai
+• Related stocks mein buying interest badhega
+• Short-term momentum traders ke liye opportunity' :
+      '• Sector-specific impact limited ho sakta hai
+• Long-term investors ke liye entry points mil sakte hain';
+    cons = impact === 'Bearish' ?
+      '• Short-term mein selling pressure aa sakta hai
+• Related stocks pe negative impact possible
+• Market sentiment temporarily weak ho sakta hai' :
+      '• News pe immediate reaction ke baad reversal possible
+• Ek khabar se complete picture nahi milti';
+    action = stocks.length ?
+      stocks[0] + ' ka daily chart check karo Zerodha Kite pe. Kya koi setup ban raha hai? Agar haan — plan karo. Agar nahi — sideline raho.' :
+      'Is news ke baad related sector stocks pe nazar rakho. Setup bane bina koi action mat lo.';
+  }
+
+  return { what: what, pros: pros.replace(/
+/g, '<br>'), cons: cons.replace(/
+/g, '<br>'), action: action };
 }
-function updatePhaseProgress(pid){const list=document.getElementById(pid+'-topics');if(!list)return;const all=list.querySelectorAll('li');const done=list.querySelectorAll('li.done');const pct=all.length?Math.round(done.length/all.length*100):0;const bar=document.getElementById(pid+'-prog');if(bar)bar.style.width=pct+'%';const lbl=document.getElementById(pid+'-pct');if(lbl)lbl.textContent=pct+'% complete';}
-
-// QUIZ
-const QUIZ=[{q:"Green candlestick means...",opts:["Close above Open","Open above Close","No change","High volume"],ans:0,exp:"GREEN = Bullish. Close is ABOVE Open. Buyers won this candle period."},{q:"Stop loss for breakout trade goes...",opts:["Above entry","Below resistance (now support)","At target","Anywhere"],ans:1,exp:"SL goes just below the broken resistance. If price falls back below it, setup has failed."},{q:"₹10,000 capital, 2% risk = max loss per trade?",opts:["₹1,000","₹500","₹200","₹100"],ans:2,exp:"2% × ₹10,000 = ₹200. This is your hard limit. Never exceed."},{q:"1:2 risk-reward means...",opts:["Risk ₹2 to make ₹1","Risk ₹1 to make ₹2","Equal risk and reward","50% win rate"],ans:1,exp:"For every ₹1 risked, profit target must be ₹2 minimum."},{q:"Hammer after downtrend signals...",opts:["Selling continues","Buyers rejected lower prices — potential reversal","Guaranteed buy","No meaning"],ans:1,exp:"Long lower wick = sellers tried hard, buyers stepped in hard. Potential reversal — wait for next candle confirmation."},{q:"Volume spike on breakout means...",opts:["Suspicious","Institutional buying — breakout valid","Too risky","Sell signal"],ans:1,exp:"High volume = big money participating. Breakout is far more reliable with volume confirmation."},{q:"When SL is hit, you should...",opts:["Hold and wait","Buy more","Exit immediately","Move SL lower"],ans:2,exp:"Exit IMMEDIATELY. Setup has failed. Small loss beats catastrophic loss."},{q:"RSI above 70 means...",opts:["Strong buy","Overbought — may reverse","Oversold","Perfect entry"],ans:1,exp:"RSI > 70 = overbought. Avoid new buys at this level."},{q:"Position size: ₹200 max risk, ₹10 SL distance = ?",opts:["5 shares","10 shares","20 shares","50 shares"],ans:2,exp:"Shares = Max Risk ÷ SL Distance = ₹200 ÷ ₹10 = 20 shares."},{q:"Golden Cross is...",opts:["Price hits 52-week high","20 EMA crosses above 50 EMA","Gold price rises","Any bullish candle"],ans:1,exp:"20 EMA crossing above 50 EMA = Golden Cross = bullish momentum signal."},{q:"Fake breakout warning sign...",opts:["High volume spike","Low volume on breakout","Strong close candle","Price far above resistance"],ans:1,exp:"Low volume breakout = very few buyers. Likely to fail and reverse."},{q:"Doji candlestick means...",opts:["Strong buy","Strong sell","Open equals Close — indecision","High volume"],ans:2,exp:"Doji: Open ≈ Close. Equal wicks. Complete indecision between buyers and sellers."},{q:"Trailing stop loss is used to...",opts:["Cut losses early","Lock in profits as price rises","Enter trades","Avoid brokerage"],ans:1,exp:"Trailing SL moves up as price rises. Locks in profits while staying in the winning trade."},{q:"Pullback entry signal is...",opts:["Price falling","Bullish reversal candle AT support","Market opens","Volume is lowest"],ans:1,exp:"Never buy a falling knife. Wait for reversal candle AT support to confirm buyers have returned."}];
-let qCur=0,qAns=false,qCorrect=0,qTotal=0;
-function loadQuiz(){const q=QUIZ[qCur%QUIZ.length];document.getElementById('quizQ').textContent=`Q${(qCur%QUIZ.length)+1}/${QUIZ.length}: ${q.q}`;const opts=document.getElementById('quizOpts');opts.innerHTML='';q.opts.forEach((o,i)=>{const b=document.createElement('button');b.className='quiz-opt';b.textContent=o;b.onclick=()=>answerQ(i,q.ans,q.exp);opts.appendChild(b);});document.getElementById('quizExpl').style.display='none';document.getElementById('nextQBtn').style.display='none';qAns=false;}
-function answerQ(chosen,correct,exp){if(qAns)return;qAns=true;qTotal++;document.querySelectorAll('.quiz-opt')[correct].classList.add('correct');if(chosen!==correct)document.querySelectorAll('.quiz-opt')[chosen].classList.add('wrong');else qCorrect++;document.getElementById('quizScoreLbl').textContent=`Score: ${qCorrect}/${qTotal}`;document.getElementById('quizExpl').textContent=exp;document.getElementById('quizExpl').style.display='block';document.getElementById('nextQBtn').style.display='inline-block';}
-function nextQ(){qCur=(qCur+1)%QUIZ.length;loadQuiz();}
-loadQuiz();
-
-// WATCH LATER
-function saveVid(e,btn,title,url){e.stopPropagation();if(S.watchLater.find(v=>v.title===title)){btn.textContent='✓ Saved';btn.classList.add('saved');return;}S.watchLater.push({title,url});btn.textContent='✓ Saved';btn.classList.add('saved');renderWatchLater();save();}
-function renderWatchLater(){const el=document.getElementById('watchLaterList');if(!el)return;if(!S.watchLater.length){el.innerHTML='<div style="color:var(--text3);font-size:12px;padding:8px 0">No saved videos yet.</div>';return;}el.innerHTML=S.watchLater.map((v,i)=>`<div class="saved-vid"><div class="yt-btn"></div><div class="sv-title">${v.title}</div><a href="${v.url}" target="_blank" style="color:var(--neon);font-size:10px;text-decoration:none;white-space:nowrap">Watch ↗</a><button class="sv-rm" onclick="rmVid(${i})">×</button></div>`).join('');}
-function rmVid(i){S.watchLater.splice(i,1);save();renderWatchLater();}
-renderWatchLater();
-
-// DAILY RECOS
-const DAILY_R=[{title:'Stock Market Basics for Beginners — NSE India',url:'https://www.youtube.com/watch?v=RieqxXMds64',tag:'Foundation'},{title:'Candlestick Patterns That Work on NSE',url:'https://www.youtube.com/watch?v=KXrVZRCGSnU',tag:'Candles'},{title:'Support & Resistance — CA Rachana Ranade',url:'https://www.youtube.com/watch?v=3o4EQxZ-6-k',tag:'S&R'},{title:'Breakout Trading Strategy — Power of Stocks',url:'https://www.youtube.com/watch?v=2g05cX2xkn8',tag:'Setups'},{title:'Risk Management Masterclass — CA Rachana Ranade',url:'https://www.youtube.com/watch?v=2g05cX2xkn8',tag:'Risk'},{title:'Volume Analysis — The Edge Most Miss',url:'https://www.youtube.com/watch?v=ANdwvD8BoSA',tag:'Volume'},{title:'EMA 20 & 50 on Zerodha Kite — Asset Yogi',url:'https://www.youtube.com/watch?v=5R75aCebHPs',tag:'Indicators'}];
-function renderDailyRecos(){const el=document.getElementById('dailyRecos');if(!el)return;const day=new Date().getDay();const recos=[DAILY_R[day%DAILY_R.length],DAILY_R[(day+1)%DAILY_R.length],DAILY_R[(day+2)%DAILY_R.length]];el.innerHTML=recos.map(r=>`<div class="reco-card"><div class="yt-btn"></div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--text)">${r.title}</div></div><span class="badge b-blue">${r.tag}</span><a href="${r.url}" target="_blank" class="btn btn-ghost" style="font-size:10px;padding:4px 12px;text-decoration:none">Watch ↗</a><button class="vid-save-btn" onclick="saveVid(event,this,'${r.title}','${r.url}')">+ Save</button></div>`).join('');}
-renderDailyRecos();
-
-// QUOTES
-const QUOTES=[{text:"The stock market is a device for transferring money from the impatient to the patient.",author:"Warren Buffett"},{text:"Risk comes from not knowing what you are doing.",author:"Warren Buffett"},{text:"Plan the trade and trade the plan.",author:"Trading Principle"},{text:"Your first loss is your best loss. Cut it and move on.",author:"Market Wisdom"},{text:"You can't control what the market does. You CAN control how you react.",author:"Trading Principle"},{text:"Discipline is the bridge between your trading goals and results.",author:"Trading Principle"},{text:"The market is not your enemy. Your emotions are.",author:"Market Wisdom"},{text:"A stop loss is not weakness. It is your survival mechanism.",author:"Trading Rule #1"},{text:"Small consistent profits beat one lucky big trade every time.",author:"Market Wisdom"},{text:"Never risk more than you can afford to lose. Never.",author:"Trading Rule #1"},{text:"Every trade begins with a plan. Every blow-up begins without one.",author:"Unknown"},{text:"The goal is not to be right. The goal is to make money.",author:"Trading Principle"},{text:"Losers average losers. Winners cut losses fast.",author:"Market Wisdom"},{text:"After 3 losses in a row, stop. Come back tomorrow.",author:"Your Rule #6"}];
-function loadQuote(){const d=new Date().getDay();const q=QUOTES[d%QUOTES.length];['quoteText','manualQuote'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=`"${q.text}"`;});['quoteAuthor','manualAuthor'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=`— ${q.author}`;});}
-loadQuote();
-
-// CANDLE DATA
-const CANDLES=[{name:'Bullish Engulfing',signal:'Reversal ↑',cls:'b-neon',color:'#00FF94',desc:'Large green candle completely covers previous red candle body. Strong reversal after downtrend.',entry:'Next candle opens green',sl:'Below the engulfing candle low'},{name:'Bearish Engulfing',signal:'Reversal ↓',cls:'b-red',color:'#FF4757',desc:'Large red candle swallows previous green. Strong reversal after uptrend.',entry:'Next candle confirms bearish',sl:'Above the engulfing candle high'},{name:'Hammer',signal:'Bullish ↑',cls:'b-neon',color:'#00FF94',desc:'Long lower wick (≥2× body), small body at top. After downtrend, buyers rejected lower prices aggressively.',entry:'Next candle opens green',sl:'Below the hammer low'},{name:'Shooting Star',signal:'Bearish ↓',cls:'b-red',color:'#FF4757',desc:'Long upper wick (≥2× body), small body at bottom. After uptrend, sellers rejected higher prices.',entry:'Next candle confirms red',sl:'Above the shooting star high'},{name:'Doji',signal:'Indecision',cls:'b-gray',color:'#8B949E',desc:'Open equals Close. Equal wicks. Complete standoff between buyers and sellers.',entry:'Wait for next candle direction',sl:'Beyond doji high or low'},{name:'Morning Star',signal:'Strong Bullish ↑',cls:'b-neon',color:'#00FF94',desc:'3-candle reversal: Red → Small body → Strong Green. Very reliable bottom reversal.',entry:'Open of 4th candle',sl:'Below the lowest of 3 candles'},{name:'Evening Star',signal:'Strong Bearish ↓',cls:'b-red',color:'#FF4757',desc:'3-candle top reversal: Green → Small → Strong Red. Mirror of morning star.',entry:'Open of 4th candle (short/exit)',sl:'Above the highest of 3 candles'},{name:'Marubozu Bull',signal:'Very Bullish ↑',cls:'b-neon',color:'#00FF94',desc:'Large green candle with NO wicks. Pure buying from open to close. Maximum conviction.',entry:'Breakout itself or pullback',sl:'Below the Marubozu body'},{name:'Marubozu Bear',signal:'Very Bearish ↓',cls:'b-red',color:'#FF4757',desc:'Large red candle with NO wicks. Pure selling throughout. Do not buy against this.',entry:'Short or completely avoid',sl:'Above the Marubozu body'},{name:'Dragonfly Doji',signal:'Bullish ↑',cls:'b-neon',color:'#00FF94',desc:'Long lower wick, Open=Close=High. Sellers tried to push down, buyers completely rejected and closed at high.',entry:'Next bullish candle',sl:'Below the dragonfly low'},{name:'Gravestone Doji',signal:'Bearish ↓',cls:'b-red',color:'#FF4757',desc:'Long upper wick, Open=Close=Low. Buyers pushed high, sellers completely rejected and closed at low.',entry:'Next bearish candle',sl:'Above the gravestone high'},{name:'Tweezer Bottom',signal:'Reversal ↑',cls:'b-neon',color:'#00FF94',desc:'Two consecutive candles with equal lows — first red, second green. Buyers defending same level.',entry:'Open of third candle',sl:'Slightly below the tweezer low'},{name:'Tweezer Top',signal:'Reversal ↓',cls:'b-red',color:'#FF4757',desc:'Two consecutive candles with equal highs — first green, second red. Sellers defending same level.',entry:'Short or exit longs',sl:'Above the tweezer high'},{name:'Inverted Hammer',signal:'Potential ↑',cls:'b-amber',color:'#F4A623',desc:'Long upper wick, small body at bottom. At downtrend bottom. Requires strong next candle confirmation.',entry:'ONLY after strong bullish next candle',sl:'Below the inverted hammer low'},{name:'Hanging Man',signal:'Warning ↓',cls:'b-amber',color:'#F4A623',desc:'Looks like hammer but at TOP of uptrend. Long lower wick. Warning of potential reversal.',entry:'Only after bearish confirmation',sl:'Above the hanging man high'},{name:'Spinning Top',signal:'Indecision',cls:'b-gray',color:'#8B949E',desc:'Small body with equal upper and lower wicks. Indecision. At S&R levels = potential reversal signal.',entry:'Wait for next candle',sl:'Depends on direction'},{name:'Three White Soldiers',signal:'Very Bullish ↑',cls:'b-neon',color:'#00FF94',desc:'Three consecutive green candles with higher closes. Strong reversal after downtrend. Institutional buying.',entry:'After the third candle closes',sl:'Below the first soldier open'},{name:'Three Black Crows',signal:'Very Bearish ↓',cls:'b-red',color:'#FF4757',desc:'Three consecutive red candles with lower closes. Strong reversal after uptrend. Heavy selling.',entry:'Short after third candle',sl:'Above the first crow open'}];
-function buildCandleGrid(){const g=document.getElementById('candleGrid');if(!g)return;g.innerHTML=CANDLES.map(c=>`<div class="candle-card"><div class="candle-visual"><svg width="30" height="52" viewBox="0 0 30 52"><line x1="15" y1="2" x2="15" y2="12" stroke="${c.color}" stroke-width="2"/><rect x="5" y="12" width="20" height="28" fill="${c.color}" rx="2" opacity="${c.name.includes('Doji')||c.name.includes('Spinning')?0.25:1}"/><line x1="15" y1="40" x2="15" y2="50" stroke="${c.color}" stroke-width="2"/></svg></div><div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;display:flex;align-items:center;gap:5px">${c.name}<div class="info-wrap"><span class="info-icon" tabindex="0">i</span><div class="info-popup"><h4>${c.name}</h4><div class="ip-row"><strong>Entry:</strong> ${c.entry}</div><div class="ip-row"><strong>SL:</strong> ${c.sl}</div></div></div></div><div style="font-size:10px;color:var(--text2);line-height:1.5;margin-bottom:6px">${c.desc}</div><span class="badge ${c.cls}">${c.signal}</span></div>`).join('');}
-buildCandleGrid();
-
-// CHART PATTERNS
-const PATTERNS=[
-{name:'Breakout from Consolidation',type:'YOUR SETUP #1',cls:'b-neon',body:'Price ek tight range mein kaafi time flat chalti hai — yeh CONSOLIDATION hai. Sochlo jaise ek spring compress ho raha ho. Is dauran volume bahut kam hota hai. Jab price is range ke UPAR close ho jaaye high volume ke saath — yeh BREAKOUT hai. Compressed energy release hoti hai aur price tezi se move karti hai. Key insight: jitni lambi consolidation, utna bada breakout ho sakta hai. Volume MUST increase on breakout candle — bina iske breakout fake hai.',entry:'Breakout candle CLOSE resistance ke UPAR ho + volume ≥ 1.5× average',sl:'Resistance ke thoda neeche (ab yeh support ban gaya)',target:'Consolidation ki height jitna upar add karo breakout point se',avoid:'Volume elevate nahi hua toh entry mat lo — 80% fake breakouts low volume wale hote hain',remember:'Price wapas range mein aayi = fake breakout. Turant exit. No holding, no hoping.'},
-{name:'Pullback to Support',type:'YOUR SETUP #2',cls:'b-neon',body:'Stock uptrend mein hai — higher highs, higher lows ban rahe hain. Phir price 3-5 din ke liye neeche aati hai — yeh PULLBACK hai. Dar mat — yeh GIFT hai, better price pe entry milti hai. Key rule: pullback mein volume GHATNA chahiye — panic nahi, sirf normal correction. Jab price strong support pe aake ruke — chahe purana resistance ho, 20 EMA ho ya trendline — aur wahan REVERSAL CANDLE bane (Hammer, Bullish Engulfing) — yahi entry point hai.',entry:'Reversal candle support pe form ho. Enter on close ya next candle open.',sl:'Support level ke neeche ya reversal candle ke low ke neeche',target:'Pichla high minimum, ya SL distance ka 2× (1:2 R:R ensure karo)',avoid:'Sirf isliye mat kharido ki price support pe hai — REVERSAL CANDLE ka wait karo',remember:'Low volume pullback = healthy. High volume pullback = selling pressure, avoid.'},
-{name:'Head & Shoulders',type:'Top Reversal',cls:'b-red',body:'Teen peaks bante hain — Left Shoulder, phir ZYADA UNCHA Head, phir Right Shoulder (left ke roughly same height). Uptrend ke TOP pe banta hai. Dono troughs milao — yeh NECKLINE. Critical signal: Right Shoulder LOW VOLUME pe banta hai — buyers ka dum nahi raha. Jab price neckline ke NEECHE close ho — pattern confirm aur bearish move expected.',entry:'Neckline ke neeche close. Pehle mat becho.',sl:'Right shoulder ke high ke upar',target:'Head se neckline ki distance, neeche project karo breakout se',avoid:'Neckline break se pehle mat becho — confirm hone do',remember:'Right shoulder pe lower volume = sabse important tell. Buyers exhaust ho gaye hain.'},
-{name:'Inverse Head & Shoulders',type:'Bottom Reversal',cls:'b-neon',body:'Yeh H&S ka ulta — downtrend ke BOTTOM pe. Teen troughs: Left Shoulder, ZYADA GEHRA Head, phir Right Shoulder. Sellers dhire dhire exhausted ho rahe hain — Head pe buyers ne resist kiya. Neckline ke UPAR breakout strong volume ke saath = powerful buy signal. Weeks mein banta hai — patience chahiye.',entry:'Neckline ke upar close + above average volume',sl:'Right shoulder ke low ke neeche',target:'Neckline se Head ki distance upar project karo',avoid:'Volume confirmation zaroori — bina volume ke unreliable',remember:'Weeks mein banta hai. Jaldi mat karo. Confirmation pe hi entry.'},
-{name:'Double Top',type:'Top Reversal',cls:'b-red',body:'Price same resistance pe DO baar jaati hai, dono baar fail. M shape. Critical: dusra top LOW VOLUME pe = buyer exhaustion. Bade players wahan sell kar rahe hain. Dono troughs milao — NECKLINE. Jab price neckline ke neeche close ho — confirm aur bearish.',entry:'Neckline ke neeche break aur close',sl:'Double top high ke thoda upar',target:'Tops se neckline ki distance, neeche project karo',avoid:'Neckline break ke bina mat becho',remember:'Dusre top pe lower volume = sellers strongly defend kar rahe hain. Yeh key hai.'},
-{name:'Double Bottom',type:'Bottom Reversal',cls:'b-neon',body:'Price same support pe DO baar jaati hai, dono baar bounce. W shape. Downtrend ke baad buyers ki wapasi dikhata hai. Bonus: dusra bottom kabhi kabhi pehle se thoda ZYADA UNCHA — buyers pehle se aggressive ho gaye. Neckline ke UPAR close = confirm.',entry:'Neckline ke upar close + volume',sl:'Double bottom low ke neeche',target:'Bottoms se neckline ki distance, upar project karo',avoid:'False breakouts hote hain — volume se confirm karo',remember:'Dusra bottom agar thoda upar ho — extra bullish sign hai.'},
-{name:'Bull Flag',type:'Continuation ▲',cls:'b-neon',body:'SHARP aur STRONG upar move (FLAGPOLE). Phir 1-2 hafte chhoti downward channel mein consolidation LOW VOLUME pe (FLAG). Reversal nahi — sirf pause, saans lena. Flag mein volume ghatna chahiye — healthy sign. Jab price upper flag line UPAR break kare high volume ke saath — continuation expected flagpole ki height jitna.',entry:'Upper flag line ke upar close + volume surge',sl:'Flag channel ke lower line ke neeche',target:'Flagpole ki height, breakout point se add karo',avoid:'Flag ke andar trade mat karo — breakout ka wait karo',remember:'Flag mein high volume = reversal ho sakta hai, flag nahi. Low volume chahiye.'},
-{name:'Bear Flag',type:'Continuation ▼',cls:'b-red',body:'Sharp downward move (flagpole) ke baad chhota upward-sloping consolidation (flag) low volume pe. Buyers trap hote hain — sochte hain recovery ho rahi hai. Actually sellers pause le rahe hain. Flag break hone ke baad price phir neeche jaati hai. Beginners: DOWNTREND mein bounce pe mat kharido — bear flag ho sakta hai.',entry:'Lower flag channel line ke neeche close',sl:'Flag ka high',target:'Flagpole ki height neeche project karo',avoid:'Flag mein kharido mat — buyers ko trap karta hai',remember:'Chhoti si recovery = trap. Experienced traders yahaan sell karte hain.'},
-{name:'Pennant',type:'Continuation',cls:'b-blue',body:'Bull/Bear flag jaisa lekin consolidation triangular hoti hai — PENNANT. Strong move (flagpole) ke baad converging trendlines mein energy store hoti hai. Dono sides squeeze — buyers aur sellers dono unsure. Apex ke paas explosive breakout expected, mostly flagpole direction mein.',entry:'Pennant ke upar/neeche strong close + volume surge',sl:'Opposite trendline ke bahar',target:'Flagpole ki height',avoid:'Pennant ke andar trade mat karo',remember:'Jitna lamba aur tight pennant, utna explosive breakout hoga.'},
-{name:'Cup & Handle',type:'Bullish Continuation',cls:'b-neon',body:'Medium-to-long term pattern, mostly weekly charts pe. Price U-shape (CUP) banaati hai — V-shape nahi, rounded bottom chahiye — gradual base building. Phir chhota pullback (HANDLE) cup rim ke 10-15% andar, low volume pe. Cup rim ke UPAR breakout high volume ke saath = strong buy.',entry:'Cup rim ke upar break high volume ke saath',sl:'Handle ke low ke neeche',target:'Cup ki depth, breakout point se add karo',avoid:'V-shaped cup less reliable hai',remember:'Handle mein log jo top pe khareed ke phanse they, woh bech rahe hain — yeh natural process hai.'},
-{name:'Ascending Triangle',type:'Bullish Continuation',cls:'b-neon',body:'Flat resistance + rising support line. Buyers baar baar same resistance test karte hain aur HIGHER LOWS bana rahe hain — buyers increasingly aggressive ho rahe hain jabki sellers wohi level defend kar rahe. Eventually buyers jeet jaate hain. High-probability bullish setup.',entry:'Flat resistance ke upar close + volume spike',sl:'Sabse recent higher low ke neeche',target:'Triangle ke widest hisse ki height add karo breakout se',avoid:'Candle CLOSE ka wait karo — intraday break pe react mat karo',remember:'Rising lows = buyers ki urgency badh rahi hai. Bullish sign hai.'},
-{name:'Descending Triangle',type:'Bearish Continuation',cls:'b-red',body:'Flat support + falling resistance. Sellers baar baar LOWER HIGHS bana rahe hain — woh sasta bechne ko taiyaar hain. Eventually sellers jeet jaate hain aur support toot jaata hai. Bearish setup.',entry:'Flat support ke neeche close',sl:'Sabse recent lower high ke upar',target:'Triangle ki width neeche project karo',avoid:'Kabhi kabhi bullishly resolve hota hai — context dekho',remember:'Falling highs = sellers har baar saste mein bech rahe hain. Bahut bearish.'},
-{name:'Symmetrical Triangle',type:'Neutral — Explosive',cls:'b-blue',body:'Lower highs + higher lows dono — converging trendlines. Na buyers clearly win, na sellers. Energy dono sides se store ho rahi hai. Neutral pattern — breakout kisi bhi direction mein. Jab breakout hota hai — EXPLOSIVE hota hai. Prior trend direction mein probability thodi zyada.',entry:'Strong close beyond either trendline + volume',sl:'Opposite trendline ke upar/neeche',target:'Triangle ke widest hisse ki height',avoid:'Triangle ke andar trade mat karo',remember:'Jitna lamba triangle aur jitna tight — utna zyada explosive breakout. Patience rakho.'},
-{name:'Rising Wedge',type:'Bearish Warning',cls:'b-red',body:'Counterintuitive pattern — price upar ja rahi hai lekin actually BEARISH hai. Dono trendlines upar slope karti hain lekin converge karti hain. Price upar hai lekin volume ghat raha hai — buyers ka momentum khatam. Zyatar cases mein DOWNWARD break hota hai. Beginners ke liye sabse dangerous trap.',entry:'Lower wedge line ke neeche close',sl:'Wedge ke sabse recent high ke upar',target:'Wedge ka bottom ya measured move',avoid:'Rising wedge mein BUY mat karo — yeh trap hai. Bahut common mistake.',remember:'Higher prices + decreasing volume = hidden weakness. Upar jaana = buyers ko trap karna.'},
-{name:'Falling Wedge',type:'Bullish Reversal',cls:'b-neon',body:'Dono trendlines neeche slope karti hain aur converge — lekin pattern BULLISH hai. Price gir rahi hai lekin selling pressure weak pad raha hai — volume ghat raha. Buyers quietly accumulate kar rahe hain. Upper line ke upar breakout = strong buy signal. Aksar downtrend ke baad bottom pe banta hai.',entry:'Upper falling wedge line ke upar close',sl:'Wedge ke sabse recent low ke neeche',target:'Wedge ki start (top)',avoid:'Breakout se pehle premature entry — common mistake',remember:'Gir rahi price + ghatna volume = selling khatam ho rahi hai. Spring compress — release aayega.'}
-]
-function buildPatternGrid(){const g=document.getElementById('patternGrid');if(!g)return;g.innerHTML=PATTERNS.map(p=>`<div class="teach-box"><div class="tb-head">${p.name}<span class="badge ${p.cls}">${p.type}</span><div class="info-wrap"><span class="info-icon" tabindex="0">i</span><div class="info-popup right"><h4>Quick Reference</h4><div class="ip-row"><strong>Entry:</strong> ${p.entry}</div><div class="ip-row"><strong>SL:</strong> ${p.sl}</div><div class="ip-row"><strong>Target:</strong> ${p.target}</div><div class="ip-row"><strong>Avoid:</strong> ${p.avoid}</div></div></div></div><div class="tb-sub">🎓 Teacher's Explanation</div><div class="tb-body" style="margin-bottom:12px">${p.body}</div><div style="background:var(--bg2);border-radius:var(--r);padding:10px"><div class="tb-rule">📍 <strong style="color:var(--neon)">Entry:</strong> ${p.entry}</div><div class="tb-rule">🛑 <strong style="color:var(--red)">SL:</strong> ${p.sl}</div><div class="tb-rule">🎯 <strong style="color:var(--amber)">Target:</strong> ${p.target}</div><div class="tb-rule">⚠️ <strong>Avoid:</strong> ${p.avoid}</div><div class="tb-rule">💡 <strong>Remember:</strong> ${p.remember}</div></div></div>`).join('');}
-buildPatternGrid();
-
-// INDICATORS
-const INDICATORS=[
-{name:'EMA (20 & 50)',color:'var(--neon)',
-rows:[['20 EMA','Short-term trend indicator. Price above 20 EMA = bullish mood. Swing traders ke liye yeh dynamic support hai uptrend mein.'],['50 EMA','Medium-term trend. 20 EMA se zyada strong support deta hai. FII aur DII is level pe nazar rakhte hain.'],['200 EMA','Long-term trend. Price iske upar = Bull Market. Neeche = Bear Market. Beginners ke liye most important level.'],['Golden Cross','20 EMA 50 EMA ke UPAR cross kare = strong buy signal. Bahut widely watched — institutions bhi react karte hain.'],['Death Cross','20 EMA 50 EMA ke NEECHE cross kare = bearish signal. Selling pressure aane ki possibility.'],['In Kite','Studies → EMA → Period: 20 add karo, phir dobara EMA → Period: 50 add karo']],
-ip:[{k:'Price > 20 EMA > 50 EMA',v:'Bullish alignment — yahi mein swing buy setups dhundo'},{k:'Price < 20 EMA',v:'Bearish zone — nayi long entry avoid karo'},{k:'EMA ka slope upar',v:'Trend strong hai — ride it, fight mat karo'},{k:'Price baar baar 20 EMA pe aake bounce kare',v:'Strong dynamic support — pullback entry milti hai yahaan'},{k:'20 EMA aur 50 EMA ek saath',v:'Bahut strong S&R zone — yahan se moves bade hote hain'}]},
-{name:'RSI (14)',color:'var(--blue)',
-rows:[['Range','0 se 100 ke beech. Key levels: 30 (oversold) aur 70 (overbought).'],['RSI > 70','Overbought zone. Stock bahut tezi se upar gaya hai. Buying se bachna chahiye — reversal possible hai.'],['RSI < 30','Oversold zone. Sellers exhausted ho rahe hain. Bullish reversal signal dhundo — seedha buy mat karo.'],['RSI 40–60','Neutral zone. Trend confirm nahi. Price action pe focus karo.'],['RSI at 50 level','Trend ka divider — upar = bullish, neeche = bearish mood overall.'],['Divergence','Price new high banaye lekin RSI new high na banaye = hidden weakness. Reversal warning.'],['In Kite','Studies → RSI → Period: 14 rakhna']],
-ip:[{k:'RSI > 70 + resistance pe',v:'Sell ya exit signal — overbought hai, avoid buying'},{k:'RSI < 30 + support pe reversal candle',v:'Strong buy opportunity — oversold + confirmation'},{k:'RSI 50 cross upar',v:'Bullish momentum confirm ho raha hai'},{k:'Price upar but RSI neeche (Divergence)',v:'Very strong warning — trend weak pad raha hai, careful raho'}]},
-{name:'MACD (12,26,9)',color:'var(--purple)',
-rows:[['MACD Line','12 EMA minus 26 EMA. Fast moving line.'],['Signal Line','MACD ka 9 EMA. Slow moving line.'],['Histogram','MACD aur Signal ke beech ka distance. Bada = strong momentum.'],['Bullish Crossover','MACD line Signal ke UPAR cross kare = Buy signal. Neeche se upar = momentum shift.'],['Bearish Crossover','MACD line Signal ke NEECHE cross kare = Exit ya sell signal.'],['Zero line cross','MACD zero ke upar = bullish territory. Neeche = bearish.'],['In Kite','Studies → MACD → Settings: 12, 26, 9 (default hain)']],
-ip:[{k:'MACD zero se upar + bullish crossover',v:'Strong buy signal — dono confirm kar rahe hain'},{k:'Histogram shrink ho raha ho',v:'Momentum weak pad raha hai — profit protect karo'},{k:'MACD divergence price se',v:'Trend palat sakta hai — be alert'},{k:'Beginners ke liye',v:'MACD ek confirming indicator hai — primary signal EMA aur S&R se lo'}]},
-{name:'Volume',color:'var(--amber)',
-rows:[['Price ↑ + Volume ↑','Sabse trusted signal. Institutions bhi khareed rahe hain. Move genuine hai.'],['Price ↑ + Volume ↓','Weak move. Retail khareeda, institutions nahi. Fake breakout ho sakta hai.'],['Price ↓ + Volume ↑','Heavy selling. Koi bada player nikal raha hai. Dangerous — avoid long.'],['Price ↓ + Volume ↓','Healthy pullback. Sellers zyada nahi hain, sirf buyers temporarily ruke hain. Opportunity ho sakti hai.'],['Volume Spike (2x+)','Institutional participation confirm. Is candle ki direction pe trust karo.'],['Volume Drying Up','Consolidation mein volume ghatna = energy store ho rahi hai. Breakout aane wala hai.']],
-ip:[{k:'Breakout + high volume',v:'Trust karo — genuine move hai. Entry valid hai.'},{k:'Breakout + low volume',v:'Skip karo ya bahut chhoti position lo — fake hone ki probability zyada'},{k:'Volume drying up in range',v:'Breakout ki preparation — dhyan raho'},{k:'Reversal candle + spike volume',v:'Bahut strong signal — institutions direction change kar rahe hain'}]},
-{name:'Bollinger Bands (20,2)',color:'var(--blue)',
-rows:[['Teen lines','Upper Band, Middle (20 SMA), Lower Band. Price usually inke beech mein rehti hai.'],['Band Squeeze','Bands ekdm pass aa jaate hain = volatility compress ho rahi hai. Bada move aane wala hai kisi bhi direction mein.'],['Price at Lower Band','Uptrend mein lower band touch = oversold + potential buy zone. Reversal candle ka wait karo.'],['Price Walking Upper Band','Bahut strong uptrend. Price continuously upar band pe chalti rahe = stay long.'],['Band Expansion','Bands badi hoti hain = volatility badhi. Move shuru ho gaya — direction confirm karo.'],['In Kite','Studies → Bollinger Bands → Period: 20, Deviation: 2']],
-ip:[{k:'Bands squeeze ho rahi ho',v:'Alert ho jao — explosive move aane wala hai. Direction confirm karo breakout pe.'},{k:'Price lower band pe + uptrend intact',v:'Pullback entry opportunity — reversal candle ka wait karo'},{k:'Price band ke bahar nikal jaye',v:'Extreme move — possible reversal ya continuation, volume se confirm karo'},{k:'Middle band (20 SMA)',v:'Dynamic support/resistance. Price isse frequently bounce karti hai'}]},
-{name:'Fibonacci Retracement',color:'var(--amber)',
-rows:[['Key Levels','23.6%, 38.2%, 50%, 61.8%, 78.6%. Ye sab natural support/resistance zones hain.'],['Sabse Important','38.2%, 50%, 61.8% — ye teen levels pe price baar baar bounce karti hai.'],['Draw kaise karein','Uptrend mein: swing low se swing high tak draw karo. Levels automatically baan jaate hain.'],['38.2% Pullback','Shallow retracement = bahut strong trend. Iss level pe reversal = aggressive buyers.'],['50% Pullback','Sabse common. Healthy pullback. Yahaan reversal candle = solid entry.'],['61.8% Pullback (Golden Ratio)','Deep retracement. Last chance for trend continuation. Agar yahan bhi toot gaya = reversal ho sakta hai.'],['In Kite','Draw Tools (pencil icon) → Fibonacci Retracement']],
-ip:[{k:'38.2% pe bounce',v:'Trend bahut strong hai — aggressive traders buy karte hain yahaan'},{k:'50% pe bounce + reversal candle',v:'Best risk:reward entry zone — most reliable level'},{k:'61.8% pe bounce',v:'Deep but recoverable — confirm karke entry lo'},{k:'78.6% ke neeche toot gaya',v:'Trend reverse ho gaya hai — long positions exit karo'}]}];
-function buildIndicatorGrid(){const g=document.getElementById('indicatorGrid');if(!g)return;g.innerHTML=INDICATORS.map(ind=>`<div class="card"><div class="card-title" style="color:${ind.color}">${ind.name}<div class="info-wrap"><span class="info-icon" tabindex="0">i</span><div class="info-popup right"><h4>Key Points</h4>${ind.ip.map(p=>`<div class="ip-row"><strong>${p.k}:</strong> ${p.v}</div>`).join('')}</div></div><div class="nl"></div></div><div style="font-size:11px;color:var(--text2);line-height:2">${ind.rows.map(r=>`<div style="padding:4px 0;border-bottom:1px solid var(--border)"><span style="color:var(--text)">${r[0]}:</span> ${r[1]}</div>`).join('')}</div></div>`).join('');}
-buildIndicatorGrid();
-
-// PAST ANALYSIS
-const PAST_ANALYSIS=[{date:'May 2025',sym:'Nifty 50',pattern:'Breakout from Consolidation',tf:'Daily',cls:'b-neon',body:'Nifty 50 consolidated between 24,100 and 24,600 for approximately 3 weeks in April–May 2025. Volume dried up significantly during this range, indicating indecision and energy building. On the breakout day, volume surged 2.3× the 20-day average as price closed above 24,600. The measured move target was approximately 25,100 — the range height (500 points) added to the breakout level.',lesson:'(1) 24,600 pe clear horizontal resistance tha jo multiple times test hua — isse pata chalta hai yeh level important tha. (2) Breakout pe volume 2.3× tha — matlab FII/DII bhi khareed rahe the, retail buyers akele nahi the. (3) 20 EMA upar ja raha tha — trend humari taraf tha, current favor mein trade tha. (4) Yeh exactly tumhara Setup #1 hai — live market context mein dekho aur identify karna seekho.'},{date:'March 2025',sym:'TCS',pattern:'Pullback to 50 EMA Support',tf:'Daily',cls:'b-neon',body:'After a strong rally from ₹3,600 to ₹4,100 in January–February 2025, TCS pulled back to the 50 EMA (around ₹3,850) in early March. Volume was below average during the entire pullback — healthy sign. A bullish engulfing candle formed right at the 50 EMA on March 12. The stock then resumed its uptrend, reaching ₹4,200.',lesson:'(1) Pehle clear uptrend tha — higher highs, higher lows — yeh zaroori condition hai setup ke liye. (2) Pullback mein volume below average tha — koi panic nahi, sirf normal correction. (3) Bullish engulfing exactly 50 EMA pe bana — two confirmations ek saath: dynamic support + reversal candle. (4) Yeh tumhara Setup #2 hai — apne Kite charts pe aise patterns dhundho.'},{date:'Feb 2025',sym:'Bank Nifty',pattern:'Double Top Reversal',tf:'Daily',cls:'b-red',body:'Bank Nifty formed two peaks at approximately 51,800–52,000 in November 2024 and January 2025. Both attempts failed. Second peak formed on noticeably lower volume — buyer exhaustion. Neckline at ~49,200. When price broke and closed below 49,200, the double top was confirmed. Declined further toward 46,600.',lesson:'(1) Dusra peak lower volume pe bana — buyers ka dum nahi raha. Yeh sabse important warning sign tha — price upar thi lekin conviction nahi. (2) Neckline break ka wait kiya gaya — sirf do peaks dekhna kaafi nahi, confirmation zaroori. (3) Yeh pattern samjhata hai ki pehli baar break fail hone ke baad doosri baar aur mushkil kyun hoti hai — sellers us level pe ready rehte hain.'},{date:'Dec 2024',sym:'INFY',pattern:'Ascending Triangle Breakout',tf:'Daily',cls:'b-neon',body:'Infosys formed an ascending triangle from October to December 2024. Flat resistance at ₹1,940 — tested 4 times. Rising support connecting successive higher lows. Pattern showed buyers increasingly aggressive while sellers held the same level. Final breakout on Dec 18 with 2.1× average volume. Moved toward ₹2,100.',lesson:'(1) ₹1,940 pe 4 baar resistance test hua — iska matlab woh level bahut important tha, aur jab break hua toh explosive tha. (2) Rising lows dikha rahe the ki buyers baar baar saste mein khareedne ki koshish kar rahe the — demand strong thi. (3) Dec 18 ka breakout 2.1× volume ke saath — institutions ne entry li, woh confirmation. (4) Clean breakout candle bina bade wicks ke = buyers ne poori candle control ki, koi rejection nahi.'},{date:'Nov 2024',sym:'Tata Motors',pattern:'Cup & Handle Pattern',tf:'Weekly',body:'Tata Motors formed a cup & handle on the weekly chart through Q2–Q3 2024. Cup from ₹1,020 to ₹850 bottom (rounded, not V-shape). Handle: 4-week pullback to ~₹940 on declining volume. Breakout above ₹1,020 confirmed the pattern. Longer-term pattern — best on weekly charts.',cls:'b-neon',lesson:'(1) Rounded (U-shaped) cup = gradual base building — institutions dhire dhire accumulate kar rahe the. V-shape rapid bounce hai jo less reliable hoti hai. (2) Handle shallow tha (10-15% andar) — zyada deep handle dikhata hai ki bahut zyada sellers hain. (3) Weekly chart pe pattern bana — weekly patterns daily se zyada reliable hote hain, time tested hain. (4) Cup rim ke upar breakout = entry point — yahi exact moment hai jab accumulated energy release hoti hai.'}];
-function buildPastAnalysis(){const g=document.getElementById('pastAnalysisGrid');if(!g)return;g.innerHTML=PAST_ANALYSIS.map(a=>`<div class="teach-box"><div class="tb-head"><span style="font-family:var(--mono);font-size:10px;color:var(--text3)">${a.date}</span><strong>${a.sym}</strong><span class="badge ${a.cls}">${a.pattern}</span><span class="badge b-gray">${a.tf} Chart</span></div><div class="tb-sub">🎓 Teacher's Analysis</div><div class="tb-body" style="margin-bottom:12px">${a.body}</div><div style="background:rgba(244,166,35,0.06);border:1px solid rgba(244,166,35,0.2);border-radius:var(--r);padding:10px"><div style="font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--amber);margin-bottom:6px">📖 Key Learning</div><div style="font-size:12px;color:var(--text2);line-height:1.7">${a.lesson}</div></div></div>`).join('');}
-buildPastAnalysis();
-
-// JOURNAL
-function logTrade(){const date=document.getElementById('jDate').value;const sym=document.getElementById('jSym').value.trim().toUpperCase();const setup=document.getElementById('jSetup').value;const entry=parseFloat(document.getElementById('jEntry').value);const sl=parseFloat(document.getElementById('jSL').value);const target=parseFloat(document.getElementById('jTarget').value);const qty=parseInt(document.getElementById('jQty').value);const exit=parseFloat(document.getElementById('jExit').value)||null;const dir=document.getElementById('jDir').value;const notes=document.getElementById('jNotes').value;if(!sym||!entry||!sl||!qty){const m=document.getElementById('jMsg');m.textContent='⚠ Fill Symbol, Entry, SL, Qty';m.style.color='var(--red)';return;}const slDist=Math.abs(entry-sl);const tgtDist=target?Math.abs(target-entry):0;const rr=slDist&&tgtDist?'1:'+(tgtDist/slDist).toFixed(1):'—';const pnl=exit?((dir==='Long'?exit-entry:entry-exit)*qty).toFixed(2):null;const status=pnl===null?'Open':parseFloat(pnl)>0?'Win':'Loss';S.trades.push({date,sym,setup,entry,sl,target,exit,qty,dir,notes,pnl,rr,status});save();renderJournal();renderHomePnL();const m=document.getElementById('jMsg');m.textContent='✓ Trade logged!';m.style.color='var(--neon)';setTimeout(()=>m.textContent='',3000);}
-function renderJournal(){const tb=document.getElementById('jBody');const jc=document.getElementById('jCount');if(jc)jc.textContent=S.trades.length+' trades';if(!S.trades.length){tb.innerHTML='<tr><td colspan="13" style="text-align:center;padding:20px;color:var(--text3)">No trades logged yet</td></tr>';return;}tb.innerHTML=S.trades.map((t,i)=>`<tr><td>${t.date||'—'}</td><td style="color:var(--text);font-weight:700">${t.sym}</td><td>${t.setup||'—'}</td><td><span class="badge ${t.dir==='Long'?'b-neon':'b-red'}">${t.dir}</span></td><td>${t.entry}</td><td style="color:var(--red)">${t.sl}</td><td style="color:var(--neon)">${t.target||'—'}</td><td>${t.exit||'Open'}</td><td>${t.qty}</td><td class="${t.pnl===null?'':parseFloat(t.pnl)>=0?'up':'down'}">${t.pnl===null?'—':(parseFloat(t.pnl)>=0?'+':'')+t.pnl}</td><td style="color:var(--amber)">${t.rr}</td><td><span class="badge ${t.status==='Win'?'b-neon':t.status==='Loss'?'b-red':'b-blue'}">${t.status}</span></td><td><button class="del-btn" onclick="delTrade(${i})">del</button></td></tr>`).join('');}
-function delTrade(i){if(confirm('Delete?')){S.trades.splice(i,1);save();renderJournal();renderPnL();}}
-renderJournal();
-
-// P&L
-let eqChInst=null;
-function renderPnL(){const trades=S.trades.filter(t=>t.pnl!==null);const wins=trades.filter(t=>parseFloat(t.pnl)>0);const losses=trades.filter(t=>parseFloat(t.pnl)<0);const total=trades.reduce((s,t)=>s+parseFloat(t.pnl),0);const wr=trades.length?Math.round(wins.length/trades.length*100):0;const aw=wins.length?Math.round(wins.reduce((s,t)=>s+parseFloat(t.pnl),0)/wins.length):0;const al=losses.length?Math.round(Math.abs(losses.reduce((s,t)=>s+parseFloat(t.pnl),0)/losses.length)):0;const pt=document.getElementById('pnl-total');if(pt){pt.textContent=(total>=0?'+':'')+'₹'+Math.abs(total).toFixed(0);pt.style.color=total>=0?'var(--neon)':'var(--red)';}const ptp=document.getElementById('pnl-total-pct');if(ptp)ptp.textContent=(total/S.capital*100).toFixed(1)+'% of capital';const pw=document.getElementById('pnl-wr');if(pw)pw.textContent=wr+'%';const pwl=document.getElementById('pnl-wl');if(pwl)pwl.textContent=wins.length+'W / '+losses.length+'L';const pa=document.getElementById('pnl-aw');if(pa)pa.textContent='₹'+aw;const pal=document.getElementById('pnl-al');if(pal)pal.textContent='₹'+al;let running=S.capital,peak=S.capital,maxDD=0,best=0,worst=0;const equity=[S.capital];trades.forEach(t=>{const v=parseFloat(t.pnl);running+=v;equity.push(Math.round(running));if(running>peak)peak=running;const dd=peak-running;if(dd>maxDD)maxDD=dd;if(v>best)best=v;if(v<worst)worst=v;});[['ps-start','₹'+S.capital.toLocaleString('en-IN')],['ps-current','₹'+Math.round(running).toLocaleString('en-IN')],['ps-trades',trades.length],['ps-dd','-₹'+Math.round(maxDD)],['ps-best','+₹'+Math.round(best)],['ps-worst','₹'+Math.round(worst)],['ps-exp',(trades.length?total/trades.length:0).toFixed(0)]].forEach(([id,v])=>{const el=document.getElementById(id);if(el){el.textContent=v;if(id==='ps-current')el.style.color=running>=S.capital?'var(--neon)':'var(--red)';}});const cl=getConsecLosses();const dloss=getTodayLoss();const dailyLimit=S.capital*0.05;document.getElementById('sl1').textContent=`Daily losses: ₹${dloss.toFixed(0)} of ₹${dailyLimit.toFixed(0)} limit`;document.getElementById('sd1').style.background=dloss>=dailyLimit?'var(--red)':dloss>=dailyLimit*0.6?'var(--amber)':'var(--neon)';document.getElementById('sl2').textContent=`Consecutive losses: ${cl} of 3 allowed`;document.getElementById('sd2').style.background=cl>=3?'var(--red)':cl>=2?'var(--amber)':'var(--neon)';document.getElementById('sl3').textContent=`Win rate: ${wr}% (${trades.length} trades)`;document.getElementById('sd3').style.background=trades.length>=5&&wr<30?'var(--red)':trades.length>=5&&wr<40?'var(--amber)':'var(--neon)';const shouldStop=dloss>=dailyLimit||cl>=3;const sv=document.getElementById('stopVerdict');sv.textContent=shouldStop?'🛑 STOP TRADING TODAY — Limit reached.':'✅ Limits OK — you can continue trading today.';sv.style.color=shouldStop?'var(--red)':'var(--neon)';const ins=[];if(trades.length<3)ins.push('Log at least 3 trades to see insights.');else{if(wr>=50)ins.push('✅ Win rate above 50% — good discipline.');else ins.push('⚠️ Win rate below 50%. Are you only taking your 2 setups?');if(aw>al)ins.push('✅ Avg win > avg loss — R:R working practically.');else ins.push('⚠️ Avg loss > avg win. Exiting winners too early?');if(maxDD>S.capital*0.1)ins.push('🔴 Max drawdown >10% — reduce position size immediately.');}document.getElementById('pnlInsights').innerHTML=ins.map(i=>`<div style="padding:5px 0;border-bottom:1px solid var(--border)">${i}</div>`).join('');const ctx=document.getElementById('equityChart');if(!ctx)return;if(eqChInst){eqChInst.destroy();eqChInst=null;}eqChInst=new Chart(ctx,{type:'line',data:{labels:equity.map((_,i)=>i===0?'Start':'T'+i),datasets:[{data:equity,borderColor:running>=S.capital?'#00FF94':'#FF4757',backgroundColor:running>=S.capital?'rgba(0,255,148,0.06)':'rgba(255,71,87,0.06)',fill:true,tension:0.35,pointRadius:4,pointBackgroundColor:running>=S.capital?'#00FF94':'#FF4757'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8B949E',font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}},y:{ticks:{color:'#8B949E',callback:v=>'₹'+v.toLocaleString('en-IN'),font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}}}}});}
-function getConsecLosses(){let c=0;for(let i=S.trades.length-1;i>=0;i--){if(S.trades[i].pnl===null)continue;if(parseFloat(S.trades[i].pnl)<0)c++;else break;}return c;}
-function getTodayLoss(){const t=new Date().toLocaleDateString('en-IN');return Math.abs(S.trades.filter(tr=>tr.date&&tr.date===t&&tr.pnl!==null&&parseFloat(tr.pnl)<0).reduce((s,tr)=>s+parseFloat(tr.pnl),0));}
-function updateCapital(){S.capital=parseFloat(document.getElementById('pnlCap').value)||10000;save();renderPnL();}
-function renderHomePnL(){const trades=S.trades.filter(t=>t.pnl!==null);const total=trades.reduce((s,t)=>s+parseFloat(t.pnl),0);const wr=trades.length?Math.round(trades.filter(t=>parseFloat(t.pnl)>0).length/trades.length*100):0;const ep=document.getElementById('h-pnl');if(ep){ep.textContent=(total>=0?'+':'')+'₹'+Math.abs(total).toFixed(0);ep.style.color=total>=0?'var(--neon)':'var(--red)';}const ew=document.getElementById('h-wr');if(ew)ew.textContent=wr+'%';const et=document.getElementById('h-trades');if(et)et.textContent=trades.length;const ec=document.getElementById('heroCapital');if(ec)ec.textContent='₹'+(S.capital+total).toLocaleString('en-IN');}
-renderHomePnL();
-
-// RISK
-function calcRisk(){const cap=parseFloat(document.getElementById('rCap').value)||10000;const pct=parseFloat(document.getElementById('rPct').value)||2;const entry=parseFloat(document.getElementById('rEntry').value)||500;const sl=parseFloat(document.getElementById('rSL').value)||485;const target=parseFloat(document.getElementById('rTarget').value)||530;const maxRisk=cap*pct/100;const slDist=Math.abs(entry-sl);const shares=slDist>0?Math.floor(maxRisk/slDist):0;const posVal=shares*entry;const profit=shares*Math.abs(target-entry);const actualRisk=shares*slDist;const rr=actualRisk>0?profit/actualRisk:0;const isGood=rr>=2;document.getElementById('r-maxrisk').textContent='₹'+maxRisk.toFixed(0);document.getElementById('r-sldist').textContent='₹'+slDist.toFixed(2);document.getElementById('r-shares').textContent=shares;document.getElementById('r-posval').textContent='₹'+posVal.toFixed(0);document.getElementById('r-profit').textContent='₹'+profit.toFixed(0);document.getElementById('r-actualrisk').textContent='₹'+actualRisk.toFixed(0);const rrel=document.getElementById('r-rr');if(rrel){rrel.textContent='1 : '+rr.toFixed(1);rrel.className='v '+(isGood?'g':'r');}const rv=document.getElementById('r-verdict');if(rv){rv.textContent=isGood?'✅ TAKE TRADE':'❌ SKIP — R:R too low';rv.className='v '+(isGood?'g':'r');};}
-function calcBrokerage(){const val=parseFloat(document.getElementById('brkTrade').value)||5000;const b=Math.min(20,val*0.0003);const stt=val*0.001;const total=b*2+stt+6;document.getElementById('brk-buy').textContent='₹'+b.toFixed(0);document.getElementById('brk-sell').textContent='₹'+b.toFixed(0);document.getElementById('brk-stt').textContent='₹'+stt.toFixed(0);document.getElementById('brk-total').textContent='₹'+total.toFixed(0);document.getElementById('brk-pct').textContent=(total/val*100).toFixed(2)+'%';}
-calcRisk();calcBrokerage();
-
-const KITE_BACKEND = 'https://shubhtradesmart-kite.netlify.app';
-
-async function fetchKiteData(){
-  const ks=document.getElementById('kiteStatus');if(ks)ks.textContent='Fetching...';
-  const token=localStorage.getItem('kite_access_token');
-  const expiry=localStorage.getItem('kite_token_expiry');
-  if(!token){if(ks)ks.textContent='Not logged in. Click Login button above.';return;}
-  if(expiry&&new Date()>new Date(expiry)){if(ks)ks.textContent='⚠ Token expired. Login again.';localStorage.removeItem('kite_access_token');return;}
-  try{
-    const [mR,pR,oR]=await Promise.all([
-      fetch(`${KITE_BACKEND}/.netlify/functions/kitedata?endpoint=margins&token=${token}`),
-      fetch(`${KITE_BACKEND}/.netlify/functions/kitedata?endpoint=positions&token=${token}`),
-      fetch(`${KITE_BACKEND}/.netlify/functions/kitedata?endpoint=orders&token=${token}`)
-    ]);
-    const md=await mR.json();const pd=await pR.json();const od=await oR.json();
-    if(md.success){const eq=md.data?.data?.equity||md.data?.equity;if(eq){const bal=document.getElementById('kite-balance');if(bal){bal.textContent='₹'+Math.round(eq.available?.live_balance||eq.net||0).toLocaleString('en-IN');bal.style.color='var(--neon)';}const used=document.getElementById('kite-used');if(used)used.textContent='₹'+Math.round(eq.utilised?.debits||0).toLocaleString('en-IN');}}
-    if(pd.success){const pos=(pd.data?.data?.net||pd.data?.net||[]);const posEl=document.getElementById('kite-positions');if(posEl){const open=pos.filter(p=>p.quantity!==0);if(!open.length)posEl.innerHTML='<div style="color:var(--text3);font-size:12px;padding:8px 0">No open positions today</div>';else posEl.innerHTML=open.map(p=>{const pl=p.pnl||0;return `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:11px;flex-wrap:wrap;gap:4px"><span style="color:var(--text);font-weight:700">${p.tradingsymbol}</span><span style="color:var(--text2)">${p.quantity} @ ₹${p.average_price}</span><span style="color:${pl>=0?'var(--neon)':'var(--red)'};font-weight:700">${pl>=0?'+':''}₹${Math.round(pl)}</span></div>`;}).join('');}}
-    if(od.success){const ords=(od.data?.data||od.data||[]);const ordEl=document.getElementById('kite-orders');if(ordEl){if(!ords.length)ordEl.innerHTML='<div style="color:var(--text3);font-size:12px;padding:8px 0">No orders today</div>';else ordEl.innerHTML=ords.slice(0,8).map(o=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;flex-wrap:wrap;gap:4px"><span style="color:var(--text)">${o.tradingsymbol}</span><span class="badge ${o.transaction_type==='BUY'?'b-neon':'b-red'}">${o.transaction_type}</span><span style="color:var(--text2)">${o.quantity} @ ₹${o.price||o.average_price||'MKT'}</span><span class="badge ${o.status==='COMPLETE'?'b-neon':o.status==='REJECTED'?'b-red':'b-amber'}">${o.status}</span></div>`).join('');}}
-    const uname=localStorage.getItem('kite_user_name')||'Shubh';
-    if(ks)ks.textContent=`✅ Live — ${uname} — ${new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`;
-    // Update home hero with live balance
-    const heroC=document.getElementById('heroCapital');if(heroC&&md.success){const eq=md.data?.data?.equity||md.data?.equity;if(eq){const bal=eq.available?.live_balance||eq.net||0;heroC.textContent='₹'+Math.round(bal).toLocaleString('en-IN');}}
-  }catch(e){if(ks)ks.textContent='❌ Error fetching data: '+e.message;}
-}
-
-// NIFTY MINI CHART
-function renderNiftyMini(){const ctx=document.getElementById('niftyMiniChart');if(!ctx)return;const base=24800;const data=Array.from({length:22},(_,i)=>base+Math.round((Math.random()-0.44)*100*(i/6+1)));new Chart(ctx,{type:'line',data:{labels:data.map((_,i)=>i===0?'9:15':i===21?'3:30':''),datasets:[{data,borderColor:'#00FF94',backgroundColor:'rgba(0,255,148,0.05)',fill:true,tension:0.35,pointRadius:(ctx2,idx)=>idx===data.length-1?5:0,pointBackgroundColor:'#00FF94'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});}
-renderNiftyMini();
-
 function toggleNews(el) {
   el.classList.toggle('expanded');
 }
@@ -2494,6 +2463,134 @@ function nextTodayRetestQ() {
 initWatchedState();
 refreshPhaseQuizStart();
 updateTodayQuizStatus();
+
+// ══════════════════════════════════════════
+// TRADE SETUP ENGINE
+// ══════════════════════════════════════════
+
+function generateTradeSetup() {
+  var sym = document.getElementById('chartSymbol')?.value || 'NSE:NIFTY';
+  var mkt = document.getElementById('chartMarket')?.value || 'nse';
+  var tf = S.chartTF || '1W';
+  var container = document.getElementById('seContent');
+  if (!container) return;
+
+  // Get display name
+  var symSel = document.getElementById('chartSymbol');
+  var symName = symSel ? (symSel.options[symSel.selectedIndex]?.text || sym) : sym;
+
+  // Setup parameters based on timeframe
+  var tfData = {
+    '1D':  { name:'1 Day',   slPct:1.5,  t1Pct:3.0,  t2Pct:5.0,  type:'Intraday/Short',  note:'1D chart pe breakout ya support bounce setup dhundo. SL tight rakho — max 1.5%.' },
+    '1W':  { name:'1 Week',  slPct:3.0,  t1Pct:6.0,  t2Pct:10.0, type:'Swing (2-7 days)', note:'Swing trade ke liye 1W chart best hai. Support/resistance zones clearly dikhte hain.' },
+    '1M':  { name:'1 Month', slPct:5.0,  t1Pct:10.0, t2Pct:18.0, type:'Positional',       note:'Positional trade — 2-4 hafte hold karne ka plan. Bigger moves, bigger SL.' },
+    '3M':  { name:'3 Month', slPct:7.0,  t1Pct:15.0, t2Pct:25.0, type:'Medium Term',      note:'Medium term setup — strong trend stocks mein entry. Sector momentum dekho.' },
+    '6M':  { name:'6 Month', slPct:10.0, t1Pct:20.0, t2Pct:35.0, type:'Long Term',        note:'Long term trend play. Fundamentally strong stocks choose karo.' },
+    '1Y':  { name:'1 Year',  slPct:12.0, t1Pct:25.0, t2Pct:45.0, type:'Investor',         note:'Investor timeframe. Technical + fundamental analysis dono zaroori hain.' }
+  };
+
+  var p = tfData[tf] || tfData['1W'];
+
+  // Setup types based on market
+  var setups = [];
+  if (mkt === 'nse' || mkt === 'index') {
+    setups = [
+      {
+        name: 'Breakout from Consolidation',
+        entry: 'Resistance break ke ek candle baad',
+        slDesc: 'Resistance ke neeche (' + p.slPct + '% below entry)',
+        t1Desc: 'Consolidation height jitna upar (' + p.t1Pct + '%)',
+        t2Desc: 'Extended move (' + p.t2Pct + '%)',
+        rr: '1:2',
+        note: symName + ' chart pe resistance zone identify karo. Jab price strong green candle ke saath high volume pe close ho resistance ke UPAR — tab entry lo. SL resistance ke thoda neeche. ' + p.note,
+        check: ['Price consolidated hai kuch time se?', 'Volume breakout candle pe 1.5x+ average hai?', 'Market overall bullish hai?', '20 EMA upar slope kar raha hai?'],
+        avoid: 'Low volume breakout pe entry mat lo. Resistance test ke pehle hi mat ghuso.'
+      },
+      {
+        name: 'Pullback to Support',
+        entry: 'Reversal candle support pe (Hammer/Engulfing)',
+        slDesc: 'Support ke thoda neeche (' + p.slPct + '% below)',
+        t1Desc: 'Pichla high (' + p.t1Pct + '%)',
+        t2Desc: 'Extended target (' + p.t2Pct + '%)',
+        rr: '1:2.5',
+        note: symName + ' uptrend mein hai aur 20/50 EMA pe pullback aa raha hai. Low volume pullback healthy hai. Support pe reversal candle ka wait karo — tab entry lo. ' + p.note,
+        check: ['Stock uptrend mein hai (higher highs, higher lows)?', 'Pullback mein volume low hai?', 'Price 20 EMA ya strong support pe hai?', 'Reversal candle bani hai?'],
+        avoid: 'Downtrend mein pullback pe mat kharido. High volume pullback = selling pressure, avoid karo.'
+      }
+    ];
+  } else if (mkt === 'forex') {
+    setups = [{
+      name: 'Forex Range Breakout',
+      entry: 'Range ke upar/neeche strong close',
+      slDesc: 'Range ke opposite end (' + p.slPct + '%)',
+      t1Desc: 'Range height project (' + p.t1Pct + '%)',
+      t2Desc: 'Extended move (' + p.t2Pct + '%)',
+      rr: '1:2',
+      note: symName + ' Forex pair pe range trading setup. Economic events (RBI, Fed meetings) ke aaspaas volatile hota hai — caution rakho.',
+      check: ['Clear range/channel visible hai?', 'Economic calendar check kiya?', 'Volume/momentum confirm kar raha hai?'],
+      avoid: 'Major news events ke during entry mat lo — spreads wide hote hain.'
+    }];
+  } else if (mkt === 'crypto') {
+    setups = [{
+      name: 'Crypto Trend Following',
+      entry: 'Breakout ya pullback to 20 EMA',
+      slDesc: 'Recent swing low (' + p.slPct + '% — crypto wide SL zaroori)',
+      t1Desc: 'Previous resistance (' + p.t1Pct + '%)',
+      t2Desc: 'Extended move (' + p.t2Pct + '%)',
+      rr: '1:2',
+      note: symName + ' crypto mein extreme volatility hoti hai. Position size BAHUT chota rakho — capital ka 1% se zyada risk mat karo per trade. ' + p.note,
+      check: ['Broad crypto market (BTC) trend kya hai?', 'Volume confirm kar raha hai?', 'No major FUD/news expected?'],
+      avoid: 'Crypto pe FOMO entry — sabse common mistake. Setup bina entry nahi.'
+    }];
+  } else {
+    setups = [{
+      name: 'Commodity Trend Play',
+      entry: 'Support bounce ya breakout',
+      slDesc: 'Below recent support (' + p.slPct + '%)',
+      t1Desc: 'Previous resistance (' + p.t1Pct + '%)',
+      t2Desc: 'Extended target (' + p.t2Pct + '%)',
+      rr: '1:2',
+      note: symName + ' commodity pe global factors ka impact hota hai. USD strength, global demand, geopolitical events — sab check karo.',
+      check: ['Global trend kya hai?', 'USD/INR rate check kiya?', 'Seasonal factors?'],
+      avoid: 'Commodity sirf strong trend mein trade karo — sideways mein nahi.'
+    }];
+  }
+
+  // Risk calculation
+  var capital = S.capital || 10000;
+  var riskAmt = Math.round(capital * 0.02);
+
+  // Build HTML for each setup
+  var html = '<div style="margin-bottom:10px;font-size:11px;color:var(--text3);font-family:var(--mono)">📊 ' + symName + '  ·  ' + p.name + ' chart  ·  ' + p.type + '</div>';
+
+  setups.forEach(function(setup, idx) {
+    html += '<div style="margin-bottom:14px;border:1px solid var(--border2);border-radius:var(--r2);overflow:hidden">' +
+      '<div style="background:rgba(0,255,148,0.05);padding:10px 14px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between">' +
+        '<div style="font-size:12px;font-weight:700;color:var(--text)">' + (idx===0?'🎯':'📍') + ' ' + setup.name + '</div>' +
+        '<span class="badge b-neon" style="font-size:9px">R:R ' + setup.rr + '</span>' +
+      '</div>' +
+      '<div style="padding:12px 14px">' +
+        '<div class="se-grid">' +
+          '<div class="se-box entry"><div class="se-lbl">✅ Entry Trigger</div><div class="se-val" style="font-size:11px;line-height:1.4">' + setup.entry + '</div></div>' +
+          '<div class="se-box sl"><div class="se-lbl">🛑 Stop Loss</div><div class="se-val" style="font-size:11px;line-height:1.4">' + setup.slDesc + '</div></div>' +
+          '<div class="se-box t1"><div class="se-lbl">🎯 Target 1</div><div class="se-val" style="font-size:11px;line-height:1.4">' + setup.t1Desc + '</div></div>' +
+          '<div class="se-box t2"><div class="se-lbl">🏁 Target 2</div><div class="se-val" style="font-size:11px;line-height:1.4">' + setup.t2Desc + '</div></div>' +
+        '</div>' +
+        '<div class="se-note">' + setup.note + '</div>' +
+        '<div style="margin-top:10px">' +
+          '<div style="font-size:10px;font-family:var(--mono);color:var(--text3);margin-bottom:6px;letter-spacing:1px">CHECKLIST BEFORE ENTRY:</div>' +
+          setup.check.map(function(ch) { return '<div style="font-size:11px;color:var(--text2);padding:2px 0">☐ ' + ch + '</div>'; }).join('') +
+          '<div style="font-size:11px;color:var(--red);padding:4px 0;margin-top:4px">⚠️ Avoid: ' + setup.avoid + '</div>' +
+        '</div>' +
+        '<div class="se-rr">₹' + capital.toLocaleString('en-IN') + ' capital pe — Max risk per trade: <span>₹' + riskAmt + '</span> (2%)</div>' +
+      '</div>' +
+    '</div>';
+  });
+
+  html += '<div style="font-size:10px;color:var(--text3);text-align:center;padding:6px;font-family:var(--mono)">⚠️ Ye setup educational reference hai — live chart pe khud verify karo Zerodha Kite pe</div>';
+
+  container.innerHTML = html;
+}
 
 </script>
 </body>
