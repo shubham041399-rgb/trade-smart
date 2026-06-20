@@ -88,7 +88,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex
 .btn-ghost:hover{border-color:var(--neon);color:var(--neon)}
 .badge{font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:1px;padding:3px 8px;border-radius:50px;text-transform:uppercase}
 .b-neon{background:var(--neon-dim);color:var(--neon);border:1px solid rgba(0,255,148,0.2)}
-.b-red{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,71,87,0.2)}
+.b-red{background:var(--red-dim);color:var(--red);border:1px solid rgba(255,71,87,0.2)}.b-grey{background:rgba(139,148,158,0.1);color:var(--text3);border:1px solid rgba(139,148,158,0.2)}
 .b-amber{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(244,166,35,0.2)}
 .b-blue{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(88,166,255,0.2)}
 .b-gray{background:rgba(139,148,158,0.1);color:var(--text3);border:1px solid var(--border2)}
@@ -1334,10 +1334,12 @@ async function fetchNSE(){
   // Static realistic values — updated regularly
   // Live NSE indices blocked by all free APIs from Netlify servers
   const LIVE_INDICES = {
-    '^NSEI':    { price: 24832, change: 0.45 },
-    '^BSESN':   { price: 81404, change: 0.38 },
-    '^NSEBANK': { price: 52147, change: 0.61 }
+    '^NSEI':    { price: 24013, change: -0.64 },
+    '^BSESN':   { price: 79212, change: -0.61 },
+    '^NSEBANK': { price: 51890, change: -0.43 }
   };
+  // Save Nifty price for mini chart use
+  localStorage.setItem('ts-nifty-price', '24013');
 
   const LIVE_STOCKS = [
     {symbol:'RELIANCE',   price:2847,  change:1.23 },
@@ -1651,9 +1653,9 @@ function renderNewsPeriod(items, period) {
 
   var now = new Date();
   var filtered = items.filter(function(n) {
-    if (period === '1D') return (now - new Date(n.ts)) < 86400000;
-    if (period === '1W') return (now - new Date(n.ts)) < 7*86400000;
-    if (period === '1M') return (now - new Date(n.ts)) < 30*86400000;
+    if (period === '1d' || period === '1D') return (now - new Date(n.ts)) < 86400000;
+    if (period === '1w' || period === '1W') return (now - new Date(n.ts)) < 7*86400000;
+    if (period === '1m' || period === '1M') return (now - new Date(n.ts)) < 30*86400000;
     return true;
   });
 
@@ -1907,14 +1909,28 @@ var todayWatchedVids = JSON.parse(localStorage.getItem('ts-today-watched-' + tod
 
 function markWatched(e, btn, vidId) {
   e.preventDefault(); e.stopPropagation();
-  if (!watchedVids.includes(vidId)) watchedVids.push(vidId);
-  if (!todayWatchedVids.includes(vidId)) todayWatchedVids.push(vidId);
-  localStorage.setItem('ts-watched-vids', JSON.stringify(watchedVids));
-  localStorage.setItem('ts-today-watched-' + todayDate, JSON.stringify(todayWatchedVids));
-  btn.textContent = '✓ Done';
-  btn.classList.add('watched');
-  var row = btn.closest('a');
-  if (row) row.classList.add('vid-watched');
+  var alreadyWatched = watchedVids.includes(vidId);
+  if (alreadyWatched) {
+    // Toggle OFF - unmark as watched
+    watchedVids = watchedVids.filter(function(v){ return v !== vidId; });
+    todayWatchedVids = todayWatchedVids.filter(function(v){ return v !== vidId; });
+    localStorage.setItem('ts-watched-vids', JSON.stringify(watchedVids));
+    localStorage.setItem('ts-today-watched-' + todayDate, JSON.stringify(todayWatchedVids));
+    btn.textContent = '▷ Watch';
+    btn.classList.remove('watched');
+    var row = btn.closest('a');
+    if (row) row.classList.remove('vid-watched');
+  } else {
+    // Toggle ON - mark as watched
+    watchedVids.push(vidId);
+    if (!todayWatchedVids.includes(vidId)) todayWatchedVids.push(vidId);
+    localStorage.setItem('ts-watched-vids', JSON.stringify(watchedVids));
+    localStorage.setItem('ts-today-watched-' + todayDate, JSON.stringify(todayWatchedVids));
+    btn.textContent = '✓ Done';
+    btn.classList.add('watched');
+    var row2 = btn.closest('a');
+    if (row2) row2.classList.add('vid-watched');
+  }
   updateTodayQuizStatus();
 }
 
@@ -1926,15 +1942,22 @@ function initWatchedState() {
 }
 
 function toggleCheck(li, phase, pid) {
-  var wasDone = li.classList.contains('done');
   li.classList.toggle('done');
-  if (phase) updatePhaseProgress(pid);
-  if (!wasDone && li.classList.contains('done')) {
-    var txt = li.textContent.trim();
+  var isDone = li.classList.contains('done');
+  var txt = li.querySelector('.chk-box') ? li.textContent.replace(/^\s+/,'').trim() : li.textContent.trim();
+  // Save per-item done state
+  var doneKey = 'ts-chk-' + btoa(encodeURIComponent(txt)).slice(0,20);
+  if (isDone) {
+    localStorage.setItem(doneKey, '1');
     if (!todayTicks.includes(txt)) todayTicks.push(txt);
     localStorage.setItem('ts-today-ticks-' + todayDate, JSON.stringify(todayTicks));
-    updateTodayQuizStatus();
+  } else {
+    localStorage.removeItem(doneKey);
+    todayTicks = todayTicks.filter(function(t){ return t !== txt; });
+    localStorage.setItem('ts-today-ticks-' + todayDate, JSON.stringify(todayTicks));
   }
+  if (phase) updatePhaseProgress(pid);
+  updateTodayQuizStatus();
 }
 
 var QB = {
@@ -2307,6 +2330,16 @@ function nextTodayRetestQ() {
   rr.innerHTML = '<div class="qz-result-box ' + (pass?'pass':'fail') + '"><h3>' + (pass?'Retest Passed! ' + pct + '%':'Retest Failed — ' + pct + '%') + '</h3><p>' + (pass?'Today confirmed. Move on.':'Re-read Learn tab explanations carefully. Then try again.') + '</p></div><button class="btn" onclick="resetTodayQuiz()" style="width:100%;margin-top:10px">' + (pass?'Done':'Try Again') + '</button>';
 }
 
+// Restore checkbox .done state from localStorage
+(function restoreCheckboxes() {
+  document.querySelectorAll('.chklist li, .phase-list li').forEach(function(li) {
+    var txt = li.textContent.replace(/^\s+/,'').trim();
+    var doneKey = 'ts-chk-' + btoa(encodeURIComponent(txt)).slice(0,20);
+    if (localStorage.getItem(doneKey) === '1') {
+      li.classList.add('done');
+    }
+  });
+})();
 initWatchedState();
 refreshPhaseQuizStart();
 updateTodayQuizStatus();
@@ -2322,7 +2355,7 @@ function drawNiftyMiniChart() {
 
   // Simulated intraday Nifty movement (9:15 AM to 3:30 PM, 75 points)
   // Based on realistic market open/close/intraday swing pattern
-  var basePrice = 24832;
+  var basePrice = parseFloat(localStorage.getItem('ts-nifty-price') || '24500');
   var labels = [];
   var data = [];
 
@@ -2399,6 +2432,550 @@ function drawNiftyMiniChart() {
     }
   });
 }
+
+// ══════════════════════════════════════════════════════════════
+// MISSING FUNCTIONS — Phase 1 Fix
+// ══════════════════════════════════════════════════════════════
+
+// ── Utility ──────────────────────────────────────────────────
+function timeAgo(date) {
+  if (!date || isNaN(date.getTime())) return 'Recent';
+  var diff = Math.floor((Date.now() - date.getTime()) / 1000);
+  if (diff < 60) return diff + 's ago';
+  if (diff < 3600) return Math.floor(diff/60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff/3600) + 'h ago';
+  return Math.floor(diff/86400) + 'd ago';
+}
+
+function fmt(n) {
+  if (n === undefined || n === null || isNaN(n)) return '0';
+  return parseFloat(n).toLocaleString('en-IN', {minimumFractionDigits:0, maximumFractionDigits:2});
+}
+
+// ── News ─────────────────────────────────────────────────────
+function toggleNews(el) {
+  var body = el.querySelector('.news-body');
+  if (!body) return;
+  var isOpen = body.style.display === 'block';
+  // Close all others first
+  document.querySelectorAll('.news-body').forEach(function(b) { b.style.display = 'none'; });
+  document.querySelectorAll('.news-item').forEach(function(i) { i.classList.remove('news-open'); });
+  if (!isOpen) {
+    body.style.display = 'block';
+    el.classList.add('news-open');
+  }
+}
+
+function showNewsFallback() {
+  var container = document.getElementById('newsContainer');
+  if (!container) return;
+  container.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);font-size:12px">⚠️ News load nahi hui. Internet check karo ya thodi der baad refresh karo.<br><button class="btn" style="margin-top:12px;padding:6px 16px;font-size:11px" onclick="fetchNews()">↻ Try Again</button></div>';
+}
+
+// ── Phase Progress ────────────────────────────────────────────
+function updatePhaseProgress(pid) {
+  var card = document.getElementById('l' + pid);
+  if (!card) return;
+  var allItems = card.querySelectorAll('.phase-list li');
+  var doneItems = card.querySelectorAll('.phase-list li.done');
+  var total = allItems.length;
+  var done = doneItems.length;
+  var pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  var progBar = document.getElementById(pid + '-prog');
+  var progPct = document.getElementById(pid + '-pct');
+  var progTopics = document.getElementById(pid + '-topics');
+  if (progBar) progBar.style.width = pct + '%';
+  if (progPct) progPct.textContent = pct + '%';
+  if (progTopics) progTopics.textContent = done + '/' + total + ' topics';
+}
+
+// ── Risk Calculator ───────────────────────────────────────────
+function calcRisk() {
+  var cap = parseFloat(document.getElementById('rCap').value) || 10000;
+  var pct = parseFloat(document.getElementById('rPct').value) || 2;
+  var entry = parseFloat(document.getElementById('rEntry').value) || 0;
+  var sl = parseFloat(document.getElementById('rSL').value) || 0;
+  var target = parseFloat(document.getElementById('rTarget').value) || 0;
+  if (entry <= 0 || sl <= 0) return;
+  var maxRisk = (cap * pct) / 100;
+  var slDist = Math.abs(entry - sl);
+  var shares = slDist > 0 ? Math.floor(maxRisk / slDist) : 0;
+  var posVal = shares * entry;
+  var profit = shares * Math.abs(target - entry);
+  var actualRisk = shares * slDist;
+  var rr = slDist > 0 && (target - entry) !== 0 ? Math.abs((target - entry) / slDist) : 0;
+  var el = function(id, val) { var e = document.getElementById(id); if(e) e.textContent = val; };
+  el('r-maxrisk', '₹' + fmt(maxRisk));
+  el('r-sldist', '₹' + fmt(slDist));
+  el('r-shares', shares);
+  el('r-posval', '₹' + fmt(posVal));
+  el('r-profit', '₹' + fmt(profit));
+  el('r-actualrisk', '₹' + fmt(actualRisk));
+  el('r-rr', '1 : ' + rr.toFixed(2));
+  var verdict = document.getElementById('r-verdict');
+  if (verdict) {
+    if (rr >= 2) {
+      verdict.textContent = '✅ Setup valid — RR 1:' + rr.toFixed(1) + ' (minimum 1:2 rule pass)';
+      verdict.style.color = 'var(--neon)';
+    } else if (rr > 0) {
+      verdict.textContent = '❌ Setup invalid — RR 1:' + rr.toFixed(1) + ' (1:2 se kam — trade mat lo)';
+      verdict.style.color = 'var(--red)';
+    } else {
+      verdict.textContent = '— Entry, SL, Target sahi se bharo';
+      verdict.style.color = 'var(--text3)';
+    }
+  }
+}
+
+function calcBrokerage() {
+  var tradeVal = parseFloat(document.getElementById('brkTrade').value) || 0;
+  if (tradeVal <= 0) return;
+  var brokeragePer = Math.min(20, tradeVal * 0.0003); // Zerodha: 0.03% or ₹20 whichever lower
+  var brokerage = brokeragePer * 2; // buy + sell
+  var stt = tradeVal * 0.001; // STT 0.1% on sell side (delivery)
+  var exchFee = tradeVal * 0.0000325 * 2; // NSE exchange fee
+  var gst = (brokerage + exchFee) * 0.18;
+  var sebi = tradeVal * 0.000001 * 2;
+  var total = brokerage + stt + exchFee + gst + sebi;
+  var el = function(id, val) { var e = document.getElementById(id); if(e) e.textContent = val; };
+  el('brk-buy', '₹' + fmt(brokeragePer));
+  el('brk-sell', '₹' + fmt(brokeragePer));
+  el('brk-stt', '₹' + fmt(stt));
+  el('brk-total', '₹' + fmt(total));
+  var pct = document.getElementById('brk-pct');
+  if (pct) pct.textContent = '(' + ((total/tradeVal)*100).toFixed(3) + '% of trade value)';
+}
+
+// ── Watchlist ─────────────────────────────────────────────────
+function renderWatchlist() {
+  var chips = document.getElementById('wlChips');
+  var favs = document.getElementById('wlFavs');
+  var empty = document.getElementById('wlEmpty');
+  var count = document.getElementById('wlCount');
+  if (!chips) return;
+  if (S.wl.length === 0) {
+    chips.innerHTML = '';
+    if (empty) empty.style.display = 'block';
+  } else {
+    if (empty) empty.style.display = 'none';
+    chips.innerHTML = S.wl.map(function(item, i) {
+      return '<div class="wl-chip" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px">' +
+        '<div><span style="font-weight:700;color:var(--text)">' + item.sym + '</span>' +
+        (item.price ? '<span style="margin-left:10px;color:var(--text2);font-size:12px">₹' + fmt(item.price) + '</span>' : '') + '</div>' +
+        '<div style="display:flex;gap:8px">' +
+        '<button onclick="toggleFav(' + i + ')" style="background:none;border:none;cursor:pointer;font-size:14px">' + (S.favs.includes(item.sym) ? '⭐' : '☆') + '</button>' +
+        '<button onclick="removeWL(' + i + ')" style="background:none;border:none;cursor:pointer;color:var(--red);font-size:12px">✕</button>' +
+        '</div></div>';
+    }).join('');
+  }
+  if (count) count.textContent = S.wl.length + ' stocks';
+  if (favs) {
+    var favList = S.wl.filter(function(item) { return S.favs.includes(item.sym); });
+    favs.innerHTML = favList.length === 0
+      ? '<div style="color:var(--text3);font-size:12px">Star any stock to add to favourites.</div>'
+      : favList.map(function(item) {
+          return '<span style="display:inline-block;padding:4px 10px;background:rgba(244,166,35,0.1);border:1px solid rgba(244,166,35,0.3);border-radius:20px;font-size:12px;color:var(--amber);margin:4px">' + item.sym + '</span>';
+        }).join('');
+  }
+}
+
+function addWLManual() {
+  var sym = (document.getElementById('wlSym').value || '').trim().toUpperCase();
+  var price = parseFloat(document.getElementById('wlPrice').value) || 0;
+  if (!sym) return;
+  if (S.wl.find(function(w){ return w.sym === sym; })) {
+    alert(sym + ' already in watchlist.'); return;
+  }
+  S.wl.push({ sym: sym, price: price, added: Date.now() });
+  save();
+  document.getElementById('wlSym').value = '';
+  document.getElementById('wlPrice').value = '';
+  renderWatchlist();
+}
+
+function addToWatchlist(sym, price) {
+  if (!sym) return;
+  sym = sym.toUpperCase();
+  if (S.wl.find(function(w){ return w.sym === sym; })) {
+    alert(sym + ' already in watchlist.'); return;
+  }
+  S.wl.push({ sym: sym, price: price || 0, added: Date.now() });
+  save();
+  renderWatchlist();
+}
+
+function removeWL(i) {
+  var sym = S.wl[i] ? S.wl[i].sym : '';
+  S.wl.splice(i, 1);
+  S.favs = S.favs.filter(function(f){ return f !== sym; });
+  save();
+  renderWatchlist();
+}
+
+function toggleFav(i) {
+  var sym = S.wl[i] ? S.wl[i].sym : '';
+  if (!sym) return;
+  if (S.favs.includes(sym)) {
+    S.favs = S.favs.filter(function(f){ return f !== sym; });
+  } else {
+    S.favs.push(sym);
+  }
+  save();
+  renderWatchlist();
+}
+
+// ── Journal ───────────────────────────────────────────────────
+function renderJournal() {
+  var body = document.getElementById('jBody');
+  var count = document.getElementById('jCount');
+  if (!body) return;
+  if (count) count.textContent = S.trades.length + ' trades';
+  if (S.trades.length === 0) {
+    body.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--text3);font-size:12px">Koi trade log nahi hai abhi. Pehla trade log karo!</td></tr>';
+    return;
+  }
+  body.innerHTML = S.trades.slice().reverse().map(function(t, i) {
+    var actualIdx = S.trades.length - 1 - i;
+    var pnl = t.exit && t.entry && t.qty ? ((parseFloat(t.exit) - parseFloat(t.entry)) * parseInt(t.qty) * (t.dir === 'SHORT' ? -1 : 1)) : null;
+    var pnlStr = pnl !== null ? (pnl >= 0 ? '<span style="color:var(--neon)">+₹' + fmt(pnl) + '</span>' : '<span style="color:var(--red)">-₹' + fmt(Math.abs(pnl)) + '</span>') : '—';
+    return '<tr>' +
+      '<td style="font-size:10px;color:var(--text3)">' + (t.date || '—') + '</td>' +
+      '<td><strong>' + (t.sym || '—') + '</strong></td>' +
+      '<td><span class="badge ' + (t.dir === 'SHORT' ? 'b-red' : 'b-neon') + '" style="font-size:9px">' + (t.dir || 'LONG') + '</span></td>' +
+      '<td>₹' + fmt(t.entry) + '</td>' +
+      '<td style="color:var(--red)">₹' + fmt(t.sl) + '</td>' +
+      '<td style="color:var(--neon)">₹' + fmt(t.target) + '</td>' +
+      '<td>' + pnlStr + '</td>' +
+      '<td><button onclick="deleteTrade(' + actualIdx + ')" style="background:none;border:none;cursor:pointer;color:var(--red);font-size:11px">✕</button></td>' +
+      '</tr>';
+  }).join('');
+}
+
+function logTrade() {
+  var get = function(id) { var e = document.getElementById(id); return e ? e.value.trim() : ''; };
+  var sym = get('jSym');
+  var entry = parseFloat(get('jEntry'));
+  var sl = parseFloat(get('jSL'));
+  var target = parseFloat(get('jTarget'));
+  var qty = parseInt(get('jQty')) || 1;
+  if (!sym || !entry || !sl || !target) {
+    var msg = document.getElementById('jMsg');
+    if (msg) { msg.textContent = '⚠️ Symbol, Entry, SL aur Target required hain.'; msg.style.color = 'var(--red)'; }
+    return;
+  }
+  var trade = {
+    date: get('jDate') || new Date().toLocaleDateString('en-IN'),
+    sym: sym.toUpperCase(),
+    setup: get('jSetup'),
+    entry: entry,
+    sl: sl,
+    target: target,
+    qty: qty,
+    exit: get('jExit') || '',
+    dir: get('jDir') || 'LONG',
+    notes: get('jNotes'),
+    ts: Date.now()
+  };
+  S.trades.push(trade);
+  save();
+  // Store Nifty price hint from entry for chart
+  localStorage.setItem('ts-nifty-price', String(entry));
+  var msg = document.getElementById('jMsg');
+  if (msg) { msg.textContent = '✅ Trade logged!'; msg.style.color = 'var(--neon)'; setTimeout(function(){ msg.textContent=''; }, 2500); }
+  // Clear form
+  ['jSym','jSetup','jEntry','jSL','jTarget','jQty','jExit','jNotes'].forEach(function(id){
+    var e = document.getElementById(id); if(e) e.value = '';
+  });
+  renderJournal();
+}
+
+function deleteTrade(i) {
+  if (!confirm('Is trade ko delete karna chahte ho?')) return;
+  S.trades.splice(i, 1);
+  save();
+  renderJournal();
+}
+
+// ── P&L ──────────────────────────────────────────────────────
+function updateCapital() {
+  var cap = parseFloat(document.getElementById('pnlCap').value) || 10000;
+  S.capital = cap;
+  localStorage.setItem('ts-cap', cap);
+  renderPnL();
+}
+
+function renderPnL() {
+  var trades = S.trades;
+  var cap = S.capital || 10000;
+  var totalPnL = 0, wins = 0, losses = 0, winAmt = 0, lossAmt = 0;
+  var eqData = [cap];
+  var running = cap;
+  trades.forEach(function(t) {
+    if (t.exit && t.entry && t.qty) {
+      var pnl = (parseFloat(t.exit) - parseFloat(t.entry)) * parseInt(t.qty) * (t.dir === 'SHORT' ? -1 : 1);
+      totalPnL += pnl;
+      running += pnl;
+      eqData.push(parseFloat(running.toFixed(2)));
+      if (pnl > 0) { wins++; winAmt += pnl; }
+      else if (pnl < 0) { losses++; lossAmt += Math.abs(pnl); }
+    }
+  });
+  var closedTrades = wins + losses;
+  var wr = closedTrades > 0 ? (wins / closedTrades * 100) : 0;
+  var avgWin = wins > 0 ? winAmt / wins : 0;
+  var avgLoss = losses > 0 ? lossAmt / losses : 0;
+  var el = function(id, val) { var e = document.getElementById(id); if(e) e.textContent = val; };
+  var col = function(id, c) { var e = document.getElementById(id); if(e) e.style.color = c; };
+  el('pnl-total', (totalPnL >= 0 ? '+' : '') + '₹' + fmt(totalPnL));
+  col('pnl-total', totalPnL >= 0 ? 'var(--neon)' : 'var(--red)');
+  el('pnl-total-pct', (totalPnL >= 0 ? '+' : '') + ((totalPnL/cap)*100).toFixed(2) + '%');
+  el('pnl-wr', wr.toFixed(1) + '%');
+  el('pnl-wl', wins + 'W / ' + losses + 'L');
+  el('pnl-aw', '+₹' + fmt(avgWin));
+  el('pnl-al', '-₹' + fmt(avgLoss));
+  // Capital summary
+  el('ps-start', '₹' + fmt(cap));
+  el('ps-current', '₹' + fmt(running));
+  el('ps-trades', closedTrades + ' closed');
+  // Drawdown
+  var peak = cap; var maxDD = 0;
+  eqData.forEach(function(v) { if(v > peak) peak = v; var dd = peak - v; if(dd > maxDD) maxDD = dd; });
+  el('ps-dd', '-₹' + fmt(maxDD));
+  // Best / Worst trade
+  var pnls = trades.filter(function(t){ return t.exit; }).map(function(t){
+    return (parseFloat(t.exit)-parseFloat(t.entry))*parseInt(t.qty)*(t.dir==='SHORT'?-1:1);
+  });
+  el('ps-best', pnls.length ? '+₹' + fmt(Math.max.apply(null,pnls)) : '—');
+  el('ps-worst', pnls.length ? '-₹' + fmt(Math.abs(Math.min.apply(null,pnls))) : '—');
+  // Expected value
+  var ev = (wr/100)*avgWin - ((100-wr)/100)*avgLoss;
+  el('ps-exp', (ev >= 0 ? '+' : '') + '₹' + fmt(ev) + ' per trade');
+  // Stop Trading Analyzer
+  var todayTrades = trades.filter(function(t){ return t.exit && t.date === new Date().toLocaleDateString('en-IN'); });
+  var dailyLoss = todayTrades.reduce(function(sum,t){
+    var p=(parseFloat(t.exit)-parseFloat(t.entry))*parseInt(t.qty)*(t.dir==='SHORT'?-1:1);
+    return p<0?sum+Math.abs(p):sum;
+  },0);
+  var dailyLimit = cap * 0.05; // 5% daily loss limit
+  var consec = 0;
+  for (var i = trades.length-1; i>=0; i--) {
+    if (!trades[i].exit) continue;
+    var p=(parseFloat(trades[i].exit)-parseFloat(trades[i].entry))*parseInt(trades[i].qty)*(trades[i].dir==='SHORT'?-1:1);
+    if(p<0) consec++; else break;
+  }
+  var sd1 = document.getElementById('sd1'); var sl1 = document.getElementById('sl1');
+  var sd2 = document.getElementById('sd2'); var sl2 = document.getElementById('sl2');
+  var sd3 = document.getElementById('sd3'); var sl3 = document.getElementById('sl3');
+  var sv = document.getElementById('stopVerdict');
+  if(sl1) sl1.textContent = 'Daily losses: ₹' + fmt(dailyLoss) + ' of ₹' + fmt(dailyLimit) + ' limit';
+  if(sl2) sl2.textContent = 'Consecutive losses: ' + consec + ' of 3 allowed';
+  if(sl3) sl3.textContent = 'Overall win rate: ' + (closedTrades>=5 ? wr.toFixed(1)+'%' : '— (need 5+ trades)');
+  var stop = dailyLoss >= dailyLimit || consec >= 3 || (closedTrades>=5 && wr<30);
+  if(sd1) sd1.style.background = dailyLoss>=dailyLimit?'var(--red)':'var(--neon)';
+  if(sd2) sd2.style.background = consec>=3?'var(--red)':'var(--neon)';
+  if(sd3) sd3.style.background = (closedTrades>=5&&wr<30)?'var(--red)':'var(--neon)';
+  if(sv) {
+    sv.textContent = stop ? '🛑 AAJ KE LIYE TRADING BAND KARO — limit hit ho gayi' : '✅ Continue trading — sab limits theek hain';
+    sv.style.color = stop ? 'var(--red)' : 'var(--neon)';
+  }
+  // Insights
+  var ins = document.getElementById('pnlInsights');
+  if(ins) {
+    var msgs = [];
+    if(closedTrades < 5) msgs.push('💡 5 trades complete karo — tab stats reliable honge.');
+    if(wr > 60 && closedTrades>=5) msgs.push('🔥 Win rate 60%+ — discipline maintain karo.');
+    if(avgLoss > avgWin && closedTrades>=5) msgs.push('⚠️ Avg loss (' + fmt(avgLoss) + ') avg win (' + fmt(avgWin) + ') se zyada hai — SL tight karo.');
+    if(consec>=2) msgs.push('⚠️ ' + consec + ' consecutive losses — position size kam karo.');
+    ins.innerHTML = msgs.length ? msgs.map(function(m){return '<div style="margin-bottom:6px">'+m+'</div>';}).join('') : '<div style="color:var(--text3)">Aur trades log karo — insights ayenge.</div>';
+  }
+  // Equity chart
+  var ctx = document.getElementById('equityChart');
+  if (ctx && typeof Chart !== 'undefined') {
+    if (ctx._chartInst) ctx._chartInst.destroy();
+    var labels = ['Start'].concat(trades.filter(function(t){return t.exit;}).map(function(t,i){return 'T'+(i+1);}));
+    ctx._chartInst = new Chart(ctx, {
+      type:'line',
+      data:{ labels:labels, datasets:[{
+        data:eqData, borderColor:'var(--neon)',
+        backgroundColor:'rgba(0,255,148,0.05)', fill:true,
+        tension:0.3, pointRadius:3, borderWidth:2
+      }]},
+      options:{ responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{display:false} },
+        scales:{
+          x:{ticks:{color:'#8B949E',font:{size:8}},grid:{color:'rgba(255,255,255,0.03)'}},
+          y:{ticks:{color:'#8B949E',font:{size:8},callback:function(v){return '₹'+v.toLocaleString('en-IN');}},grid:{color:'rgba(255,255,255,0.03)'}}
+        }
+      }
+    });
+  }
+  // Update home stats
+  var hp = document.getElementById('h-pnl');
+  var ht = document.getElementById('h-trades');
+  var hw = document.getElementById('h-wr');
+  if(hp) { hp.textContent=(totalPnL>=0?'+':'')+' ₹'+fmt(totalPnL); hp.style.color=totalPnL>=0?'var(--neon)':'var(--red)'; }
+  if(ht) ht.textContent = trades.length;
+  if(hw) hw.textContent = wr.toFixed(0)+'%';
+}
+
+// ── Sectors ───────────────────────────────────────────────────
+var SECTOR_DATA = {
+  nse: {
+    'Banking & Finance': { stocks:['HDFCBANK','ICICIBANK','SBIN','AXISBANK','KOTAKBANK','INDUSINDBK','BANKBARODA','CANBK'], tip:'Rate sensitive sector. RBI policy pe nazar rakho. FII buying inme hoti hai.' },
+    'IT & Technology': { stocks:['TCS','INFY','WIPRO','HCLTECH','TECHM','LTIM','MPHASIS','COFORGE'], tip:'USD/INR movement se directly impact hota hai. US recession fear pe ye girta hai.' },
+    'Auto & EV': { stocks:['MARUTI','TATAMOTORS','M&M','BAJAJ-AUTO','EICHERMOT','HEROMOTOCO','TVSMOTOR'], tip:'Monthly auto sales data 1st week mein aata hai. EV transition ke liye TATAMOTORS watch karo.' },
+    'Pharma & Healthcare': { stocks:['SUNPHARMA','DRREDDY','CIPLA','DIVISLAB','BIOCON','AUROPHARMA','LUPIN'], tip:'FDA approvals aur US generic pricing pe depend karta hai. Defensive sector — market crash mein stable.' },
+    'FMCG': { stocks:['HINDUNILVR','ITC','NESTLEIND','BRITANNIA','DABUR','MARICO','GODREJCP'], tip:'Defensive sector. Weak market mein ye outperform karta hai. Rural demand indicator.' },
+    'Energy & Oil': { stocks:['RELIANCE','ONGC','BPCL','IOC','NTPC','POWERGRID'], tip:'Crude oil prices se directly linked. Global geopolitics impact karta hai.' },
+    'Metals & Mining': { stocks:['TATASTEEL','JSWSTEEL','HINDALCO','VEDL','COALINDIA','NMDC'], tip:'China demand pe depend. Global commodity cycle follow karta hai.' },
+    'Real Estate': { stocks:['DLF','GODREJPROP','OBEROIRLTY','PRESTIGE','LODHA'], tip:'Interest rate sensitive. Rate cut = real estate rally.' },
+    'Infra & Capital Goods': { stocks:['LT','SIEMENS','ABB','BHEL','CUMMINSIND'], tip:'Government capex budget pe dependent. Budget announcements pe react karta hai.' }
+  },
+  bse: {
+    'Banking': { stocks:['HDFCBANK','ICICIBANK','SBIN','AXISBANK','KOTAKBANK'], tip:'Same as NSE banking — rate sensitive.' },
+    'IT': { stocks:['TCS','INFY','WIPRO','HCLTECH','TECHM'], tip:'USD exposure wale stocks.' },
+    'Consumer': { stocks:['HINDUNILVR','ITC','NESTLEIND','BRITANNIA'], tip:'Staples — defensive play.' }
+  },
+  forex: {
+    'INR Majors': { stocks:['USDINR','EURINR','GBPINR','JPYINR'], tip:'USD/INR sabse important. RBI intervene karta hai 83-87 range mein. Import-heavy companies pe impact.' },
+    'USD Pairs': { stocks:['EURUSD','GBPUSD','USDJPY','AUDUSD'], tip:'Fed policy aur US jobs data pe move karta hai. India ke IT stocks pe indirect impact.' }
+  },
+  crypto: {
+    'Large Cap Crypto': { stocks:['BTCUSDT','ETHUSDT','BNBUSDT','SOLUSDT'], tip:'High volatility. NSE pe directly trade nahi hota. Sentiment indicator ke roop mein dekho.' },
+    'Alt Coins': { stocks:['ADAUSDT','DOTUSDT','MATICUSDT'], tip:'BTC follow karte hain mostly. Speculative — beginners ke liye avoid.' }
+  },
+  commodities: {
+    'Precious Metals': { stocks:['GOLD','SILVER','GOLDM'], tip:'Safe haven asset. Global uncertainty mein badhta hai. MCX pe trade hota hai.' },
+    'Energy': { stocks:['CRUDEOIL','NATURALGAS'], tip:'Global supply-demand pe dependent. Crude India ke CAD pe impact karta hai.' },
+    'Agri': { stocks:['COTTON','SOYBEAN','CASTORSEED'], tip:'Monsoon aur global supply pe depend. NCDEX pe trade hota hai.' }
+  }
+};
+
+function updateSectorDropdown() {
+  var mkt = document.getElementById('mktSelect').value;
+  var sec = document.getElementById('sectorSelect');
+  if (!sec) return;
+  sec.innerHTML = '';
+  var data = SECTOR_DATA[mkt] || {};
+  Object.keys(data).forEach(function(name) {
+    var opt = document.createElement('option');
+    opt.value = name; opt.textContent = name;
+    sec.appendChild(opt);
+  });
+  renderSectorDetail();
+}
+
+function renderSectorDetail() {
+  var mkt = (document.getElementById('mktSelect') || {}).value || 'nse';
+  var sec = (document.getElementById('sectorSelect') || {}).value || '';
+  var container = document.getElementById('sectorDetail');
+  if (!container || !sec) return;
+  var data = (SECTOR_DATA[mkt] || {})[sec];
+  if (!data) { container.innerHTML = ''; return; }
+  container.innerHTML = '<div class="card" style="margin-top:14px">' +
+    '<div class="card-title">' + sec + ' <div class="nl"></div></div>' +
+    '<div style="margin-bottom:10px;font-size:12px;color:var(--text2);line-height:1.7">💡 ' + data.tip + '</div>' +
+    '<div style="display:flex;flex-wrap:wrap;gap:8px">' +
+    data.stocks.map(function(s) {
+      return '<span style="padding:4px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;font-size:12px;font-family:var(--mono);cursor:pointer;color:var(--text)" onclick="addToWatchlist('' + s + '',0)">' + s + ' <span style="color:var(--text3);font-size:9px">+WL</span></span>';
+    }).join('') +
+    '</div></div>';
+}
+
+function initSectors() {
+  updateSectorDropdown();
+}
+
+// ── saveVid (Watch Later) ─────────────────────────────────────
+function saveVid(e, btn, title, url) {
+  e.preventDefault(); e.stopPropagation();
+  var already = S.watchLater.find(function(v){ return v.title === title; });
+  if (already) {
+    S.watchLater = S.watchLater.filter(function(v){ return v.title !== title; });
+    btn.textContent = '🔖';
+    btn.title = 'Save for later';
+  } else {
+    S.watchLater.push({ title: title, url: url || '#', saved: Date.now() });
+    btn.textContent = '✓ Saved';
+    btn.title = 'Saved!';
+  }
+  localStorage.setItem('ts-wl-vids', JSON.stringify(S.watchLater));
+}
+
+// ── Manual Tab Daily Quiz (nextQ) ─────────────────────────────
+var _manualQuiz = { qs:[], idx:0, score:0 };
+var MANUAL_QS = [
+  { q:'Ek trade mein maximum kitna capital risk karna chahiye?', opts:['10%','5%','2-3%','No limit'], ans:2, exp:'2-3% rule — ₹10,000 capital pe max ₹200-300 risk per trade.' },
+  { q:'Stop loss kab set karna chahiye?', opts:['Trade ke baad','Trade lene se pehle','Jab loss ho tab','Zarurat nahi'], ans:1, exp:'Entry se pehle SL fix karo — warna emotion se decision hoga.' },
+  { q:'RR ratio minimum kitna hona chahiye?', opts:['1:1','1:2','1:3','Koi bhi'], ans:1, exp:'Minimum 1:2 matlab ₹100 risk pe ₹200 profit target.' },
+  { q:'Swing trade kitne din ka hota hai?', opts:['1-2 ghante','Ek din','2-7 din','1 mahina'], ans:2, exp:'Swing trade 2 se 7 din ka — overnight position hold karna padta hai.' },
+  { q:'FII buying ka market pe kya asar hota hai?', opts:['Gir sakta hai','Chahye up jaata hai','Koi asar nahi','Sirf IT stocks pe'], ans:1, exp:'FII inflow = institutional confidence = broad market bullish sentiment.' },
+  { q:'Bearish candle kaisi hoti hai?', opts:['Green body, close > open','Red body, close < open','Long wick only','Doji'], ans:1, exp:'Bearish = red candle — close open se neeche. Bears ne control rakha.' },
+  { q:'Volume price action ke saath kya confirm karta hai?', opts:['Sirf direction','Breakout ki strength','Candlestick color','Nothing'], ans:1, exp:'High volume + breakout = genuine move. Low volume breakout = fake ho sakta hai.' },
+  { q:'20 EMA ka use kya hai?', opts:['Long term trend','Short term trend aur support','Volume measure','P&L calculate'], ans:1, exp:'20 EMA short-term trend indicator hai — price ke upar = bullish bias.' }
+];
+
+function nextQ() {
+  if (_manualQuiz.qs.length === 0) {
+    // Initialize quiz
+    _manualQuiz.qs = shuffle(MANUAL_QS.slice());
+    _manualQuiz.idx = 0;
+    _manualQuiz.score = 0;
+  }
+  var qEl = document.getElementById('quizQ');
+  var optsEl = document.getElementById('quizOpts');
+  var explEl = document.getElementById('quizExpl');
+  var nextBtn = document.getElementById('nextQBtn');
+  var scoreLbl = document.getElementById('quizScoreLbl');
+  if (!qEl || !optsEl) return;
+  if (_manualQuiz.idx >= _manualQuiz.qs.length) {
+    qEl.textContent = '🎉 Quiz complete! Score: ' + _manualQuiz.score + '/' + _manualQuiz.qs.length;
+    optsEl.innerHTML = '<button class="btn btn-ghost" onclick="_manualQuiz.qs=[];nextQ()" style="margin-top:10px">Restart Quiz</button>';
+    if(explEl) explEl.textContent = '';
+    if(nextBtn) nextBtn.style.display = 'none';
+    return;
+  }
+  var q = _manualQuiz.qs[_manualQuiz.idx];
+  qEl.textContent = (_manualQuiz.idx+1) + '. ' + q.q;
+  if(explEl) explEl.textContent = '';
+  if(nextBtn) nextBtn.style.display = 'none';
+  if(scoreLbl) scoreLbl.textContent = 'Score: ' + _manualQuiz.score + '/' + _manualQuiz.qs.length;
+  optsEl.innerHTML = q.opts.map(function(opt, i) {
+    return '<button class="quiz-opt" onclick="answerManualQ(this,' + i + ')" style="display:block;width:100%;text-align:left;margin-bottom:6px;padding:8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;font-size:12px;color:var(--text)">' + opt + '</button>';
+  }).join('');
+}
+
+function answerManualQ(btn, chosen) {
+  var q = _manualQuiz.qs[_manualQuiz.idx];
+  var correct = chosen === q.ans;
+  if(correct) _manualQuiz.score++;
+  _manualQuiz.idx++;
+  document.querySelectorAll('.quiz-opt').forEach(function(b, i) {
+    b.disabled = true;
+    if(i === q.ans) b.style.background = 'rgba(0,255,148,0.15)';
+    if(i === chosen && !correct) b.style.background = 'rgba(255,71,87,0.15)';
+  });
+  var explEl = document.getElementById('quizExpl');
+  if(explEl) {
+    explEl.textContent = (correct ? '✅ Sahi! ' : '❌ Galat. ') + q.exp;
+    explEl.style.color = correct ? 'var(--neon)' : 'var(--red)';
+  }
+  var nextBtn = document.getElementById('nextQBtn');
+  if(nextBtn) nextBtn.style.display = 'block';
+}
+
+// ── Show Journal on tab load ──────────────────────────────────
+(function patchShowTab() {
+  var _orig = showTab;
+  showTab = function(t, btn) {
+    _orig(t, btn);
+    if (t === 'journal') renderJournal();
+    if (t === 'watchlist') renderWatchlist();
+    if (t === 'pnl') renderPnL();
+  };
+})();
+
+
 
 </script>
 </body>
