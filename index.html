@@ -1253,6 +1253,8 @@ function showTab(t,btn){
   if(t==='mktcharts')initMktCharts();
   if(t==='quiz'){refreshPhaseQuizStart();updateTodayQuizStatus();}
   if(t==='market'){var mU=document.getElementById('mktUpdate');if(mU&&mU.textContent==='⟳ Fetching...')refreshAll();}
+  if(t==='news'){var nc=document.getElementById('newsContainer');if(nc&&(!nc.children.length||nc.innerHTML.trim()===''))fetchNews();}
+  if(t==='manual'){if(document.getElementById('quizQ')&&document.getElementById('quizQ').textContent==='Loading...')nextQ();}
 }
 function showSubTab(g,id,btn){document.querySelectorAll(`[id^="${g}-"]`).forEach(el=>el.style.display='none');document.getElementById(g+'-'+id).style.display='block';document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
 function openPhase(id){document.querySelectorAll('.phase-card').forEach(c=>{if(c.id!==id)c.classList.remove('open');});document.getElementById(id).classList.toggle('open');}
@@ -1948,7 +1950,7 @@ function toggleCheck(li, phase, pid) {
   var isDone = li.classList.contains('done');
   var txt = li.querySelector('.chk-box') ? li.textContent.replace(/^\s+/,'').trim() : li.textContent.trim();
   // Save per-item done state
-  var doneKey = 'ts-chk-' + btoa(encodeURIComponent(txt)).slice(0,20);
+  var doneKey; try { doneKey = 'ts-chk-' + btoa(unescape(encodeURIComponent(txt))).slice(0,20); } catch(e) { doneKey = 'ts-chk-' + txt.slice(0,20).replace(/[^a-z0-9]/gi,'_'); }
   if (isDone) {
     localStorage.setItem(doneKey, '1');
     if (!todayTicks.includes(txt)) todayTicks.push(txt);
@@ -2334,12 +2336,14 @@ function nextTodayRetestQ() {
 
 // Restore checkbox .done state from localStorage
 (function restoreCheckboxes() {
-  document.querySelectorAll('.chklist li, .phase-list li').forEach(function(li) {
+  document.querySelectorAll('.chklist li').forEach(function(li) {
     var txt = li.textContent.replace(/^\s+/,'').trim();
-    var doneKey = 'ts-chk-' + btoa(encodeURIComponent(txt)).slice(0,20);
-    if (localStorage.getItem(doneKey) === '1') {
-      li.classList.add('done');
-    }
+    try {
+      var doneKey = 'ts-chk-' + btoa(unescape(encodeURIComponent(txt))).slice(0,20);
+      if (localStorage.getItem(doneKey) === '1') {
+        li.classList.add('done');
+      }
+    } catch(e) {}
   });
 })();
 initWatchedState();
@@ -2865,6 +2869,7 @@ function updateSectorDropdown() {
     sec.appendChild(opt);
   });
   renderSectorDetail();
+  renderSectorChart();
 }
 
 function renderSectorDetail() {
@@ -2886,6 +2891,50 @@ function renderSectorDetail() {
 
 function initSectors() {
   updateSectorDropdown();
+  renderSectorChart();
+}
+
+function renderSectorChart() {
+  var ctx = document.getElementById('sectorChart');
+  if (!ctx || typeof Chart === 'undefined') return;
+  if (ctx._chartInst) { ctx._chartInst.destroy(); ctx._chartInst = null; }
+  var mkt = (document.getElementById('mktSelect') || {}).value || 'nse';
+  var labels, data, colors;
+  if (mkt === 'nse') {
+    labels = ['Banking','IT','Auto','Pharma','FMCG','Energy','Metals','Realty','Infra'];
+    data   = [2.1, -0.8, 1.4, 0.6, -0.3, 1.8, -1.2, 2.4, 1.1];
+  } else if (mkt === 'forex') {
+    labels = ['USD/INR','EUR/INR','GBP/INR','JPY/INR'];
+    data   = [0.3, -0.2, 0.1, -0.4];
+  } else if (mkt === 'crypto') {
+    labels = ['BTC','ETH','BNB','SOL'];
+    data   = [1.8, 2.3, -0.9, 3.1];
+  } else if (mkt === 'commodities') {
+    labels = ['Gold','Silver','Crude','NatGas'];
+    data   = [0.7, 1.2, -1.5, 0.4];
+  } else {
+    labels = ['Banking','IT','Consumer'];
+    data   = [1.2, -0.5, 0.8];
+  }
+  colors = data.map(function(v) { return v >= 0 ? 'rgba(0,255,148,0.7)' : 'rgba(255,71,87,0.7)'; });
+  ctx._chartInst = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{ data: data, backgroundColor: colors, borderRadius: 4, borderSkipped: false }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false },
+        tooltip: { callbacks: { label: function(c) { return (c.parsed.y >= 0 ? '+' : '') + c.parsed.y + '%'; } } }
+      },
+      scales: {
+        x: { ticks: { color: '#8B949E', font: { size: 9 } }, grid: { color: 'rgba(255,255,255,0.03)' } },
+        y: { ticks: { color: '#8B949E', font: { size: 9 }, callback: function(v) { return v + '%'; } },
+             grid: { color: 'rgba(255,255,255,0.05)' } }
+      }
+    }
+  });
 }
 
 // ── saveVid (Watch Later) ─────────────────────────────────────
