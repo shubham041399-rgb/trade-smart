@@ -881,7 +881,7 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
     <button class="sub-tab" onclick="showNewsPeriod('1m',this)">This Month (1M)</button>
     <button class="sub-tab" onclick="showNewsPeriod('1y',this)">Archive (1Y)</button>
   </div>
-  <div id="newsContainer"><div style="text-align:center;padding:30px;color:var(--text3)">Loading...</div></div>
+  <div id="newsContainer"></div>
 </div>
 <!-- CHARTS EDUCATION -->
 <div class="panel" id="panel-charts">
@@ -1254,7 +1254,7 @@ function showTab(t,btn){
   if(t==='quiz'){refreshPhaseQuizStart();updateTodayQuizStatus();}
   if(t==='learn'){if(document.getElementById('quizQ')&&document.getElementById('quizQ').textContent==='Loading...')nextQ();}
   if(t==='market'){var mU=document.getElementById('mktUpdate');if(mU&&mU.textContent==='⟳ Fetching...')refreshAll();}
-  if(t==='news'){fetchNews();}
+  if(t==='news'){var _stored=getNewsForPeriod(S.newsSource,currentNewsPeriod);if(_stored.length)renderNewsPeriod(_stored,currentNewsPeriod);else fetchNews();}
 
 }
 function showSubTab(g,id,btn){document.querySelectorAll(`[id^="${g}-"]`).forEach(el=>el.style.display='none');document.getElementById(g+'-'+id).style.display='block';document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
@@ -2487,17 +2487,15 @@ function showNewsFallback() {
 function updatePhaseProgress(pid) {
   var card = document.getElementById('l' + pid);
   if (!card) return;
-  var allItems = card.querySelectorAll('.phase-list li');
-  var doneItems = card.querySelectorAll('.phase-list li.done');
+  var allItems = card.querySelectorAll('.chklist li');
+  var doneItems = card.querySelectorAll('.chklist li.done');
   var total = allItems.length;
   var done = doneItems.length;
   var pct = total > 0 ? Math.round((done / total) * 100) : 0;
   var progBar = document.getElementById(pid + '-prog');
   var progPct = document.getElementById(pid + '-pct');
-  var progTopics = document.getElementById(pid + '-topics');
   if (progBar) progBar.style.width = pct + '%';
-  if (progPct) progPct.textContent = pct + '%';
-  if (progTopics) progTopics.textContent = done + '/' + total + ' topics';
+  if (progPct) progPct.textContent = done + '/' + total + ' topics · ' + pct + '%';
 }
 
 // ── Risk Calculator ───────────────────────────────────────────
