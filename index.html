@@ -1252,9 +1252,10 @@ function showTab(t,btn){
   if(t==='watchlist')renderWatchlist();
   if(t==='mktcharts')initMktCharts();
   if(t==='quiz'){refreshPhaseQuizStart();updateTodayQuizStatus();}
+  if(t==='learn'){if(document.getElementById('quizQ')&&document.getElementById('quizQ').textContent==='Loading...')nextQ();}
   if(t==='market'){var mU=document.getElementById('mktUpdate');if(mU&&mU.textContent==='⟳ Fetching...')refreshAll();}
-  if(t==='news'){var nc=document.getElementById('newsContainer');if(nc&&(!nc.children.length||nc.innerHTML.trim()===''))fetchNews();}
-  if(t==='manual'){if(document.getElementById('quizQ')&&document.getElementById('quizQ').textContent==='Loading...')nextQ();}
+  if(t==='news'){fetchNews();}
+
 }
 function showSubTab(g,id,btn){document.querySelectorAll(`[id^="${g}-"]`).forEach(el=>el.style.display='none');document.getElementById(g+'-'+id).style.display='block';document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
 function openPhase(id){document.querySelectorAll('.phase-card').forEach(c=>{if(c.id!==id)c.classList.remove('open');});document.getElementById(id).classList.toggle('open');}
@@ -1948,16 +1949,20 @@ function initWatchedState() {
 function toggleCheck(li, phase, pid) {
   li.classList.toggle('done');
   var isDone = li.classList.contains('done');
-  var txt = li.querySelector('.chk-box') ? li.textContent.replace(/^\s+/,'').trim() : li.textContent.trim();
-  // Save per-item done state
-  var doneKey; try { doneKey = 'ts-chk-' + btoa(unescape(encodeURIComponent(txt))).slice(0,20); } catch(e) { doneKey = 'ts-chk-' + txt.slice(0,20).replace(/[^a-z0-9]/gi,'_'); }
+  // Use stable index-based key — no special character issues
+  var parentList = li.parentElement;
+  var idx = Array.prototype.indexOf.call(parentList.children, li);
+  var listId = parentList.id || (pid || 'home');
+  var doneKey = 'ts-chk-' + listId + '-' + idx;
   if (isDone) {
     localStorage.setItem(doneKey, '1');
+    var txt = li.textContent.replace(/^\s+/,'').trim();
     if (!todayTicks.includes(txt)) todayTicks.push(txt);
     localStorage.setItem('ts-today-ticks-' + todayDate, JSON.stringify(todayTicks));
   } else {
     localStorage.removeItem(doneKey);
-    todayTicks = todayTicks.filter(function(t){ return t !== txt; });
+    var txt2 = li.textContent.replace(/^\s+/,'').trim();
+    todayTicks = todayTicks.filter(function(t){ return t !== txt2; });
     localStorage.setItem('ts-today-ticks-' + todayDate, JSON.stringify(todayTicks));
   }
   if (phase) updatePhaseProgress(pid);
@@ -2336,14 +2341,14 @@ function nextTodayRetestQ() {
 
 // Restore checkbox .done state from localStorage
 (function restoreCheckboxes() {
-  document.querySelectorAll('.chklist li').forEach(function(li) {
-    var txt = li.textContent.replace(/^\s+/,'').trim();
-    try {
-      var doneKey = 'ts-chk-' + btoa(unescape(encodeURIComponent(txt))).slice(0,20);
+  document.querySelectorAll('.chklist').forEach(function(ul) {
+    var listId = ul.id || 'home';
+    Array.prototype.forEach.call(ul.children, function(li, idx) {
+      var doneKey = 'ts-chk-' + listId + '-' + idx;
       if (localStorage.getItem(doneKey) === '1') {
         li.classList.add('done');
       }
-    } catch(e) {}
+    });
   });
 })();
 initWatchedState();
