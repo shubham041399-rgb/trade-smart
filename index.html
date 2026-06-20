@@ -920,7 +920,421 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
         </div>
       </div>
     </div>
-    <div class="candle-grid" id="candleGrid"></div>
+    <div id="candleGrid">
+
+<div class="card" style="margin-bottom:14px">
+  <div class="card-title">🕯️ Basic Candles <div class="nl"></div></div>
+  <div class="g2">
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">1. Marubozu (Bullish) 🟩</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Badi green body, koi wick nahi ya bahut chhoti.<br>
+        <strong>Matlab:</strong> Buyers ne pure din control rakha. Open se close tak lagatar buying.<br>
+        <strong>Signal:</strong> Strong bullish momentum. Agli candle bhi green hone ki zyada chance.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Breakout ke saath aaye toh entry valid. Volume high hona chahiye.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--red);margin-bottom:6px">2. Marubozu (Bearish) 🟥</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Badi red body, koi wick nahi ya bahut chhoti.<br>
+        <strong>Matlab:</strong> Sellers ne pure din control rakha. Open se close tak lagatar selling.<br>
+        <strong>Signal:</strong> Strong bearish momentum. Downtrend continue ho sakta hai.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Support break ke saath aaye toh short setup valid.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">3. Hammer 🔨</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Chhoti body upar, bahut lamba lower wick (body ka 2x+), koi upper wick nahi.<br>
+        <strong>Matlab:</strong> Bears ne price neeche dhakela, lekin bulls ne wapas upar kheencha. Rejection of lows.<br>
+        <strong>Signal:</strong> Downtrend ke baad aaye toh bullish reversal signal.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Support level pe hammer = strong buy signal. Next candle green confirm karo.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--red);margin-bottom:6px">4. Hanging Man 🪆</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Hammer jaisi dikhti hai lekin uptrend ke baad aati hai.<br>
+        <strong>Matlab:</strong> Bulls ka control kamzor pad raha hai. Bears zyada aggressive ho rahe hain.<br>
+        <strong>Signal:</strong> Uptrend ke top pe = bearish reversal warning.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Confirmation zaroor lo — agli candle red honi chahiye confirm ke liye.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--red);margin-bottom:6px">5. Shooting Star ⭐</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Chhoti body neeche, bahut lamba upper wick, koi lower wick nahi.<br>
+        <strong>Matlab:</strong> Bulls ne price upar dhakela lekin bears ne wapas neeche kheeencha. Rejection of highs.<br>
+        <strong>Signal:</strong> Uptrend ke baad = strong bearish reversal signal.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Resistance level pe shooting star = sell/short setup. Volume confirm karo.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">6. Inverted Hammer 🔁</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Chhoti body neeche, lamba upper wick. Shooting star jaisi but downtrend mein.<br>
+        <strong>Matlab:</strong> Bears ka pressure kam ho raha hai. Bulls price upar le gaye lekin close nahi kar paye.<br>
+        <strong>Signal:</strong> Downtrend ke baad = potential bullish reversal.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Confirmation candle (green) ka wait karo. Support pe zyada reliable.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:14px">
+  <div class="card-title">🔄 Doji Candles — Indecision <div class="nl"></div></div>
+  <div class="g2">
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--amber);margin-bottom:6px">7. Standard Doji ➕</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Open aur close almost same — cross ya plus sign jaise dikhta hai.<br>
+        <strong>Matlab:</strong> Market mein indecision hai — buyers aur sellers equal hain.<br>
+        <strong>Signal:</strong> Trend reversal ka warning. Akele strong nahi — context dekhna zaroori.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Key level pe doji = caution signal. Agli candle direction batayegi.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--amber);margin-bottom:6px">8. Long-Legged Doji 🕊️</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Doji lekin dono wicks bahut lambi — upar aur neeche dono taraf.<br>
+        <strong>Matlab:</strong> Extreme volatility — buyers aur sellers dono ne try kiya lekin koi nahi jeeta.<br>
+        <strong>Signal:</strong> Big move aane wala hai — kisi bhi direction mein.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Breakout ke baad direction follow karo. Side mein raho jab tak clear na ho.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">9. Dragonfly Doji 🐉</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Open = Close = High (body aur upper wick nahi), sirf lamba lower wick.<br>
+        <strong>Matlab:</strong> Bears ne price bahut neeche dhakela lekin bulls ne puri wapasi ki — T shape.<br>
+        <strong>Signal:</strong> Downtrend mein = strong bullish reversal signal.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Support level pe dragonfly doji = high probability buy. Volume dekhna zaroori.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--red);margin-bottom:6px">10. Gravestone Doji ⚰️</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Open = Close = Low, sirf lamba upper wick — inverted T shape.<br>
+        <strong>Matlab:</strong> Bulls ne price bahut upar uthaya lekin bears ne puri wapasi ki.<br>
+        <strong>Signal:</strong> Uptrend mein = strong bearish reversal signal.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Resistance pe gravestone = sell signal. Confirmation candle ka wait karo.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:14px">
+  <div class="card-title">🕯️🕯️ Two-Candle Patterns <div class="nl"></div></div>
+  <div class="g2">
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">11. Bullish Engulfing 🟩🟩</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Pehli red candle, doosri green candle jo pehli ko puri tarah engulf kare.<br>
+        <strong>Matlab:</strong> Bears ne control khoya, bulls ne puri tarah le liya. Strong momentum shift.<br>
+        <strong>Signal:</strong> Downtrend ke baad = powerful bullish reversal. Top 3 patterns mein se ek.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Support pe engulfing = high confidence buy. Volume high hona chahiye.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--red);margin-bottom:6px">12. Bearish Engulfing 🟥🟥</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Pehli green candle, doosri red candle jo pehli ko puri tarah engulf kare.<br>
+        <strong>Matlab:</strong> Bulls ka control gaya, bears ne complete control liya. Strong selling pressure.<br>
+        <strong>Signal:</strong> Uptrend ke baad = powerful bearish reversal signal.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Resistance pe bearish engulfing = exit longs / enter shorts.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">13. Piercing Line 📌</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Badi red candle, phir green candle jo red candle ke 50% se zyada upar close kare.<br>
+        <strong>Matlab:</strong> Bears ka momentum ruk gaya. Bulls ne recovery shuru ki.<br>
+        <strong>Signal:</strong> Downtrend mein = moderate bullish reversal. Engulfing se thoda weak.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Support ke paas aur volume ke saath reliable. Confirmation lo.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--red);margin-bottom:6px">14. Dark Cloud Cover ☁️</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Badi green candle, phir red candle jo green candle ke 50% se zyada neeche close kare.<br>
+        <strong>Matlab:</strong> Bulls thak gaye. Bears ne control lena shuru kiya.<br>
+        <strong>Signal:</strong> Uptrend mein = bearish reversal signal. Piercing line ka opposite.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Resistance ke paas = exit signal. Agli candle se confirm karo.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">15. Tweezer Bottom 🔧🔧</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Do candles jinke lows exactly same hon — ek red, ek green.<br>
+        <strong>Matlab:</strong> Same support level pe do baar rejection — bears fail hue.<br>
+        <strong>Signal:</strong> Downtrend ke baad = double support confirmation, bullish reversal.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Key support pe tweezer bottom = strong buy zone. SL lows ke neeche rakho.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--red);margin-bottom:6px">16. Tweezer Top 🔧🔧</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Do candles jinke highs exactly same hon — ek green, ek red.<br>
+        <strong>Matlab:</strong> Same resistance level pe do baar rejection — bulls fail hue.<br>
+        <strong>Signal:</strong> Uptrend ke baad = double resistance confirmation, bearish reversal.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Key resistance pe tweezer top = exit zone. SL highs ke upar rakho.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:14px">
+  <div class="card-title">🕯️🕯️🕯️ Three-Candle Patterns <div class="nl"></div></div>
+  <div class="g2">
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">17. Morning Star 🌅</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Badi red → Chhoti candle (gap down) → Badi green (gap up).<br>
+        <strong>Matlab:</strong> Bears ka power khatam, transition ho raha hai, bulls aaye. Trilogy of reversal.<br>
+        <strong>Signal:</strong> Downtrend ke baad = strongest bullish reversal patterns mein se ek.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Support pe morning star = high confidence entry. Risk:Reward bahut achha hota hai.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--red);margin-bottom:6px">18. Evening Star 🌆</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Badi green → Chhoti candle (gap up) → Badi red (gap down).<br>
+        <strong>Matlab:</strong> Bulls ka power khatam, bears wapas aye. Morning star ka opposite.<br>
+        <strong>Signal:</strong> Uptrend ke baad = strongest bearish reversal patterns mein se ek.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Resistance pe evening star = exit longs immediately.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">19. Three White Soldiers 💂💂💂</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Teen lagatar badi green candles, har ek pichli se upar close kare.<br>
+        <strong>Matlab:</strong> Strong sustained buying — bulls completely in control teen dino tak.<br>
+        <strong>Signal:</strong> Downtrend ke baad = very strong bullish reversal / continuation.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Pattern ke baad pullback ka wait karo entry ke liye. Direct entry risky ho sakti hai.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--red);margin-bottom:6px">20. Three Black Crows 🐦🐦🐦</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Teen lagatar badi red candles, har ek pichli se neeche close kare.<br>
+        <strong>Matlab:</strong> Strong sustained selling — bears completely in control teen dino tak.<br>
+        <strong>Signal:</strong> Uptrend ke baad = very strong bearish reversal signal.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Longs exit karo. Short entry ke liye bounce ka wait karo.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">21. Morning Doji Star 🌅✨</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Badi red → Doji (indecision) → Badi green.<br>
+        <strong>Matlab:</strong> Morning star se bhi zyada powerful — beech mein doji perfect indecision dikhata hai.<br>
+        <strong>Signal:</strong> Downtrend reversal — morning star se stronger version.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Support pe = very high confidence buy setup.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--red);margin-bottom:6px">22. Evening Doji Star 🌆✨</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Badi green → Doji → Badi red.<br>
+        <strong>Matlab:</strong> Evening star se zyada powerful — doji perfect uncertainty dikhata hai top pe.<br>
+        <strong>Signal:</strong> Uptrend reversal — evening star se stronger.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Resistance pe = strong sell/exit signal.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">23. Three Inside Up 📈</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Badi red → Chhoti green (harami inside red) → Badi green confirm.<br>
+        <strong>Matlab:</strong> Bearish harami ke baad confirmation — bulls ne control le liya.<br>
+        <strong>Signal:</strong> Confirmed bullish reversal — teen candle confirmation.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Teen candle complete hone ke baad entry — low risk setup.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--red);margin-bottom:6px">24. Three Inside Down 📉</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Badi green → Chhoti red (harami inside green) → Badi red confirm.<br>
+        <strong>Matlab:</strong> Bullish harami ke baad bears ne confirm kiya — selling pressure bada.<br>
+        <strong>Signal:</strong> Confirmed bearish reversal.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Resistance pe = exit signal after confirmation.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="card" style="margin-bottom:14px">
+  <div class="card-title">⚡ Special & Advanced Patterns <div class="nl"></div></div>
+  <div class="g2">
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--amber);margin-bottom:6px">25. Harami (Bullish) 🤰</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Badi red candle, phir chhoti green candle jo puri tarah andar ho (harami = pregnant).<br>
+        <strong>Matlab:</strong> Bears ka momentum ruk gaya. Chhoti body = indecision aaya.<br>
+        <strong>Signal:</strong> Potential bullish reversal — confirmation zaroori.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Support pe harami + next green candle = entry signal.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--amber);margin-bottom:6px">26. Harami (Bearish) 🤰</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Badi green candle, phir chhoti red candle jo andar ho.<br>
+        <strong>Matlab:</strong> Bulls ka momentum ruka. Market soch raha hai — direction change ho sakta hai.<br>
+        <strong>Signal:</strong> Potential bearish reversal.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Resistance pe harami + next red candle = exit/short signal.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">27. Spinning Top (Bullish context) 🌀</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Chhoti body (any color), dono taraf equal wicks.<br>
+        <strong>Matlab:</strong> Market mein balance hai — na buyers na sellers haave. Pure indecision.<br>
+        <strong>Signal:</strong> Downtrend mein = bulls wapas aa rahe hain, reversal possible.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Akele trade mat lo. Strong candle ke saath confirmation lo.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--purple);margin-bottom:6px">28. Kicker Pattern 🦵</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Red candle ke baad gap up karke green candle — ya green ke baad gap down red.<br>
+        <strong>Matlab:</strong> Sudden complete sentiment change — news ya event driven. Bahut rare.<br>
+        <strong>Signal:</strong> Sabse powerful reversal pattern — price rarely wapas aati hai.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Gap direction mein strong entry. SL gap ke dono candles ke extreme ke neeche/upar.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">29. Rising Three Methods 📊</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Badi green → teen chhoti red (consolidation) → badi green breakout.<br>
+        <strong>Matlab:</strong> Uptrend mein brief rest — bears try kiya lekin bulls ne control wapas liya.<br>
+        <strong>Signal:</strong> Strong bullish continuation pattern.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Paanchvi candle (green breakout) pe entry. SL chhoti candles ke low ke neeche.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--red);margin-bottom:6px">30. Falling Three Methods 📉</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Badi red → teen chhoti green (bounce) → badi red breakdown.<br>
+        <strong>Matlab:</strong> Downtrend mein brief bounce — bulls try kiya lekin bears wapas aaye.<br>
+        <strong>Signal:</strong> Strong bearish continuation pattern.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Paanchvi candle (red breakdown) pe short. SL chhoti candles ke high ke upar.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">31. Bullish Belt Hold 🥋</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Gap down open, phir seedha upar — koi lower wick, long green body.<br>
+        <strong>Matlab:</strong> Bears ne shuru kiya lekin bulls ne turant control liya — aggressive buying.<br>
+        <strong>Signal:</strong> Downtrend mein = strong bullish reversal.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Gap down ke baad belt hold = institutional buying signal.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--red);margin-bottom:6px">32. Bearish Belt Hold 🥋</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Gap up open, phir seedha neeche — koi upper wick, long red body.<br>
+        <strong>Matlab:</strong> Bulls ne shuru kiya lekin bears ne turant control liya — aggressive selling.<br>
+        <strong>Signal:</strong> Uptrend mein = strong bearish reversal.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Gap up ke baad belt hold = institutional selling signal.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--amber);margin-bottom:6px">33. High Wave Candle 🌊</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Bahut chhoti body, dono taraf bahut lambi wicks — long-legged doji jaisi but body hai.<br>
+        <strong>Matlab:</strong> Extreme volatility, complete chaos — buyers aur sellers dono strongly active.<br>
+        <strong>Signal:</strong> Major uncertainty — big move aane se pehle ki calm.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Trade mat lo jab tak direction clear na ho. Breakout side follow karo.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">34. On Neck Line 📏</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Badi red candle, phir chhoti green candle jo previous red ke close pe close ho.<br>
+        <strong>Matlab:</strong> Bulls ne try kiya wapas aane ka lekin fail — bearish pressure continue hai.<br>
+        <strong>Signal:</strong> Bearish continuation — sell the bounce.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Downtrend mein bounce pe short entry. SL green candle ke high ke upar.
+      </div>
+    </div>
+
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
+      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">35. Abandoned Baby (Bull) 👶</div>
+      <div style="font-size:11px;color:var(--text2);line-height:1.8">
+        <strong>Kaisi dikhti hai:</strong> Badi red → Doji (gap down, isolated) → Badi green (gap up).<br>
+        <strong>Matlab:</strong> Doji completely isolated — abandoned. Bears aur bulls dono ne chhoda beech mein.<br>
+        <strong>Signal:</strong> Rare lekin extremely powerful bullish reversal.<br>
+        <strong style="color:var(--amber)">Kab use karein:</strong> Gap-up green candle pe entry — very high probability setup.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">📋 Quick Reference — NSE Trading ke liye <div class="nl"></div></div>
+  <div style="font-size:11px;color:var(--text2);line-height:2">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div>
+        <div style="color:var(--neon);font-weight:700;margin-bottom:6px">🟢 Bullish Patterns (Buy Signal)</div>
+        Hammer · Inverted Hammer · Bullish Engulfing<br>
+        Piercing Line · Morning Star · Three White Soldiers<br>
+        Dragonfly Doji · Tweezer Bottom · Kicker (up)<br>
+        Bullish Harami · Rising Three Methods · Belt Hold (bull)<br>
+        Morning Doji Star · Three Inside Up · Abandoned Baby
+      </div>
+      <div>
+        <div style="color:var(--red);font-weight:700;margin-bottom:6px">🔴 Bearish Patterns (Sell Signal)</div>
+        Shooting Star · Hanging Man · Bearish Engulfing<br>
+        Dark Cloud Cover · Evening Star · Three Black Crows<br>
+        Gravestone Doji · Tweezer Top · Kicker (down)<br>
+        Bearish Harami · Falling Three Methods · Belt Hold (bear)<br>
+        Evening Doji Star · Three Inside Down
+      </div>
+    </div>
+    <div style="margin-top:12px;padding:10px;background:rgba(244,166,35,0.08);border:1px solid rgba(244,166,35,0.2);border-radius:var(--r)">
+      ⚠️ <strong style="color:var(--amber)">Golden Rules:</strong> Koi bhi single candle pattern akele kaafi nahi — hamesha <strong>trend + support/resistance + volume</strong> ke saath confirm karo. NSE pe daily chart pe ye patterns sabse zyada reliable hain.
+    </div>
+  </div>
+</div>
+
+    </div>
   </div>
   <div id="ct-patterns" style="display:none">
   <div id="patternGrid">
@@ -1624,8 +2038,11 @@ function processNewsItem(rawTitle, rawDesc, link, pubDate) {
   var bull = ['rise','gain','surge','rally','bullish','boost','jump','advance','high','profit'].filter(function(k) { return t.indexOf(k) >= 0; }).length;
   var bear = ['fall','drop','loss','decline','crash','bearish','cut','plunge','risk','concern'].filter(function(k) { return t.indexOf(k) >= 0; }).length;
   var sent = bull > bear ? 'bull' : bear > bull ? 'bear' : 'neutral';
+  var tsMs = pubDate ? new Date(pubDate).getTime() : Date.now();
+  if (isNaN(tsMs)) tsMs = Date.now();
   return {
     title: title, desc: desc, link: link, ago: ago, sent: sent,
+    ts: tsMs,
     simple: sent === 'bull' ? 'Ye khabar positive hai — kisi company, sector ya economy ke liye achhi news hai. Market is pe upar react kar sakta hai.' : sent === 'bear' ? 'Ye khabar negative hai — fear ya uncertainty create kar sakti hai. Selling pressure aa sakta hai.' : 'Mixed signals hain — clearly bullish ya bearish nahi. Price action dekho confirm karne ke liye.',
     action: sent === 'bull' ? 'Related sector mein strong stocks dhundo. Koi existing setup agar ban raha ho toh 1:2 R:R ke saath entry plan karo. Bina setup ke jump mat karo.' : sent === 'bear' ? 'Naye long trades avoid karo. Jo open positions hain unka SL tight karo. Market clarity aane tak sideline rehna better hai.' : 'Patience rakho. Koi bhi trade lene se pehle next 1-2 din ka price action dekho — direction clear hogi.',
     impact: sent === 'bull' ? 'Bullish' : sent === 'bear' ? 'Bearish' : 'Neutral',
