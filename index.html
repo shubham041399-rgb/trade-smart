@@ -1248,6 +1248,8 @@ function showTab(t,btn){
   if(t==='pnl')renderPnL();
   if(t==='sectors')initSectors();
   if(t==='risk'){calcRisk();calcBrokerage();}
+  if(t==='journal')renderJournal();
+  if(t==='watchlist')renderWatchlist();
   if(t==='mktcharts')initMktCharts();
   if(t==='quiz'){refreshPhaseQuizStart();updateTodayQuizStatus();}
   if(t==='market'){var mU=document.getElementById('mktUpdate');if(mU&&mU.textContent==='⟳ Fetching...')refreshAll();}
@@ -2877,7 +2879,7 @@ function renderSectorDetail() {
     '<div style="margin-bottom:10px;font-size:12px;color:var(--text2);line-height:1.7">💡 ' + data.tip + '</div>' +
     '<div style="display:flex;flex-wrap:wrap;gap:8px">' +
     data.stocks.map(function(s) {
-      return '<span style="padding:4px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;font-size:12px;font-family:var(--mono);cursor:pointer;color:var(--text)" onclick="addToWatchlist('' + s + '',0)">' + s + ' <span style="color:var(--text3);font-size:9px">+WL</span></span>';
+      return '<span style="padding:4px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:20px;font-size:12px;font-family:var(--mono);cursor:pointer;color:var(--text)" onclick="addToWatchlist(&quot;' + s + '&quot;,0)">' + s + ' <span style="color:var(--text3);font-size:9px">+WL</span></span>';
     }).join('') +
     '</div></div>';
 }
@@ -2964,16 +2966,7 @@ function answerManualQ(btn, chosen) {
   if(nextBtn) nextBtn.style.display = 'block';
 }
 
-// ── Show Journal on tab load ──────────────────────────────────
-(function patchShowTab() {
-  var _orig = showTab;
-  showTab = function(t, btn) {
-    _orig(t, btn);
-    if (t === 'journal') renderJournal();
-    if (t === 'watchlist') renderWatchlist();
-    if (t === 'pnl') renderPnL();
-  };
-})();
+
 
 
 
