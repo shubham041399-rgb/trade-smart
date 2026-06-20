@@ -2123,9 +2123,10 @@ function renderNewsPeriod(items, period) {
 
   var now = new Date();
   var filtered = items.filter(function(n) {
-    if (period === '1d' || period === '1D') return (now - new Date(n.ts)) < 86400000;
-    if (period === '1w' || period === '1W') return (now - new Date(n.ts)) < 7*86400000;
-    if (period === '1m' || period === '1M') return (now - new Date(n.ts)) < 30*86400000;
+    var t = n.storedAt || n.ts || Date.now();
+    if (period === '1d' || period === '1D') return (now - t) < 86400000;
+    if (period === '1w' || period === '1W') return (now - t) < 7*86400000;
+    if (period === '1m' || period === '1M') return (now - t) < 30*86400000;
     return true;
   });
 
