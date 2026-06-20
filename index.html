@@ -873,6 +873,7 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
     <button class="chart-btn" id="nbBL" onclick="setNewsSrc('bl',this)">Business Line</button>
     <button class="chart-btn" id="nbNDTV" onclick="setNewsSrc('ndtv',this)">NDTV Profit</button>
     <button class="chart-btn" id="nbBS" onclick="setNewsSrc('bs',this)">Business Standard</button>
+    <button class="chart-btn" id="nbGeo" onclick="setNewsSrc('geo',this)">🌍 Geopolitical</button>
     <button class="chart-btn" onclick="fetchNews()">&#8635; Refresh</button>
   </div>
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
@@ -1961,7 +1962,7 @@ function initMktCharts(){updateChartSymbols();const hl=document.getElementById('
 // NEWS
 const NEWS_FEEDS={mc:'https://www.moneycontrol.com/rss/latestnews.xml',mint:'https://www.livemint.com/rss/markets',bl:'https://www.thehindubusinessline.com/markets/feeder/default.rss',ndtv:'https://feeds.feedburner.com/ndtvprofit-latest-business-news',bs:'https://www.business-standard.com/rss/markets-106.rss'};
 // NEWS STORE (localStorage persistence)
-var NEWS_STORE_KEY = 'ts-news-store-v2';
+var NEWS_STORE_KEY = 'ts-news-store-v3';
 var currentNewsPeriod = '1d';
 
 function loadNewsStore() {
@@ -1979,7 +1980,9 @@ function storeNewsItems(src, items) {
   var now = Date.now();
   items.forEach(function(item) {
     if (existing.indexOf(item.title) === -1) {
-      item.storedAt = now;
+      // ts = actual publish time (from pubDate), fallback to now
+      if (!item.ts || isNaN(item.ts)) item.ts = now;
+      item.storedAt = item.ts;
       store[src].unshift(item);
     }
   });
@@ -2073,7 +2076,8 @@ function fetchNews() {
     mint: 'https://www.livemint.com/rss/markets',
     bl:   'https://www.thehindubusinessline.com/markets/feeder/default.rss',
     ndtv: 'https://feeds.feedburner.com/ndtvprofit-latest-business-news',
-    bs:   'https://www.business-standard.com/rss/markets-106.rss'
+    bs:   'https://www.business-standard.com/rss/markets-106.rss',
+    geo:  'https://feeds.bbci.co.uk/news/world/rss.xml'
   };
 
   var feedUrl = FEED_URLS[src] || FEED_URLS.mc;
@@ -2123,11 +2127,15 @@ function renderNewsPeriod(items, period) {
 
   var now = new Date();
   var filtered = items.filter(function(n) {
-    var t = n.storedAt || n.ts || Date.now();
+    var t = n.storedAt || n.ts || 0;
     if (period === '1d' || period === '1D') return (now - t) < 86400000;
     if (period === '1w' || period === '1W') return (now - t) < 7*86400000;
     if (period === '1m' || period === '1M') return (now - t) < 30*86400000;
     return true;
+  });
+  // Sort: newest first
+  filtered.sort(function(a, b) {
+    return ((b.storedAt || b.ts || 0) - (a.storedAt || a.ts || 0));
   });
 
   if (!filtered.length) {
@@ -2230,6 +2238,12 @@ function generateNewsKP(title, desc, impact) {
     pros = isPos ? '• Strong macro = corporate earnings ke liye positive<br>• Foreign investor confidence badhta hai<br>• Broad market rally ka support' : '• Weak data pe RBI rate cut consider kar sakta hai<br>• Selective opportunities emerge hoti hain';
     cons = isPos ? '• High growth pe inflation risk<br>• Valuations already stretched ho sakti hain' : '• Earnings pressure badta hai<br>• Market sentiment negative rehta hai';
     action = isPos ? 'Cyclical sectors (Banking, Auto, Infra) pe nazar rakho. Pullback entries plan karo.' : 'Defensive stocks (FMCG, Pharma, IT) better perform karte hain weak macro mein.';
+  }
+  else if (t.includes('war') || t.includes('sanction') || t.includes('geopolit') || t.includes('conflict') || t.includes('tariff') || t.includes('trump') || t.includes('budget') || t.includes('defence') || t.includes('missile') || t.includes('attack') || t.includes('ceasefire') || t.includes('nato') || t.includes('china') || t.includes('pakistan') || t.includes('russia') || t.includes('ukraine') || t.includes('iran') || t.includes('israel') || t.includes('middle east') || t.includes('crude') || t.includes('oil price') || t.includes('fed rate') || t.includes('us budget') || t.includes('import duty')) {
+    what = 'Geopolitical update — ' + title.split(' ').slice(0,8).join(' ') + '... Ye khabar India ke market ko indirectly affect kar sakti hai.';
+    pros = '• Geopolitical tension mein defensive sectors (FMCG, Pharma, IT) outperform karte hain<br>• Crude gire toh India ke liye positive — oil import bill kam hoga<br>• INR stable ho sakta hai agar global risk-off mood mein FII bhi sell kare';
+    cons = '• Crude badhne se inflation pressure — RBI hawkish ho sakta hai<br>• FII selling bade scale pe ho sakti hai risk-off mein<br>• IT stocks pe US slowdown ka direct impact<br>• Defence stocks volatile ho sakte hain';
+    action = 'Naye long positions hold karo. Crude oil aur USD/INR track karo. Geopolitical news pe koi bhi impulsive trade mat lo — dust settle hone do 1-2 din.';
   }
   else {
     what = '"' + title.split(' ').slice(0,7).join(' ') + '..." — ' + (stocks.length ? stocks.join(', ') + ' se related khabar.' : 'Market ya economy se related update.');
