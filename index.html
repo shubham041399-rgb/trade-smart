@@ -426,6 +426,32 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
   .hstat:last-child{display:block}
 }
 
+/* ── PHASE 2 CSS ── */
+.study-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:9999;overflow-y:auto;padding:20px 10px}
+.study-modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);max-width:700px;margin:0 auto;padding:24px;position:relative}
+.study-close{position:absolute;top:12px;right:16px;background:none;border:none;color:var(--text3);font-size:20px;cursor:pointer}
+.study-modal h2{font-size:14px;font-weight:700;color:var(--neon);margin-bottom:16px;font-family:var(--mono);letter-spacing:1px}
+.study-sec{margin-bottom:16px}
+.study-sec h3{font-size:10px;font-family:var(--mono);letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:8px}
+.study-sec p,.study-sec li{font-size:12px;color:var(--text2);line-height:1.9}
+.study-sec ul{padding-left:16px}
+.study-sec .example{background:rgba(0,255,148,0.06);border-left:3px solid var(--neon);padding:8px 12px;border-radius:0 var(--r) var(--r) 0;font-size:11px;color:var(--text2);margin-top:8px}
+.study-btn{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;font-size:9px;background:rgba(88,166,255,0.1);border:1px solid rgba(88,166,255,0.25);border-radius:10px;color:var(--blue);cursor:pointer;margin-left:6px;vertical-align:middle;white-space:nowrap}
+.study-btn:hover{background:rgba(88,166,255,0.2)}
+.gate-wrap{background:rgba(244,166,35,0.04);border:1px solid rgba(244,166,35,0.18);border-radius:var(--r2);padding:14px;margin-bottom:14px}
+.gate-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;color:var(--text2);cursor:pointer}
+.gate-row:last-child{border-bottom:none}
+.gate-box{width:18px;height:18px;min-width:18px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;transition:.15s}
+.gate-box.on{background:var(--neon);border-color:var(--neon);color:#000}
+.gate-verdict{margin-top:10px;padding:10px;border-radius:var(--r);text-align:center;font-size:12px;font-weight:700;background:var(--bg3)}
+.guidance-wrap{background:rgba(0,255,148,0.04);border:1px solid rgba(0,255,148,0.18);border-radius:var(--r2);padding:16px;margin-bottom:14px}
+.trend-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.trend-row:last-child{border-bottom:none}
+.ai-box{background:rgba(139,92,246,0.07);border:1px solid rgba(139,92,246,0.2);border-radius:var(--r);padding:10px 12px;margin-top:8px;font-size:11px;line-height:1.8;color:var(--text2)}
+.ai-box .ai-load{color:var(--text3);font-style:italic;font-size:11px}
+.style-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:16px;margin-bottom:12px}
+.style-card h3{font-size:13px;font-weight:700;margin-bottom:10px}
+
 </style>
 </head>
 <body>
@@ -477,1246 +503,61 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
 </nav>
 <div class="content"><div class="main">
 
-<!-- HOME -->
-<div class="panel active" id="panel-home">
-  <div class="quote-box"><div class="quote-text" id="quoteText">Loading...</div><div class="quote-author" id="quoteAuthor">—</div></div>
-  <div class="hero">
-    <div class="hero-grid"></div>
-    <svg class="hero-skyline" viewBox="0 0 1200 52" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="0" y="22" width="60" height="30" fill="#161B22"/><rect x="10" y="8" width="8" height="14" fill="#161B22"/><circle cx="14" cy="7" r="2" fill="#00FF94" opacity="0.8"/>
-      <rect x="70" y="16" width="80" height="36" fill="#161B22"/><rect x="90" y="2" width="12" height="14" fill="#161B22"/><circle cx="96" cy="1" r="2" fill="#F4A623" opacity="0.9"/>
-      <rect x="165" y="26" width="50" height="26" fill="#161B22"/>
-      <rect x="225" y="12" width="90" height="40" fill="#161B22"/><rect x="245" y="2" width="10" height="10" fill="#161B22"/><circle cx="250" cy="1" r="2" fill="#00FF94" opacity="0.7"/>
-      <rect x="325" y="22" width="60" height="30" fill="#161B22"/>
-      <rect x="395" y="6" width="100" height="46" fill="#161B22"/><circle cx="422" cy="-3" r="2.5" fill="#FF4757" opacity="0.8"/>
-      <rect x="505" y="20" width="70" height="32" fill="#161B22"/>
-      <rect x="585" y="14" width="85" height="38" fill="#161B22"/><circle cx="610" cy="3" r="2" fill="#00FF94" opacity="0.9"/>
-      <rect x="680" y="24" width="55" height="28" fill="#161B22"/>
-      <rect x="745" y="10" width="95" height="42" fill="#161B22"/><circle cx="776" cy="-1" r="2" fill="#F4A623" opacity="0.8"/>
-      <rect x="850" y="18" width="65" height="34" fill="#161B22"/>
-      <rect x="925" y="8" width="80" height="44" fill="#161B22"/><circle cx="950" cy="-3" r="2" fill="#00FF94" opacity="0.7"/>
-      <rect x="1015" y="22" width="70" height="30" fill="#161B22"/>
-      <rect x="1095" y="12" width="105" height="40" fill="#161B22"/><circle cx="1120" cy="-1" r="2" fill="#FF4757" opacity="0.8"/>
-    </svg>
-    <div class="hero-content">
-      <div style="font-size:12px;color:var(--text3);margin-bottom:4px">Good day, Shubh 👋</div>
-      <div class="hero-pval" id="heroCapital">₹10,000</div>
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
-        <span class="badge b-neon"><span class="live-dot"></span>LIVE</span>
-        <span class="market-badge market-closed" id="heroBadge">—</span>
-        <span style="font-family:var(--mono);font-size:10px;color:var(--text3)" id="heroTimer">—</span>
-      </div>
-      <div class="hero-stats">
-        <div><div class="hero-stat-val" id="h-pnl" style="color:var(--neon)">₹0</div><div class="hero-stat-lbl">Total P&L</div></div>
-        <div><div class="hero-stat-val" id="h-trades">0</div><div class="hero-stat-lbl">Trades</div></div>
-        <div><div class="hero-stat-val" id="h-wr">0%</div><div class="hero-stat-lbl">Win Rate</div></div>
-        <div><div class="hero-stat-val" id="h-phase" style="color:var(--amber)">Phase 1</div><div class="hero-stat-lbl">Current Phase</div></div>
-      </div>
-    </div>
-  </div>
-  <div class="g4" style="margin-bottom:14px">
-    <div class="metric"><div class="metric-lbl">Nifty 50</div><div class="metric-val" id="hm-nifty">—</div><div class="metric-ch" id="hm-nifty-c">—</div></div>
-    <div class="metric"><div class="metric-lbl">BTC/USD</div><div class="metric-val" id="hm-btc">—</div><div class="metric-ch" id="hm-btc-c">(cached)</div></div>
-    <div class="metric"><div class="metric-lbl">USD/INR</div><div class="metric-val" id="hm-usd">—</div><div class="metric-ch" id="hm-usd-c">live</div></div>
-    <div class="metric"><div class="metric-lbl">Gold</div><div class="metric-val" id="hm-gold">—</div><div class="metric-ch" id="hm-gold-c">live</div></div>
-  </div>
-  <div class="card" style="margin-bottom:14px">
-    <div class="card-title">Nifty 50 — Today's Movement <div class="nl"></div></div>
-    <div style="position:relative;height:150px"><canvas id="niftyMiniChart"></canvas></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Daily Checklist <div class="nl"></div></div>
-    <ul class="chklist">
-      <li onclick="toggleCheck(this)"><div class="chk-box"></div>Review yesterday's trade — what went right/wrong?</li>
-      <li onclick="toggleCheck(this)"><div class="chk-box"></div>Check Nifty 50 trend — above or below 20 EMA?</li>
-      <li onclick="toggleCheck(this)"><div class="chk-box"></div>Scan 3 stocks for your two setups only</li>
-      <li onclick="toggleCheck(this)"><div class="chk-box"></div>Check FII/DII data on NSE website</li>
-      <li onclick="toggleCheck(this)"><div class="chk-box"></div>Read today's top 3 market news</li>
-      <li onclick="toggleCheck(this)"><div class="chk-box"></div>Update trade journal if any trade was taken</li>
-      <li onclick="toggleCheck(this)"><div class="chk-box"></div>Review risk — did you respect the 2-3% rule today?</li>
-    </ul>
-  </div>
-</div>
-<!-- LEARN -->
-<div class="panel" id="panel-learn">
-  <div class="sec-hdr"><h2>Learning <span>Roadmap</span></h2></div>
-  <div class="golden">
-    <h3>⚡ Golden Rules — Never Break</h3>
-    <div class="rule-item"><span class="rule-num">01</span>Never risk more than 2-3% of capital on a single trade</div>
-    <div class="rule-item"><span class="rule-num">02</span>Minimum 1:2 risk-reward ratio — no exceptions</div>
-    <div class="rule-item"><span class="rule-num">03</span>Two setups ONLY — breakout from consolidation & pullback to support</div>
-    <div class="rule-item"><span class="rule-num">04</span>Paper trade 10 logged trades minimum before going live</div>
-    <div class="rule-item"><span class="rule-num">05</span>One stock, one setup at a time when live</div>
-    <div class="rule-item"><span class="rule-num">06</span>Stop loss is non-negotiable — set it before entry always</div>
-    <div class="rule-item"><span class="rule-num">07</span>Never average down on a losing position. Ever.</div>
-  </div>
-  <div class="phase-pips">
-    <div class="phase-pip active-p" onclick="openPhase('lp1')"><div class="pn">1</div><div class="pl">Foundation</div></div>
-    <div class="phase-pip" onclick="openPhase('lp2')"><div class="pn">2</div><div class="pl">Setups</div></div>
-    <div class="phase-pip" onclick="openPhase('lp3')"><div class="pn">3</div><div class="pl">Risk</div></div>
-    <div class="phase-pip" onclick="openPhase('lp4')"><div class="pn">4</div><div class="pl">Paper</div></div>
-    <div class="phase-pip" onclick="openPhase('lp5')"><div class="pn">5</div><div class="pl">Live</div></div>
-  </div>
+<div id="phaseLoader" style="text-align:center;padding:40px;color:var(--text3);font-size:12px">⟳ App load ho rahi hai...</div>
+<div id="phaseContent"></div>
+
+<script>
+// ── Phase Content Loader ─────────────────────────────────────
+function loadPhaseContent() {
+  var files = ['phase1.html','phase2.html','phase3.html'];
+  var results = {}; var loaded = 0;
+  files.forEach(function(file) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', file + '?v=2', true);
+    xhr.onload = function() {
+      results[file] = xhr.status === 200 ? xhr.responseText : '';
+      loaded++;
+      if (loaded === files.length) assembleApp(results);
+    };
+    xhr.onerror = function() { results[file]=''; loaded++; if(loaded===files.length) assembleApp(results); };
+    xhr.send();
+  });
+}
+
+function assembleApp(results) {
+  var container = document.getElementById('phaseContent');
+  var loader    = document.getElementById('phaseLoader');
+  if (container) container.innerHTML =
+    (results['phase1.html']||'') +
+    (results['phase2.html']||'') +
+    (results['phase3.html']||'');
+  if (loader) loader.style.display = 'none';
+  setTimeout(initApp, 100);
+}
+
+function initApp() {
+  try { initWatchedState(); } catch(e) {}
+  try { refreshPhaseQuizStart(); } catch(e) {}
+  try { updateTodayQuizStatus(); } catch(e) {}
+  try { updateGuidance(); } catch(e) {}
+  try { refreshAll(); } catch(e) {}
+  // Restore checkboxes
+  document.querySelectorAll('.chklist').forEach(function(ul) {
+    var listId = ul.id || 'home';
+    Array.prototype.forEach.call(ul.children, function(li, idx) {
+      if (localStorage.getItem('ts-chk-'+listId+'-'+idx)==='1') li.classList.add('done');
+    });
+  });
+  // Update phase progress
+  ['p1','p2','p3'].forEach(function(pid) { try { updatePhaseProgress(pid); } catch(e) {} });
+  // Show home tab
+  var homeBtn = document.querySelector('.nav-btn');
+  try { showTab('home', homeBtn); } catch(e) {}
+}
+
+loadPhaseContent();
+</script>
 
-  <!-- PHASE 1 -->
-  <div class="phase-card current open" id="lp1">
-    <div class="phase-hdr" onclick="togglePhase('lp1')"><div class="phase-num">01</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Foundation — No Real Money</div><div style="font-size:11px;color:var(--text3)">Candlesticks · S&R · Volume · Trend · 3-4 weeks</div></div><span class="badge b-amber">Current</span></div>
-    <div class="phase-body">
-      <div class="g2" style="margin-bottom:12px">
-        <div>
-          <div class="card-title">Topics In Order <div class="nl"></div></div>
-          <ul class="chklist" id="p1-topics">
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>1. What is the stock market? How NSE/BSE work</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>2. Investing vs trading vs speculation</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>3. Reading a price chart — OHLC explained</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>4. Candlestick basics — body, wicks, colour meaning</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>5. Key candlestick patterns — Doji, Hammer, Engulfing</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>6. Support & resistance — what they are</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>7. How to draw S&R lines on Zerodha Kite</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>8. Trend lines — uptrend, downtrend, sideways</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>9. Volume analysis — why it validates price moves</li>
-            <li onclick="toggleCheck(this,true,'p1')"><div class="chk-box"></div>10. Moving Averages — 20 EMA and 50 EMA basics</li>
-          </ul>
-          <div class="prog-bar"><div class="prog-fill" id="p1-prog" style="width:0%"></div></div>
-          <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:4px" id="p1-pct">0% complete</div>
-        </div>
-        <div>
-          <div class="card-title">YouTube Videos — Click to Watch <div class="nl"></div></div>
-          <div style="font-size:10px;color:var(--amber);margin-bottom:8px;font-family:var(--mono)">⚠ Click any video row to open it directly on YouTube</div>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="vid-num">01</div><div class="yt-btn"></div><div style="flex:1">Stock Market Basics — Pranjal Kamra</div><button class="vid-save-btn" onclick="saveVid(event,this,'Stock Market Basics Pranjal Kamra','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'RieqxXMds64')" id="wb-RieqxXMds64">✓ Watched</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=V47CdOCDo4s" target="_blank"><div class="vid-num">02</div><div class="yt-btn"></div><div style="flex:1">Share Market Basics — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Share Market Basics Rachana Ranade','https://www.youtube.com/watch?v=V47CdOCDo4s')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'V47CdOCDo4s')" id="wb-V47CdOCDo4s">✓ Watched</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=KXrVZRCGSnU" target="_blank"><div class="vid-num">03</div><div class="yt-btn"></div><div style="flex:1">Candlestick Patterns — Pranjal Kamra</div><button class="vid-save-btn" onclick="saveVid(event,this,'Candlestick Patterns Pranjal Kamra','https://www.youtube.com/watch?v=KXrVZRCGSnU')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'KXrVZRCGSnU')" id="wb-KXrVZRCGSnU">✓ Watched</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=3o4EQxZ-6-k" target="_blank"><div class="vid-num">04</div><div class="yt-btn"></div><div style="flex:1">Support and Resistance — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Support Resistance Rachana Ranade','https://www.youtube.com/watch?v=3o4EQxZ-6-k')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'3o4EQxZ-6-k')" id="wb-3o4EQxZ-6-k">✓ Watched</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=ANdwvD8BoSA" target="_blank"><div class="vid-num">05</div><div class="yt-btn"></div><div style="flex:1">Volume and Price Action — Vivek Bajaj</div><button class="vid-save-btn" onclick="saveVid(event,this,'Volume Price Action Vivek Bajaj','https://www.youtube.com/watch?v=ANdwvD8BoSA')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'ANdwvD8BoSA')" id="wb-ANdwvD8BoSA">✓ Watched</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=5R75aCebHPs" target="_blank"><div class="vid-num">06</div><div class="yt-btn"></div><div style="flex:1">EMA Moving Averages — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'EMA Moving Averages Rachana Ranade','https://www.youtube.com/watch?v=5R75aCebHPs')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'5R75aCebHPs')" id="wb-5R75aCebHPs">✓ Watched</button></a>
-        </div>
-      </div>
-      <div class="summary-box"><h4>Phase 1 Key Terms — Detailed Hinglish Summary</h4>
-        <div class="summary-term"><span class="s-term">NSE &amp; BSE</span><span class="s-def">Yeh India ke do main stock exchanges hain jahan shares kharide aur beche jaate hain. NSE (National Stock Exchange) sabse bada hai trading volume ke hisaab se — isliye Zerodha pe zyaadatar NSE use karo. Liquidity zyada hogi toh entry-exit fast aur tighter spread ke saath hogi.</span></div>
-        <div class="summary-term"><span class="s-term">OHLC — Candlestick Structure</span><span class="s-def">Open (jahan se candle shuru hui), High (din ka sabse upar ka point), Low (din ka sabse neeche ka point), Close (jahan candle band hui). Body batati hai ki buyers ya sellers mein kaun jeeta. Wicks (shadows) dikhate hain ki price kitna far gayi lekin wapas pull hui — yeh REJECTION zones hain, bahut important.</span></div>
-        <div class="summary-term"><span class="s-term">Support Level</span><span class="s-def">Woh floor zone jahan price aate hi buyers active ho jaate hain aur girna rok dete hain. Agar price 3-4 baar ek hi level se bounce karti rahe — woh strong support hai. Swing traders ke liye yeh entry zones hote hain. Jitni zyada bounces, utna strong support.</span></div>
-        <div class="summary-term"><span class="s-term">Resistance Level</span><span class="s-def">Market ki ceiling — jahan heavy selling pressure hota hai aur price ko upar badhne se rok deta hai. Jab price yahan tak pahunche aur sellers haavi ho jaayein toh price wapas neeche jaati hai. Resistance break hone ke liye HIGH VOLUME chahiye — warna fake breakout ho sakta hai.</span></div>
-        <div class="summary-term"><span class="s-term">Volume — Trading Ka Fuel</span><span class="s-def">Volume matlab kitne shares us time period mein trade hue. Yeh price move ka CONFIRMATION deta hai. Price upar gayi + volume high = genuine buying, institutions aa rahe hain. Price upar gayi + volume low = weak move, fake out ho sakta hai. Volume hamesha price ke saath analyze karo, akele nahi.</span></div>
-        <div class="summary-term"><span class="s-term">20 EMA &amp; 50 EMA</span><span class="s-def">Exponential Moving Average — last 20 ya 50 candles ka weighted average. Yeh DYNAMIC support aur resistance ka kaam karta hai. 20 EMA short-term momentum batata hai, 50 EMA medium-term trend dikhata hai. Agar price dono ke upar hai (Price &gt; 20 EMA &gt; 50 EMA) toh BULLISH ALIGNMENT — yahi mein swing buy setups dhundo.</span></div>
-        <div class="summary-term"><span class="s-term">Uptrend vs Downtrend</span><span class="s-def">Uptrend = Higher Highs AND Higher Lows — har peak pichle se upar, har trough pichle se upar. Downtrend = Lower Highs AND Lower Lows. Swing traders sirf uptrend mein long (buy) trade lete hain. Trend ke against trade lena beginners ke liye sabse bada risk hai.</span></div>
-        <div class="summary-term"><span class="s-term">Candlestick Patterns</span><span class="s-def">Hammer: long lower wick + choti body = buyers ne sellers ko reject kiya. Doji: open ≈ close = market confused, indecision. Bullish Engulfing: badi green candle pichli red ko dhak le = strong buyers aa gaye. Shooting Star: long upper wick + choti body at top = buyers reject hue, reversal possible. In patterns ka matlab context ke saath samjho — akele mat dekho.</span></div>
-        <div class="summary-term"><span class="s-term">Swing Trade</span><span class="s-def">2 se 10 din tak stock hold karna ek price swing capture karne ke liye. Na intraday (same day), na investor (months/years). Aapka timeframe daily chart hai. Entry plan karo, SL lagao, target set karo — phir plan follow karo. Emotional decisions = losses.</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PHASE 2 -->
-  <div class="phase-card" id="lp2">
-    <div class="phase-hdr" onclick="togglePhase('lp2')"><div class="phase-num">02</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Setups — Master Exactly Two</div><div style="font-size:11px;color:var(--text3)">Breakout from Consolidation · Pullback to Support · 2-3 weeks</div></div><span class="badge b-blue">Locked</span></div>
-    <div class="phase-body">
-      <div class="g2">
-        <div>
-          <div class="card-title">Topics In Order <div class="nl"></div></div>
-          <ul class="chklist" id="p2-topics">
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>1. What is consolidation — flat range identification</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>2. Real breakout vs fake breakout</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>3. Volume confirmation on breakouts</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>4. Entry, SL, Target for breakout setup</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>5. What is a pullback and why it happens</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>6. Pullback to support in uptrend — identification</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>7. Reversal candle confirmation at support</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>8. Entry, SL, Target for pullback setup</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>9. Practise: find 10 past breakouts on Zerodha</li>
-            <li onclick="toggleCheck(this,true,'p2')"><div class="chk-box"></div>10. Practise: find 10 past pullbacks on Zerodha</li>
-          </ul>
-          <div class="prog-bar"><div class="prog-fill" id="p2-prog" style="width:0%"></div></div>
-          <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:4px" id="p2-pct">0% complete</div>
-        </div>
-        <div>
-          <div class="card-title">YouTube Videos — Click to Watch <div class="nl"></div></div>
-          <div style="font-size:10px;color:var(--amber);margin-bottom:8px;font-family:var(--mono)">⚠ Click any row to open directly on YouTube</div>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=2g05cX2xkn8" target="_blank"><div class="vid-num">01</div><div class="yt-btn"></div><div style="flex:1">Breakout Trading Strategy — Power of Stocks</div><button class="vid-save-btn" onclick="saveVid(event,this,'Breakout Strategy — Power of Stocks','https://www.youtube.com/watch?v=2g05cX2xkn8')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'2g05cX2xkn8')" id="wb-2g05cX2xkn8">✓ Watched</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="vid-num">02</div><div class="yt-btn"></div><div style="flex:1">Real vs Fake Breakout — Trading Campus</div><button class="vid-save-btn" onclick="saveVid(event,this,'Real vs Fake Breakout','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'RieqxXMds64')" id="wb-RieqxXMds64">✓ Watched</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="vid-num">03</div><div class="yt-btn"></div><div style="flex:1">Pullback Trading Strategy — NSE Live Charts</div><button class="vid-save-btn" onclick="saveVid(event,this,'Pullback Strategy NSE','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'RieqxXMds64')" id="wb-RieqxXMds64">✓ Watched</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=5R75aCebHPs" target="_blank"><div class="vid-num">04</div><div class="yt-btn"></div><div style="flex:1">Swing Trading Complete Setup — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Swing Trading Setup — Rachana Ranade','https://www.youtube.com/watch?v=5R75aCebHPs')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'5R75aCebHPs')" id="wb-5R75aCebHPs">✓ Watched</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=KXrVZRCGSnU" target="_blank"><div class="vid-num">05</div><div class="yt-btn"></div><div style="flex:1">How to Find Breakout Stocks — NSE Screener</div><button class="vid-save-btn" onclick="saveVid(event,this,'Finding Breakout Stocks NSE','https://www.youtube.com/watch?v=KXrVZRCGSnU')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'KXrVZRCGSnU')" id="wb-KXrVZRCGSnU">✓ Watched</button></a>
-        </div>
-      </div>
-      <div class="summary-box"><h4>Phase 2 Key Terms — Detailed Hinglish Summary</h4>
-        <div class="summary-term"><span class="s-term">Consolidation — Sideways Range</span><span class="s-def">Jab market ek tight range mein sideways chalti hai — na upar ja rahi, na neeche. Buyers aur sellers dono ek hi zone mein fight kar rahe hote hain. Sochlo jaise ek coil compress ho rahi ho. Is dauran volume ghatna chahiye — yeh energy store hone ki sign hai. Jitni lambi consolidation, utna bada aur sharp breakout ho sakta hai.</span></div>
-        <div class="summary-term"><span class="s-term">Breakout Setup (Tumhara Setup #1)</span><span class="s-def">Jab price resistance zone ke UPAR ek strong candle se CLOSE ho jaaye aur us candle ka volume normal se 1.5x-2x zyada ho — yeh valid breakout hai. Entry: breakout candle close hone ke baad ya agle candle ke open pe. SL: resistance ke thoda neeche (ab woh support ban gaya). Target: consolidation ki height jitna upar. Kabhi bhi running candle mein seedha jump mat karo.</span></div>
-        <div class="summary-term"><span class="s-term">Fake Breakout — Sabse Bada Trap</span><span class="s-def">Price resistance ke upar jaati hai lekin wapas range mein aa jaati hai — yeh FAKE BREAKOUT hai. Isse bachne ka rule: breakout candle ka CLOSE resistance ke upar hona chahiye, sirf wick cross karna kaafi nahi. Aur volume LOW ho toh almost 80% chance hai ki fake hai. Wapas range mein close = turant exit.</span></div>
-        <div class="summary-term"><span class="s-term">Pullback Setup (Tumhara Setup #2)</span><span class="s-def">Uptrend mein price 3-5 din ke liye neeche aati hai LOW VOLUME ke saath (panic nahi, sirf correction). Jab yeh kisi strong support pe aake ruke — chahe 20 EMA ho, trendline ho, ya S&R — aur wahan REVERSAL CANDLE bane (Hammer ya Bullish Engulfing) — yahi tumhara entry point hai. Yeh GIFT hai — better price pe entry milti hai strong trend mein.</span></div>
-        <div class="summary-term"><span class="s-term">Stop Loss — Non-Negotiable Rule</span><span class="s-def">Trade enter karne se PEHLE SL decide karo, baad mein nahi. SL ek technical level pe lagao — support ke neeche ya reversal candle ke low ke neeche. Kabhi bhi SL ko neeche mat khiskaao kyunki price wahan pahunch gayi — yeh emotional trap hai. "SL hit hua aur price wapas gayi" — yeh normal hai, part of the game hai.</span></div>
-        <div class="summary-term"><span class="s-term">1:2 Risk:Reward Ratio</span><span class="s-def">Agar tum ₹100 risk kar rahe ho toh target minimum ₹200 ka hona chahiye. Mathematically: agar tum 50% trades mein bhi galat hote ho, phir bhi net profitable rahoge 1:2 R:R ke saath (5 wins × ₹200 = ₹1000, 5 losses × ₹100 = ₹500, net = +₹500). Is ratio se chhota koi trade mat lo.</span></div>
-        <div class="summary-term"><span class="s-term">Entry Timing — Volume Confirmation</span><span class="s-def">Entry sirf tabhi lo jab DO cheezein ek saath milein: (1) Price sahi level pe ho (support ya breakout zone) aur (2) Volume ka confirmation ho. Volume ke bina price move = weak, unreliable. Volume spike ke saath price move = institutional participation = trust karo.</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PHASE 3 -->
-  <div class="phase-card" id="lp3">
-    <div class="phase-hdr" onclick="togglePhase('lp3')"><div class="phase-num">03</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Risk Management — Most Important Phase</div><div style="font-size:11px;color:var(--text3)">Position Sizing · Stop Loss · 1:2 R:R · 1-2 weeks</div></div><span class="badge b-blue">Locked</span></div>
-    <div class="phase-body">
-      <div class="g2">
-        <div>
-          <div class="card-title">Topics In Order <div class="nl"></div></div>
-          <ul class="chklist" id="p3-topics">
-            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>1. Why risk management is the #1 skill</li>
-            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>2. Position sizing — how many shares to buy</li>
-            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>3. The 2-3% rule for ₹10,000 capital</li>
-            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>4. Correct stop loss placement</li>
-            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>5. Risk-Reward ratio — always minimum 1:2</li>
-            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>6. Position size formula: MaxRisk ÷ SL distance</li>
-            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>7. Trailing stop loss — locking in profits</li>
-            <li onclick="toggleCheck(this,true,'p3')"><div class="chk-box"></div>8. Zerodha brokerage impact on small capital</li>
-          </ul>
-          <div class="prog-bar"><div class="prog-fill" id="p3-prog" style="width:0%"></div></div>
-          <div style="font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:4px" id="p3-pct">0% complete</div>
-        </div>
-        <div>
-          <div class="card-title">YouTube Videos — Click to Watch <div class="nl"></div></div>
-          <div style="font-size:10px;color:var(--amber);margin-bottom:8px;font-family:var(--mono)">⚠ Click any row to open directly on YouTube</div>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=2g05cX2xkn8" target="_blank"><div class="vid-num">01</div><div class="yt-btn"></div><div style="flex:1">Risk Management Masterclass — CA Rachana Ranade</div><button class="vid-save-btn" onclick="saveVid(event,this,'Risk Management — Rachana Ranade','https://www.youtube.com/watch?v=2g05cX2xkn8')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'2g05cX2xkn8')" id="wb-2g05cX2xkn8">✓ Watched</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=ANdwvD8BoSA" target="_blank"><div class="vid-num">02</div><div class="yt-btn"></div><div style="flex:1">Position Sizing for Beginners — Trading with Vivek</div><button class="vid-save-btn" onclick="saveVid(event,this,'Position Sizing — Vivek Bajaj','https://www.youtube.com/watch?v=ANdwvD8BoSA')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'ANdwvD8BoSA')" id="wb-ANdwvD8BoSA">✓ Watched</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=3o4EQxZ-6-k" target="_blank"><div class="vid-num">03</div><div class="yt-btn"></div><div style="flex:1">Stop Loss Placement — Power of Stocks</div><button class="vid-save-btn" onclick="saveVid(event,this,'Stop Loss Placement — Power of Stocks','https://www.youtube.com/watch?v=3o4EQxZ-6-k')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'3o4EQxZ-6-k')" id="wb-3o4EQxZ-6-k">✓ Watched</button></a>
-          <a class="vid-link" href="https://www.youtube.com/watch?v=KXrVZRCGSnU" target="_blank"><div class="vid-num">04</div><div class="yt-btn"></div><div style="flex:1">Why 90% Traders Lose — Honest Explanation</div><button class="vid-save-btn" onclick="saveVid(event,this,'Why 90% Traders Lose','https://www.youtube.com/watch?v=KXrVZRCGSnU')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'KXrVZRCGSnU')" id="wb-KXrVZRCGSnU">✓ Watched</button></a>
-        </div>
-      </div>
-      <div class="summary-box"><h4>Phase 3 Key Terms — Detailed Hinglish Summary</h4>
-        <div class="summary-term"><span class="s-term">Position Sizing — Most Critical Skill</span><span class="s-def">Formula: Shares = Max Risk Amount ÷ SL Distance. Example: Capital ₹10,000, Risk 2% = ₹200 max risk. SL distance ₹10. Shares = ₹200 ÷ ₹10 = 20 shares. Lekin 20 × stock price bhi dekho — agar total position tumhari capital se zyada hai toh shares kam karo. Dono constraints follow karo: risk limit AND capital limit.</span></div>
-        <div class="summary-term"><span class="s-term">The 2% Rule — Account Bachao</span><span class="s-def">Apni total capital ka maximum 2% hi ek trade mein risk karo. ₹10,000 capital pe = max ₹200 per trade loss. Yeh rule consecutive losing streaks mein account protect karta hai. 10 consecutive losses bhi 2% rule pe = capital ka sirf 18% khatam — account wapas recover ho sakta hai. Bina is rule ke, 5 bade losses mein account 50% se zyada khatam ho sakta hai.</span></div>
-        <div class="summary-term"><span class="s-term">1:2 Risk:Reward — Math Tumhare Saath Hai</span><span class="s-def">Har trade mein target risk ka 2x hona chahiye. Proof: 10 trades mein 5 sahi, 5 galat. 5 wins × ₹200 = ₹1,000. 5 losses × ₹100 = ₹500. NET PROFIT = ₹500 — aur tum sirf 50% accurate the! 1:2 R:R ke bina 60-70% accuracy chahiye profitable rehne ke liye. Is ratio se chhota koi trade mat lo, chahe kitna bhi achha setup lage.</span></div>
-        <div class="summary-term"><span class="s-term">Stop Loss Placement — Technical, Not Random</span><span class="s-def">SL hamesha ek TECHNICAL level pe lagao — support ke neeche, reversal candle ke low ke neeche, ya EMA ke neeche. Kabhi round number pe mat lagao (jaise exactly ₹500). Kabhi "mujhe itna loss nahi chahiye" ke hisaab se mat lagao. SL ek safety net hai — tight ho lekin logical level pe ho. SL hit hona trading ka normal hissa hai, failure nahi.</span></div>
-        <div class="summary-term"><span class="s-term">Trailing Stop Loss — Profit Lock Karo</span><span class="s-def">Jab trade tumhare favor mein move kare aur target ke paas pahunche, SL ko upar le jaao break-even pe ya profit zone mein. Example: Buy ₹100, SL ₹94. Price ₹112 pe. Ab SL ko ₹108 pe le jaao. Agar price aur upar jaye — winner mein raho. Agar reverse ho — minimum profit ke saath niklo. Yeh "free trade" concept hai — downside eliminate ho jaata hai.</span></div>
-        <div class="summary-term"><span class="s-term">Brokerage Impact on Small Capital</span><span class="s-def">Zerodha: ₹20 per executed order (buy aur sell = ₹40 total) + STT (~0.1%) + GST + other charges. ₹10,000 trade pe total cost roughly ₹55-70. Iska matlab ₹10,000 pe ₹2 profit = LOSS after charges. Isliye 1:2 R:R aur minimum ₹150-200+ target ka hona zaroori hai. Chhote targets = brokerage kha jaata hai sab.</span></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PHASE 4 -->
-  <div class="phase-card" id="lp4">
-    <div class="phase-hdr" onclick="togglePhase('lp4')"><div class="phase-num">04</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Paper Trading — Gate to Live Money</div><div style="font-size:11px;color:var(--text3)">10 logged trades minimum · Use Journal tab · 2-3 weeks</div></div><span class="badge b-blue">Locked</span></div>
-    <div class="phase-body">
-      <div style="background:rgba(244,166,35,0.07);border:1px solid rgba(244,166,35,0.2);border-radius:var(--r2);padding:14px;font-size:12px;color:var(--text2);line-height:2">
-        <div style="color:var(--amber);font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Rules</div>
-        ✓ Use real NSE prices — just don't execute the trade<br>✓ Write entry, SL, target BEFORE the trade<br>✓ Track outcome when SL or target is hit<br>✗ Don't skip logging even one trade<br>✗ Don't move SL after placing it<br>
-        <span style="color:var(--amber)">GATE: 10 logged trades in Journal → unlock Phase 5</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- PHASE 5 -->
-  <div class="phase-card" id="lp5">
-    <div class="phase-hdr" onclick="togglePhase('lp5')"><div class="phase-num">05</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--text)">Live Trading — Real Money</div><div style="font-size:11px;color:var(--text3)">One stock · One setup · Zerodha</div></div><span class="badge b-blue">Locked</span></div>
-    <div class="phase-body">
-      <div style="background:rgba(255,71,87,0.06);border:1px solid rgba(255,71,87,0.2);border-radius:var(--r2);padding:14px;font-size:12px;color:var(--text2);line-height:2">
-        1. Max risk: ₹300 per trade (3% of ₹10,000)<br>2. Set SL order on Zerodha BEFORE entering<br>3. ONE open trade at a time — no exceptions<br>4. SL hits = close immediately, no holding<br>5. Log every trade within 30 minutes<br>6. After 3 consecutive losses = stop for the day<br>7. Only NSE stocks with volume above 500K/day
-      </div>
-    </div>
-  </div>
-
-  <div class="divider"></div>
-  <!-- QUIZ -->
-  <div class="sec-hdr"><h2>Daily <span>Quiz</span></h2><small id="quizScoreLbl">Score: 0/0</small></div>
-  <div class="quiz-card"><div class="quiz-q" id="quizQ">Loading...</div><div class="quiz-opts" id="quizOpts"></div><div class="quiz-expl" id="quizExpl"></div><button class="btn btn-ghost" id="nextQBtn" onclick="nextQ()" style="display:none;margin-top:12px">Next Question →</button></div>
-  <div class="divider"></div>
-  <!-- DAILY RECOS -->
-  <div class="sec-hdr"><h2>Daily <span>Recommendations</span></h2></div>
-  <div id="dailyRecos"></div>
-  <div style="margin-top:14px"><div class="card-title">Watch Later <div class="nl"></div></div><div id="watchLaterList"><div style="color:var(--text3);font-size:12px;padding:8px 0">No saved videos yet.</div></div></div>
-
-  <div class="divider"></div>
-  <!-- ADVANCED TOPICS -->
-  <div class="sec-hdr"><h2>Advanced <span>Topics</span> — After Phase 5</h2></div>
-  <div class="g3">
-    <div class="card">
-      <div class="card-title">Technical Indicators <div class="nl"></div></div>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=ANdwvD8BoSA" target="_blank"><div class="yt-btn"></div><div style="flex:1">RSI Complete Guide for NSE</div><button class="vid-save-btn" onclick="saveVid(event,this,'RSI Guide NSE','https://www.youtube.com/watch?v=ANdwvD8BoSA')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'ANdwvD8BoSA')" id="wb-ANdwvD8BoSA">✓ Watched</button></a>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=5R75aCebHPs" target="_blank"><div class="yt-btn"></div><div style="flex:1">MACD Strategy for Swing Trading</div><button class="vid-save-btn" onclick="saveVid(event,this,'MACD Strategy','https://www.youtube.com/watch?v=5R75aCebHPs')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'5R75aCebHPs')" id="wb-5R75aCebHPs">✓ Watched</button></a>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=KXrVZRCGSnU" target="_blank"><div class="yt-btn"></div><div style="flex:1">Bollinger Bands Explained</div><button class="vid-save-btn" onclick="saveVid(event,this,'Bollinger Bands','https://www.youtube.com/watch?v=KXrVZRCGSnU')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'KXrVZRCGSnU')" id="wb-KXrVZRCGSnU">✓ Watched</button></a>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="yt-btn"></div><div style="flex:1">Fibonacci Retracement Mastery</div><button class="vid-save-btn" onclick="saveVid(event,this,'Fibonacci Retracement','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'RieqxXMds64')" id="wb-RieqxXMds64">✓ Watched</button></a>
-    </div>
-    <div class="card">
-      <div class="card-title">Advanced Patterns <div class="nl"></div></div>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="yt-btn"></div><div style="flex:1">Head & Shoulders Pattern</div><button class="vid-save-btn" onclick="saveVid(event,this,'Head Shoulders Pattern','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'RieqxXMds64')" id="wb-RieqxXMds64">✓ Watched</button></a>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=2g05cX2xkn8" target="_blank"><div class="yt-btn"></div><div style="flex:1">Cup & Handle Pattern</div><button class="vid-save-btn" onclick="saveVid(event,this,'Cup Handle Pattern','https://www.youtube.com/watch?v=2g05cX2xkn8')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'2g05cX2xkn8')" id="wb-2g05cX2xkn8">✓ Watched</button></a>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=3o4EQxZ-6-k" target="_blank"><div class="yt-btn"></div><div style="flex:1">Double Top & Double Bottom</div><button class="vid-save-btn" onclick="saveVid(event,this,'Double Top Bottom','https://www.youtube.com/watch?v=3o4EQxZ-6-k')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'3o4EQxZ-6-k')" id="wb-3o4EQxZ-6-k">✓ Watched</button></a>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=2g05cX2xkn8" target="_blank"><div class="yt-btn"></div><div style="flex:1">Flag & Pennant Patterns</div><button class="vid-save-btn" onclick="saveVid(event,this,'Flag Pennant Patterns','https://www.youtube.com/watch?v=2g05cX2xkn8')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'2g05cX2xkn8')" id="wb-2g05cX2xkn8">✓ Watched</button></a>
-    </div>
-    <div class="card">
-      <div class="card-title">Psychology & Options <div class="nl"></div></div>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=KXrVZRCGSnU" target="_blank"><div class="yt-btn"></div><div style="flex:1">Trading Psychology — Deep Dive</div><button class="vid-save-btn" onclick="saveVid(event,this,'Trading Psychology','https://www.youtube.com/watch?v=KXrVZRCGSnU')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'KXrVZRCGSnU')" id="wb-KXrVZRCGSnU">✓ Watched</button></a>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=RieqxXMds64" target="_blank"><div class="yt-btn"></div><div style="flex:1">Options Basics — Indian Market</div><button class="vid-save-btn" onclick="saveVid(event,this,'Options Basics India','https://www.youtube.com/watch?v=RieqxXMds64')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'RieqxXMds64')" id="wb-RieqxXMds64">✓ Watched</button></a>
-      <a class="vid-link" href="https://www.youtube.com/watch?v=5R75aCebHPs" target="_blank"><div class="yt-btn"></div><div style="flex:1">Fundamental Analysis Introduction</div><button class="vid-save-btn" onclick="saveVid(event,this,'Fundamental Analysis','https://www.youtube.com/watch?v=5R75aCebHPs')">+ Save</button><button class="vid-watch-btn" onclick="markWatched(event,this,'5R75aCebHPs')" id="wb-5R75aCebHPs">✓ Watched</button></a>
-    </div>
-  </div>
-</div>
-<!-- MARKET -->
-<div class="panel" id="panel-market">
-  <div class="sec-hdr"><h2>Market <span>Overview</span></h2><div style="display:flex;gap:8px"><div class="r-badge live" id="mktUpdate">⟳ Fetching...</div><div class="r-badge" id="mktCountdown">—</div></div></div>
-  <div class="mkt-banner" id="mktBanner" style="background:rgba(0,255,148,0.05);border-color:rgba(0,255,148,0.2)">
-    <div><div class="mkt-banner-title" id="bannerTitle" style="color:var(--neon)">—</div><div style="font-size:11px;opacity:0.75;margin-top:2px" id="bannerSub">—</div></div>
-    <div class="countdown"><div class="cd-block"><span class="cd-num" id="cd-h">--</span><span class="cd-lbl">hrs</span></div><span class="cd-sep">:</span><div class="cd-block"><span class="cd-num" id="cd-m">--</span><span class="cd-lbl">min</span></div><span class="cd-sep">:</span><div class="cd-block"><span class="cd-num" id="cd-s">--</span><span class="cd-lbl">sec</span></div></div>
-  </div>
-  <div class="g4" style="margin-bottom:14px">
-    <div class="metric"><div class="metric-lbl">Nifty 50</div><div class="metric-val" id="m-nifty">—</div><div class="metric-ch" id="m-nifty-c">—</div></div>
-    <div class="metric"><div class="metric-lbl">Sensex</div><div class="metric-val" id="m-sensex">—</div><div class="metric-ch" id="m-sensex-c">—</div></div>
-    <div class="metric"><div class="metric-lbl">Bank Nifty</div><div class="metric-val" id="m-bnifty">—</div><div class="metric-ch" id="m-bnifty-c">—</div></div>
-    <div class="metric"><div class="metric-lbl">BTC/USD</div><div class="metric-val" id="m-btc">—</div><div class="metric-ch" id="m-btc-c">—</div></div>
-  </div>
-  <div class="g2" style="margin-bottom:14px">
-    <div class="card">
-      <div class="card-title">NSE Top Stocks <span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--text3)">(15min delayed)</span><div class="nl"></div></div>
-      <div class="tbl-scroll"><table class="tbl"><thead><tr><th>Symbol</th><th>Price ₹</th><th>Change</th><th>+WL</th></tr></thead><tbody id="nseTable"><tr><td colspan="4" style="text-align:center;padding:18px;color:var(--text3)">(cached)</td></tr></tbody></table></div>
-    </div>
-    <div>
-      <div class="card" style="margin-bottom:12px">
-        <div class="card-title">Forex vs INR <span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--neon)">(live)</span><div class="nl"></div></div>
-        <div class="tbl-scroll"><table class="tbl"><thead><tr><th>Pair</th><th>Rate</th></tr></thead><tbody id="forexTable"><tr><td colspan="2" style="text-align:center;padding:14px;color:var(--text3)">(cached)</td></tr></tbody></table></div>
-      </div>
-      <div class="card" style="margin-bottom:12px">
-        <div class="card-title">Crypto <span style="font-size:9px;font-weight:400;text-transform:none;letter-spacing:0;color:var(--neon)">(live)</span><div class="nl"></div></div>
-        <div class="tbl-scroll"><table class="tbl"><thead><tr><th>Coin</th><th>USD</th><th>24h</th><th>7d</th></tr></thead><tbody id="cryptoTable"><tr><td colspan="4" style="text-align:center;padding:14px;color:var(--text3)">(cached)</td></tr></tbody></table></div>
-      </div>
-      <div class="card">
-        <div class="card-title">Commodities <div class="nl"></div></div>
-        <div class="tbl-scroll"><table class="tbl"><thead><tr><th>Asset</th><th>Price</th><th>24h</th></tr></thead><tbody id="commodTable"><tr><td colspan="3" style="text-align:center;padding:14px;color:var(--text3)">(cached)</td></tr></tbody></table></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MKT CHARTS -->
-<div class="panel" id="panel-mktcharts">
-  <div class="sec-hdr"><h2>Market <span>Charts</span> — Live TradingView</h2></div>
-  <div class="holiday-card" style="margin-bottom:14px">
-    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--purple);margin-bottom:8px">📅 NSE Market Holidays 2026 (Remaining)</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap" id="holidayList"></div>
-  </div>
-  <div class="card" style="margin-bottom:14px">
-    <div class="g2" style="margin-bottom:12px">
-      <div><label>Market</label><select id="chartMarket" onchange="updateChartSymbols()">
-        <option value="nse">NSE India (Stocks)</option>
-        <option value="index">NSE Indices</option>
-        <option value="forex">Forex (INR Pairs)</option>
-        <option value="crypto">Cryptocurrency</option>
-        <option value="commodities">Commodities</option>
-      </select></div>
-      <div><label>Symbol</label><select id="chartSymbol" onchange="loadTVChart()"></select></div>
-    </div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap" id="tfBtns">
-      <button class="chart-btn" onclick="setTF('1D',this)">1D</button>
-      <button class="chart-btn active" onclick="setTF('1W',this)">1W</button>
-      <button class="chart-btn" onclick="setTF('1M',this)">1M</button>
-      <button class="chart-btn" onclick="setTF('3M',this)">3M</button>
-      <button class="chart-btn" onclick="setTF('6M',this)">6M</button>
-      <button class="chart-btn" onclick="setTF('1Y',this)">1Y</button>
-    </div>
-  </div>
-  <div class="tv-container" id="tvChartWrap"></div>
-
-  <!-- TRADE SETUP ENGINE -->
-  <div class="setup-engine" id="tradeSetupEngine">
-    <div class="se-title">🎯 Trade Setup Engine <span style="color:var(--text3);font-size:8px;font-weight:400">— Based on selected chart</span></div>
-    <div id="seContent">
-      <div style="text-align:center;padding:20px;color:var(--text3);font-size:11px">Select a symbol and timeframe above, then click<br><button class="btn" style="margin-top:8px;padding:6px 16px;font-size:11px" onclick="generateTradeSetup()">⚡ Generate Setup</button></div>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:14px">
-    <div class="card-title">Official Market Status Today <div class="nl"></div></div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.9">
-      <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:8px">
-        <div>Hours: <strong style="color:var(--text)">Mon–Fri 9:15 AM – 3:30 PM IST</strong></div>
-        <div>Pre-market: <strong style="color:var(--text)">9:00–9:15 AM</strong></div>
-      </div>
-      <div id="todayStatusBox" style="padding:10px;background:var(--bg3);border-radius:var(--r)">Checking...</div>
-    </div>
-  </div>
-</div>
-
-<!-- SECTORS -->
-<div class="panel" id="panel-sectors">
-  <div class="sec-hdr"><h2>Sector <span>Analysis</span></h2></div>
-  <div class="sector-select-wrap">
-    <div><label>Market</label><select id="mktSelect" onchange="updateSectorDropdown()">
-      <option value="nse">NSE India</option><option value="bse">BSE India</option>
-      <option value="forex">Forex</option><option value="crypto">Crypto</option>
-      <option value="commodities">Commodities</option>
-    </select></div>
-    <div><label>Sector / Category</label><select id="sectorSelect" onchange="renderSectorDetail()"></select></div>
-  </div>
-  <div id="sectorDetail"></div>
-  <div class="card" style="margin-top:14px"><div class="card-title">Momentum Chart <div class="nl"></div></div><div style="position:relative;height:250px"><canvas id="sectorChart"></canvas></div></div>
-</div>
-
-<!-- WATCHLIST -->
-<div class="panel" id="panel-watchlist">
-  <div class="sec-hdr"><h2>My <span>Watchlist</span></h2><small id="wlCount">0 stocks</small></div>
-  <div class="card" style="margin-bottom:12px"><div style="display:flex;gap:8px;flex-wrap:wrap"><input type="text" id="wlSym" placeholder="Symbol e.g. RELIANCE" style="flex:1;min-width:130px"><input type="number" id="wlPrice" placeholder="Price ₹" style="width:100px"><button class="btn btn-neon" onclick="addWLManual()">+ Add</button></div></div>
-  <div class="card" style="margin-bottom:12px"><div class="card-title">All Stocks <div class="nl"></div></div><div id="wlEmpty" style="color:var(--text3);font-size:12px;padding:8px 0">No stocks added yet.</div><div id="wlChips"></div></div>
-  <div class="card"><div class="card-title">⭐ Favourites <div class="nl"></div></div><div id="wlFavs" style="color:var(--text3);font-size:12px;padding:8px 0">Mark stocks as favourite using ⭐</div></div>
-</div>
-
-<!-- NEWS -->
-<div class="panel" id="panel-news">
-  <div class="sec-hdr"><h2>News &amp; <span>Intelligence</span></h2><span class="r-badge" id="newsTimer">-</span></div>
-  <div style="background:rgba(88,166,255,0.05);border:1px solid rgba(88,166,255,0.15);border-radius:var(--r2);padding:12px;margin-bottom:12px">
-    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:6px">Global Macro</div>
-    <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--text2)">
-      <div><strong style="color:var(--text)">US Fed:</strong> 4.25-4.50%</div>
-      <div><strong style="color:var(--text)">RBI Repo:</strong> 6.25%</div>
-      <div><strong style="color:var(--text)">USD/INR:</strong> <span id="macroUSD">-</span></div>
-      <div><strong style="color:var(--text)">BTC:</strong> <span id="macroBTC">-</span></div>
-      <div><strong style="color:var(--text)">Updated:</strong> <span id="macroTime">-</span></div>
-    </div>
-  </div>
-  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
-    <button class="chart-btn active" id="nbMC" onclick="setNewsSrc('mc',this)">MoneyControl</button>
-    <button class="chart-btn" id="nbMint" onclick="setNewsSrc('mint',this)">LiveMint</button>
-    <button class="chart-btn" id="nbBL" onclick="setNewsSrc('bl',this)">Business Line</button>
-    <button class="chart-btn" id="nbNDTV" onclick="setNewsSrc('ndtv',this)">NDTV Profit</button>
-    <button class="chart-btn" id="nbBS" onclick="setNewsSrc('bs',this)">Business Standard</button>
-    <button class="chart-btn" id="nbGeo" onclick="setNewsSrc('geo',this)">🌍 Geopolitical</button>
-    <button class="chart-btn" onclick="fetchNews()">&#8635; Refresh</button>
-  </div>
-  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">
-    <button class="sub-tab active" onclick="showNewsPeriod('1d',this)">Today (1D)</button>
-    <button class="sub-tab" onclick="showNewsPeriod('1w',this)">This Week (1W)</button>
-    <button class="sub-tab" onclick="showNewsPeriod('1m',this)">This Month (1M)</button>
-    <button class="sub-tab" onclick="showNewsPeriod('1y',this)">Archive (1Y)</button>
-  </div>
-  <div id="newsContainer"></div>
-</div>
-<!-- CHARTS EDUCATION -->
-<div class="panel" id="panel-charts">
-  <div class="sec-hdr"><h2>Chart <span>Education</span></h2></div>
-  <div class="sub-tabs">
-    <button class="sub-tab active" onclick="showSubTab('ct','candles',this)">Candlesticks</button>
-    <button class="sub-tab" onclick="showSubTab('ct','patterns',this)">Chart Patterns</button>
-    <button class="sub-tab" onclick="showSubTab('ct','indicators',this)">Indicators</button>
-    <button class="sub-tab" onclick="showSubTab('ct','setup',this)">Setup Guide</button>
-    <button class="sub-tab" onclick="showSubTab('ct','timeframes',this)">Timeframes</button>
-    <button class="sub-tab" onclick="showSubTab('ct','psychology',this)">Psychology</button>
-    <button class="sub-tab" onclick="showSubTab('ct','analysis',this)">Past Analysis</button>
-  </div>
-  <div id="ct-candles">
-    <div class="card" style="margin-bottom:14px">
-      <div class="card-title">How to Read a Candlestick <div class="nl"></div></div>
-      <div class="g2">
-        <div style="display:flex;align-items:center;justify-content:center;padding:16px">
-          <svg width="280" height="180" viewBox="0 0 280 180">
-            <line x1="70" y1="15" x2="70" y2="45" stroke="#00FF94" stroke-width="2"/><rect x="50" y="45" width="40" height="90" fill="#00FF94" rx="2"/><line x1="70" y1="135" x2="70" y2="165" stroke="#00FF94" stroke-width="2"/>
-            <text x="118" y="22" fill="#8B949E" font-size="10" font-family="JetBrains Mono">← High (wick)</text>
-            <text x="118" y="82" fill="#00FF94" font-size="10" font-family="JetBrains Mono">← GREEN (Bull)</text>
-            <text x="118" y="162" fill="#8B949E" font-size="10" font-family="JetBrains Mono">← Low (wick)</text>
-            <text x="25" y="50" fill="#8B949E" font-size="9" font-family="JetBrains Mono">Close</text>
-            <text x="28" y="135" fill="#8B949E" font-size="9" font-family="JetBrains Mono">Open</text>
-            <line x1="190" y1="15" x2="190" y2="45" stroke="#FF4757" stroke-width="2"/><rect x="170" y="45" width="40" height="90" fill="#FF4757" rx="2"/><line x1="190" y1="135" x2="190" y2="165" stroke="#FF4757" stroke-width="2"/>
-            <text x="215" y="72" fill="#FF4757" font-size="10" font-family="JetBrains Mono">RED</text><text x="215" y="86" fill="#FF4757" font-size="10" font-family="JetBrains Mono">(Bearish)</text>
-          </svg>
-        </div>
-        <div style="font-size:12px;color:var(--text2);line-height:1.9;padding:12px">
-          <strong style="color:var(--neon)">GREEN:</strong> Close above Open. Buyers won.<br>
-          <strong style="color:var(--red)">RED:</strong> Close below Open. Sellers won.<br><br>
-          <strong>Large body</strong> = strong move<br>
-          <strong>Long upper wick</strong> = sellers rejected higher prices<br>
-          <strong>Long lower wick</strong> = buyers rejected lower prices
-        </div>
-      </div>
-    </div>
-    <div id="candleGrid">
-
-<div class="card" style="margin-bottom:14px">
-  <div class="card-title">🕯️ Basic Candles <div class="nl"></div></div>
-  <div class="g2">
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">1. Marubozu (Bullish) 🟩</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Badi green body, koi wick nahi ya bahut chhoti.<br>
-        <strong>Matlab:</strong> Buyers ne pure din control rakha. Open se close tak lagatar buying.<br>
-        <strong>Signal:</strong> Strong bullish momentum. Agli candle bhi green hone ki zyada chance.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Breakout ke saath aaye toh entry valid. Volume high hona chahiye.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--red);margin-bottom:6px">2. Marubozu (Bearish) 🟥</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Badi red body, koi wick nahi ya bahut chhoti.<br>
-        <strong>Matlab:</strong> Sellers ne pure din control rakha. Open se close tak lagatar selling.<br>
-        <strong>Signal:</strong> Strong bearish momentum. Downtrend continue ho sakta hai.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Support break ke saath aaye toh short setup valid.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">3. Hammer 🔨</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Chhoti body upar, bahut lamba lower wick (body ka 2x+), koi upper wick nahi.<br>
-        <strong>Matlab:</strong> Bears ne price neeche dhakela, lekin bulls ne wapas upar kheencha. Rejection of lows.<br>
-        <strong>Signal:</strong> Downtrend ke baad aaye toh bullish reversal signal.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Support level pe hammer = strong buy signal. Next candle green confirm karo.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--red);margin-bottom:6px">4. Hanging Man 🪆</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Hammer jaisi dikhti hai lekin uptrend ke baad aati hai.<br>
-        <strong>Matlab:</strong> Bulls ka control kamzor pad raha hai. Bears zyada aggressive ho rahe hain.<br>
-        <strong>Signal:</strong> Uptrend ke top pe = bearish reversal warning.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Confirmation zaroor lo — agli candle red honi chahiye confirm ke liye.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--red);margin-bottom:6px">5. Shooting Star ⭐</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Chhoti body neeche, bahut lamba upper wick, koi lower wick nahi.<br>
-        <strong>Matlab:</strong> Bulls ne price upar dhakela lekin bears ne wapas neeche kheeencha. Rejection of highs.<br>
-        <strong>Signal:</strong> Uptrend ke baad = strong bearish reversal signal.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Resistance level pe shooting star = sell/short setup. Volume confirm karo.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">6. Inverted Hammer 🔁</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Chhoti body neeche, lamba upper wick. Shooting star jaisi but downtrend mein.<br>
-        <strong>Matlab:</strong> Bears ka pressure kam ho raha hai. Bulls price upar le gaye lekin close nahi kar paye.<br>
-        <strong>Signal:</strong> Downtrend ke baad = potential bullish reversal.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Confirmation candle (green) ka wait karo. Support pe zyada reliable.
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<div class="card" style="margin-bottom:14px">
-  <div class="card-title">🔄 Doji Candles — Indecision <div class="nl"></div></div>
-  <div class="g2">
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--amber);margin-bottom:6px">7. Standard Doji ➕</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Open aur close almost same — cross ya plus sign jaise dikhta hai.<br>
-        <strong>Matlab:</strong> Market mein indecision hai — buyers aur sellers equal hain.<br>
-        <strong>Signal:</strong> Trend reversal ka warning. Akele strong nahi — context dekhna zaroori.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Key level pe doji = caution signal. Agli candle direction batayegi.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--amber);margin-bottom:6px">8. Long-Legged Doji 🕊️</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Doji lekin dono wicks bahut lambi — upar aur neeche dono taraf.<br>
-        <strong>Matlab:</strong> Extreme volatility — buyers aur sellers dono ne try kiya lekin koi nahi jeeta.<br>
-        <strong>Signal:</strong> Big move aane wala hai — kisi bhi direction mein.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Breakout ke baad direction follow karo. Side mein raho jab tak clear na ho.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">9. Dragonfly Doji 🐉</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Open = Close = High (body aur upper wick nahi), sirf lamba lower wick.<br>
-        <strong>Matlab:</strong> Bears ne price bahut neeche dhakela lekin bulls ne puri wapasi ki — T shape.<br>
-        <strong>Signal:</strong> Downtrend mein = strong bullish reversal signal.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Support level pe dragonfly doji = high probability buy. Volume dekhna zaroori.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--red);margin-bottom:6px">10. Gravestone Doji ⚰️</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Open = Close = Low, sirf lamba upper wick — inverted T shape.<br>
-        <strong>Matlab:</strong> Bulls ne price bahut upar uthaya lekin bears ne puri wapasi ki.<br>
-        <strong>Signal:</strong> Uptrend mein = strong bearish reversal signal.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Resistance pe gravestone = sell signal. Confirmation candle ka wait karo.
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<div class="card" style="margin-bottom:14px">
-  <div class="card-title">🕯️🕯️ Two-Candle Patterns <div class="nl"></div></div>
-  <div class="g2">
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">11. Bullish Engulfing 🟩🟩</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Pehli red candle, doosri green candle jo pehli ko puri tarah engulf kare.<br>
-        <strong>Matlab:</strong> Bears ne control khoya, bulls ne puri tarah le liya. Strong momentum shift.<br>
-        <strong>Signal:</strong> Downtrend ke baad = powerful bullish reversal. Top 3 patterns mein se ek.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Support pe engulfing = high confidence buy. Volume high hona chahiye.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--red);margin-bottom:6px">12. Bearish Engulfing 🟥🟥</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Pehli green candle, doosri red candle jo pehli ko puri tarah engulf kare.<br>
-        <strong>Matlab:</strong> Bulls ka control gaya, bears ne complete control liya. Strong selling pressure.<br>
-        <strong>Signal:</strong> Uptrend ke baad = powerful bearish reversal signal.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Resistance pe bearish engulfing = exit longs / enter shorts.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">13. Piercing Line 📌</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Badi red candle, phir green candle jo red candle ke 50% se zyada upar close kare.<br>
-        <strong>Matlab:</strong> Bears ka momentum ruk gaya. Bulls ne recovery shuru ki.<br>
-        <strong>Signal:</strong> Downtrend mein = moderate bullish reversal. Engulfing se thoda weak.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Support ke paas aur volume ke saath reliable. Confirmation lo.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--red);margin-bottom:6px">14. Dark Cloud Cover ☁️</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Badi green candle, phir red candle jo green candle ke 50% se zyada neeche close kare.<br>
-        <strong>Matlab:</strong> Bulls thak gaye. Bears ne control lena shuru kiya.<br>
-        <strong>Signal:</strong> Uptrend mein = bearish reversal signal. Piercing line ka opposite.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Resistance ke paas = exit signal. Agli candle se confirm karo.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">15. Tweezer Bottom 🔧🔧</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Do candles jinke lows exactly same hon — ek red, ek green.<br>
-        <strong>Matlab:</strong> Same support level pe do baar rejection — bears fail hue.<br>
-        <strong>Signal:</strong> Downtrend ke baad = double support confirmation, bullish reversal.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Key support pe tweezer bottom = strong buy zone. SL lows ke neeche rakho.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--red);margin-bottom:6px">16. Tweezer Top 🔧🔧</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Do candles jinke highs exactly same hon — ek green, ek red.<br>
-        <strong>Matlab:</strong> Same resistance level pe do baar rejection — bulls fail hue.<br>
-        <strong>Signal:</strong> Uptrend ke baad = double resistance confirmation, bearish reversal.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Key resistance pe tweezer top = exit zone. SL highs ke upar rakho.
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<div class="card" style="margin-bottom:14px">
-  <div class="card-title">🕯️🕯️🕯️ Three-Candle Patterns <div class="nl"></div></div>
-  <div class="g2">
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">17. Morning Star 🌅</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Badi red → Chhoti candle (gap down) → Badi green (gap up).<br>
-        <strong>Matlab:</strong> Bears ka power khatam, transition ho raha hai, bulls aaye. Trilogy of reversal.<br>
-        <strong>Signal:</strong> Downtrend ke baad = strongest bullish reversal patterns mein se ek.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Support pe morning star = high confidence entry. Risk:Reward bahut achha hota hai.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--red);margin-bottom:6px">18. Evening Star 🌆</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Badi green → Chhoti candle (gap up) → Badi red (gap down).<br>
-        <strong>Matlab:</strong> Bulls ka power khatam, bears wapas aye. Morning star ka opposite.<br>
-        <strong>Signal:</strong> Uptrend ke baad = strongest bearish reversal patterns mein se ek.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Resistance pe evening star = exit longs immediately.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">19. Three White Soldiers 💂💂💂</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Teen lagatar badi green candles, har ek pichli se upar close kare.<br>
-        <strong>Matlab:</strong> Strong sustained buying — bulls completely in control teen dino tak.<br>
-        <strong>Signal:</strong> Downtrend ke baad = very strong bullish reversal / continuation.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Pattern ke baad pullback ka wait karo entry ke liye. Direct entry risky ho sakti hai.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--red);margin-bottom:6px">20. Three Black Crows 🐦🐦🐦</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Teen lagatar badi red candles, har ek pichli se neeche close kare.<br>
-        <strong>Matlab:</strong> Strong sustained selling — bears completely in control teen dino tak.<br>
-        <strong>Signal:</strong> Uptrend ke baad = very strong bearish reversal signal.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Longs exit karo. Short entry ke liye bounce ka wait karo.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">21. Morning Doji Star 🌅✨</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Badi red → Doji (indecision) → Badi green.<br>
-        <strong>Matlab:</strong> Morning star se bhi zyada powerful — beech mein doji perfect indecision dikhata hai.<br>
-        <strong>Signal:</strong> Downtrend reversal — morning star se stronger version.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Support pe = very high confidence buy setup.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--red);margin-bottom:6px">22. Evening Doji Star 🌆✨</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Badi green → Doji → Badi red.<br>
-        <strong>Matlab:</strong> Evening star se zyada powerful — doji perfect uncertainty dikhata hai top pe.<br>
-        <strong>Signal:</strong> Uptrend reversal — evening star se stronger.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Resistance pe = strong sell/exit signal.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">23. Three Inside Up 📈</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Badi red → Chhoti green (harami inside red) → Badi green confirm.<br>
-        <strong>Matlab:</strong> Bearish harami ke baad confirmation — bulls ne control le liya.<br>
-        <strong>Signal:</strong> Confirmed bullish reversal — teen candle confirmation.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Teen candle complete hone ke baad entry — low risk setup.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--red);margin-bottom:6px">24. Three Inside Down 📉</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Badi green → Chhoti red (harami inside green) → Badi red confirm.<br>
-        <strong>Matlab:</strong> Bullish harami ke baad bears ne confirm kiya — selling pressure bada.<br>
-        <strong>Signal:</strong> Confirmed bearish reversal.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Resistance pe = exit signal after confirmation.
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<div class="card" style="margin-bottom:14px">
-  <div class="card-title">⚡ Special & Advanced Patterns <div class="nl"></div></div>
-  <div class="g2">
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--amber);margin-bottom:6px">25. Harami (Bullish) 🤰</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Badi red candle, phir chhoti green candle jo puri tarah andar ho (harami = pregnant).<br>
-        <strong>Matlab:</strong> Bears ka momentum ruk gaya. Chhoti body = indecision aaya.<br>
-        <strong>Signal:</strong> Potential bullish reversal — confirmation zaroori.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Support pe harami + next green candle = entry signal.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--amber);margin-bottom:6px">26. Harami (Bearish) 🤰</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Badi green candle, phir chhoti red candle jo andar ho.<br>
-        <strong>Matlab:</strong> Bulls ka momentum ruka. Market soch raha hai — direction change ho sakta hai.<br>
-        <strong>Signal:</strong> Potential bearish reversal.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Resistance pe harami + next red candle = exit/short signal.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">27. Spinning Top (Bullish context) 🌀</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Chhoti body (any color), dono taraf equal wicks.<br>
-        <strong>Matlab:</strong> Market mein balance hai — na buyers na sellers haave. Pure indecision.<br>
-        <strong>Signal:</strong> Downtrend mein = bulls wapas aa rahe hain, reversal possible.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Akele trade mat lo. Strong candle ke saath confirmation lo.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--purple);margin-bottom:6px">28. Kicker Pattern 🦵</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Red candle ke baad gap up karke green candle — ya green ke baad gap down red.<br>
-        <strong>Matlab:</strong> Sudden complete sentiment change — news ya event driven. Bahut rare.<br>
-        <strong>Signal:</strong> Sabse powerful reversal pattern — price rarely wapas aati hai.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Gap direction mein strong entry. SL gap ke dono candles ke extreme ke neeche/upar.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">29. Rising Three Methods 📊</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Badi green → teen chhoti red (consolidation) → badi green breakout.<br>
-        <strong>Matlab:</strong> Uptrend mein brief rest — bears try kiya lekin bulls ne control wapas liya.<br>
-        <strong>Signal:</strong> Strong bullish continuation pattern.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Paanchvi candle (green breakout) pe entry. SL chhoti candles ke low ke neeche.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--red);margin-bottom:6px">30. Falling Three Methods 📉</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Badi red → teen chhoti green (bounce) → badi red breakdown.<br>
-        <strong>Matlab:</strong> Downtrend mein brief bounce — bulls try kiya lekin bears wapas aaye.<br>
-        <strong>Signal:</strong> Strong bearish continuation pattern.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Paanchvi candle (red breakdown) pe short. SL chhoti candles ke high ke upar.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">31. Bullish Belt Hold 🥋</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Gap down open, phir seedha upar — koi lower wick, long green body.<br>
-        <strong>Matlab:</strong> Bears ne shuru kiya lekin bulls ne turant control liya — aggressive buying.<br>
-        <strong>Signal:</strong> Downtrend mein = strong bullish reversal.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Gap down ke baad belt hold = institutional buying signal.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--red);margin-bottom:6px">32. Bearish Belt Hold 🥋</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Gap up open, phir seedha neeche — koi upper wick, long red body.<br>
-        <strong>Matlab:</strong> Bulls ne shuru kiya lekin bears ne turant control liya — aggressive selling.<br>
-        <strong>Signal:</strong> Uptrend mein = strong bearish reversal.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Gap up ke baad belt hold = institutional selling signal.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--amber);margin-bottom:6px">33. High Wave Candle 🌊</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Bahut chhoti body, dono taraf bahut lambi wicks — long-legged doji jaisi but body hai.<br>
-        <strong>Matlab:</strong> Extreme volatility, complete chaos — buyers aur sellers dono strongly active.<br>
-        <strong>Signal:</strong> Major uncertainty — big move aane se pehle ki calm.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Trade mat lo jab tak direction clear na ho. Breakout side follow karo.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">34. On Neck Line 📏</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Badi red candle, phir chhoti green candle jo previous red ke close pe close ho.<br>
-        <strong>Matlab:</strong> Bulls ne try kiya wapas aane ka lekin fail — bearish pressure continue hai.<br>
-        <strong>Signal:</strong> Bearish continuation — sell the bounce.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Downtrend mein bounce pe short entry. SL green candle ke high ke upar.
-      </div>
-    </div>
-
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-      <div style="font-weight:700;color:var(--neon);margin-bottom:6px">35. Abandoned Baby (Bull) 👶</div>
-      <div style="font-size:11px;color:var(--text2);line-height:1.8">
-        <strong>Kaisi dikhti hai:</strong> Badi red → Doji (gap down, isolated) → Badi green (gap up).<br>
-        <strong>Matlab:</strong> Doji completely isolated — abandoned. Bears aur bulls dono ne chhoda beech mein.<br>
-        <strong>Signal:</strong> Rare lekin extremely powerful bullish reversal.<br>
-        <strong style="color:var(--amber)">Kab use karein:</strong> Gap-up green candle pe entry — very high probability setup.
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-title">📋 Quick Reference — NSE Trading ke liye <div class="nl"></div></div>
-  <div style="font-size:11px;color:var(--text2);line-height:2">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <div>
-        <div style="color:var(--neon);font-weight:700;margin-bottom:6px">🟢 Bullish Patterns (Buy Signal)</div>
-        Hammer · Inverted Hammer · Bullish Engulfing<br>
-        Piercing Line · Morning Star · Three White Soldiers<br>
-        Dragonfly Doji · Tweezer Bottom · Kicker (up)<br>
-        Bullish Harami · Rising Three Methods · Belt Hold (bull)<br>
-        Morning Doji Star · Three Inside Up · Abandoned Baby
-      </div>
-      <div>
-        <div style="color:var(--red);font-weight:700;margin-bottom:6px">🔴 Bearish Patterns (Sell Signal)</div>
-        Shooting Star · Hanging Man · Bearish Engulfing<br>
-        Dark Cloud Cover · Evening Star · Three Black Crows<br>
-        Gravestone Doji · Tweezer Top · Kicker (down)<br>
-        Bearish Harami · Falling Three Methods · Belt Hold (bear)<br>
-        Evening Doji Star · Three Inside Down
-      </div>
-    </div>
-    <div style="margin-top:12px;padding:10px;background:rgba(244,166,35,0.08);border:1px solid rgba(244,166,35,0.2);border-radius:var(--r)">
-      ⚠️ <strong style="color:var(--amber)">Golden Rules:</strong> Koi bhi single candle pattern akele kaafi nahi — hamesha <strong>trend + support/resistance + volume</strong> ke saath confirm karo. NSE pe daily chart pe ye patterns sabse zyada reliable hain.
-    </div>
-  </div>
-</div>
-
-    </div>
-  </div>
-  <div id="ct-patterns" style="display:none">
-  <div id="patternGrid">
-    <div class="card" style="margin-bottom:14px"><div class="card-title">Continuation Patterns <div class="nl"></div></div>
-      <div class="g2">
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-          <div style="font-weight:700;color:var(--neon);margin-bottom:6px">🚩 Flag Pattern</div>
-          <div style="font-size:11px;color:var(--text2);line-height:1.7">Strong move ke baad chhota consolidation — flag shape banta hai. Breakout original direction mein hota hai.<br><strong style="color:var(--amber)">Entry:</strong> Flag ka upper boundary break hone pe.<br><strong style="color:var(--red)">SL:</strong> Flag ke low ke neeche.<br><strong style="color:var(--neon)">Target:</strong> Flag pole ki height = target.</div>
-        </div>
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-          <div style="font-weight:700;color:var(--neon);margin-bottom:6px">📐 Pennant</div>
-          <div style="font-size:11px;color:var(--text2);line-height:1.7">Flag jaisa hai lekin consolidation triangular hota hai. Volume breakout pe badhna chahiye confirm ke liye.<br><strong style="color:var(--amber)">Entry:</strong> Triangle breakout pe.<br><strong style="color:var(--red)">SL:</strong> Pennant ke low ke neeche.<br><strong style="color:var(--neon)">Target:</strong> Pole height add karo.</div>
-        </div>
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-          <div style="font-weight:700;color:var(--neon);margin-bottom:6px">☕ Cup & Handle</div>
-          <div style="font-size:11px;color:var(--text2);line-height:1.7">U-shape banta hai phir chhota handle. Weekly chart pe zyada reliable. Breakout = strong bullish signal.<br><strong style="color:var(--amber)">Entry:</strong> Handle ka resistance break hone pe.<br><strong style="color:var(--red)">SL:</strong> Handle ke low ke neeche.<br><strong style="color:var(--neon)">Target:</strong> Cup depth = target.</div>
-        </div>
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-          <div style="font-weight:700;color:var(--neon);margin-bottom:6px">📊 Ascending Triangle</div>
-          <div style="font-size:11px;color:var(--text2);line-height:1.7">Flat top resistance + rising lows. Buyers stronger hote ja rahe hain. Breakout mostly upar hota hai.<br><strong style="color:var(--amber)">Entry:</strong> Flat resistance break pe.<br><strong style="color:var(--red)">SL:</strong> Last swing low ke neeche.<br><strong style="color:var(--neon)">Target:</strong> Triangle height add karo.</div>
-        </div>
-      </div>
-    </div>
-    <div class="card"><div class="card-title">Reversal Patterns <div class="nl"></div></div>
-      <div class="g2">
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-          <div style="font-weight:700;color:var(--red);margin-bottom:6px">🏔️ Head & Shoulders</div>
-          <div style="font-size:11px;color:var(--text2);line-height:1.7">Bearish reversal pattern. Teen peaks — beech wala sabse upar (head). Neckline break = strong sell signal.<br><strong style="color:var(--amber)">Entry:</strong> Neckline break ke baad retest pe.<br><strong style="color:var(--red)">SL:</strong> Right shoulder ke upar.<br><strong style="color:var(--neon)">Target:</strong> Head to neckline distance = target.</div>
-        </div>
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-          <div style="font-weight:700;color:var(--red);margin-bottom:6px">⛰️⛰️ Double Top</div>
-          <div style="font-size:11px;color:var(--text2);line-height:1.7">Do baar same level pe rejection — bearish. Neckline (support) break confirm karta hai reversal.<br><strong style="color:var(--amber)">Entry:</strong> Neckline break pe.<br><strong style="color:var(--red)">SL:</strong> Tops ke upar.<br><strong style="color:var(--neon)">Target:</strong> Tops to neckline distance = target.</div>
-        </div>
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-          <div style="font-weight:700;color:var(--neon);margin-bottom:6px">🏔️ Double Bottom</div>
-          <div style="font-size:11px;color:var(--text2);line-height:1.7">Do baar same support pe bounce — bullish reversal. W-shape banta hai.<br><strong style="color:var(--amber)">Entry:</strong> Neckline (resistance) break pe.<br><strong style="color:var(--red)">SL:</strong> Bottoms ke neeche.<br><strong style="color:var(--neon)">Target:</strong> Bottoms to neckline distance = target.</div>
-        </div>
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-          <div style="font-weight:700;color:var(--red);margin-bottom:6px">📉 Descending Triangle</div>
-          <div style="font-size:11px;color:var(--text2);line-height:1.7">Flat bottom support + falling highs. Sellers zyada strong. Breakout mostly neeche hota hai.<br><strong style="color:var(--amber)">Entry:</strong> Flat support break pe (short).<br><strong style="color:var(--red)">SL:</strong> Last swing high ke upar.<br><strong style="color:var(--neon)">Target:</strong> Triangle height minus karo.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-  <div id="ct-indicators" style="display:none">
-  <div id="indicatorGrid">
-    <div class="card" style="margin-bottom:14px"><div class="card-title">Trend Indicators <div class="nl"></div></div>
-      <div class="g2">
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-          <div style="font-weight:700;color:var(--neon);margin-bottom:6px">📈 20 EMA</div>
-          <div style="font-size:11px;color:var(--text2);line-height:1.7">Short-term trend indicator. Price EMA ke upar = bullish bias. Swing traders ke liye sabse important EMA.<br><strong style="color:var(--amber)">Use:</strong> Price 20 EMA pe pullback kare aur bounce kare → entry signal.<br><strong style="color:var(--text3)">Zerodha Kite:</strong> Studies → EMA → Period 20</div>
-        </div>
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-          <div style="font-weight:700;color:var(--neon);margin-bottom:6px">📈 50 EMA</div>
-          <div style="font-size:11px;color:var(--text2);line-height:1.7">Medium-term trend. 20 EMA 50 EMA ke upar cross kare → strong bullish signal (Golden Cross).<br><strong style="color:var(--amber)">Use:</strong> Trend direction confirm karne ke liye. 50 EMA = major support.<br><strong style="color:var(--text3)">Zerodha Kite:</strong> Studies → EMA → Period 50</div>
-        </div>
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-          <div style="font-weight:700;color:var(--amber);margin-bottom:6px">〰️ RSI (14)</div>
-          <div style="font-size:11px;color:var(--text2);line-height:1.7">Momentum indicator — 0 to 100. Above 70 = overbought (sell zone). Below 30 = oversold (buy zone).<br><strong style="color:var(--amber)">Use:</strong> RSI divergence sabse powerful signal — price naya high banaye RSI na banaye = weakness.<br><strong style="color:var(--text3)">Zerodha Kite:</strong> Studies → RSI → Period 14</div>
-        </div>
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-          <div style="font-weight:700;color:var(--amber);margin-bottom:6px">⚡ MACD</div>
-          <div style="font-size:11px;color:var(--text2);line-height:1.7">Moving Average Convergence Divergence. MACD line signal line cross kare = entry/exit signal.<br><strong style="color:var(--amber)">Use:</strong> Bullish crossover (MACD signal ke upar aaye) + price uptrend mein = buy setup.<br><strong style="color:var(--text3)">Settings:</strong> 12, 26, 9 (default)</div>
-        </div>
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-          <div style="font-weight:700;color:var(--purple);margin-bottom:6px">🎯 Bollinger Bands</div>
-          <div style="font-size:11px;color:var(--text2);line-height:1.7">3 lines — middle (20 SMA) + upper/lower bands (2 std dev). Price bands ke bahar = extreme move.<br><strong style="color:var(--amber)">Use:</strong> Band squeeze = breakout aane wala. Price lower band touch kare uptrend mein = buy.<br><strong style="color:var(--text3)">Settings:</strong> 20 period, 2 std dev</div>
-        </div>
-        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:14px">
-          <div style="font-weight:700;color:var(--purple);margin-bottom:6px">📊 Volume</div>
-          <div style="font-size:11px;color:var(--text2);line-height:1.7">Sabse underrated indicator. High volume + price move = genuine. Low volume + price move = fake breakout.<br><strong style="color:var(--amber)">Rule:</strong> Hamesha price ke saath volume confirm karo. Volume average se 1.5x upar hona chahiye breakout pe.<br><strong style="color:var(--text3)">NSE minimum:</strong> 5 lakh shares/day</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-  <div id="ct-setup" style="display:none">
-    <div class="card">
-      <div class="card-title">Zerodha Kite Setup Guide <div class="nl"></div></div>
-      <div class="kite-step"><div class="kite-step-num">1</div><div class="kite-step-body"><strong>Open Chart:</strong> Kite → tap any stock → Chart icon → set timeframe to Daily (D)</div></div>
-      <div class="kite-step"><div class="kite-step-num">2</div><div class="kite-step-body"><strong>Add Indicators:</strong> Studies → EMA (20, green) → EMA (50, orange) → Volume bars</div></div>
-      <div class="kite-step"><div class="kite-step-num">3</div><div class="kite-step-body"><strong>Identify Setup:</strong> Flat range → Breakout setup. Pullback in uptrend → Pullback setup.</div></div>
-      <div class="kite-step"><div class="kite-step-num">4</div><div class="kite-step-body"><strong>Validate:</strong> Volume confirmation? 20 EMA pointing up? Clear level to trade?</div></div>
-      <div class="kite-step"><div class="kite-step-num">5</div><div class="kite-step-body"><strong>Plan First:</strong> Write Entry, SL, Target BEFORE touching Buy button. No plan = no trade.</div></div>
-      <div class="kite-step"><div class="kite-step-num">6</div><div class="kite-step-body"><strong>Risk Check:</strong> Shares = ₹200 ÷ (Entry – SL). Max position value: 60% of capital.</div></div>
-      <div class="kite-step"><div class="kite-step-num">7</div><div class="kite-step-body"><strong>Execute:</strong> Buy (Limit) → IMMEDIATELY set SL-M order. Done.</div></div>
-    </div>
-  </div>
-  <div id="ct-timeframes" style="display:none">
-    <div class="card">
-      <div class="card-title">Multi-Timeframe Analysis <div class="nl"></div></div>
-      <div style="font-size:12px;color:var(--text2);line-height:2">
-        <div style="padding:8px;background:var(--bg3);border-radius:var(--r);margin-bottom:6px;border-left:3px solid var(--neon)"><strong style="color:var(--neon)">Weekly</strong> — Direction only. Never trade against weekly trend.</div>
-        <div style="padding:8px;background:var(--bg3);border-radius:var(--r);margin-bottom:6px;border-left:3px solid var(--amber)"><strong style="color:var(--amber)">Daily</strong> — PRIMARY chart. Find setups and plan trades here.</div>
-        <div style="padding:8px;background:var(--bg3);border-radius:var(--r);margin-bottom:6px;border-left:3px solid var(--blue)"><strong style="color:var(--blue)">4-Hour</strong> — Fine-tune entry after finding setup on daily.</div>
-        <div style="padding:8px;background:var(--bg3);border-radius:var(--r);border-left:3px solid var(--text3)"><strong style="color:var(--text3)">1H / 15min</strong> — Execution timing only. Too noisy for setup finding.</div>
-        <div style="margin-top:10px;padding:10px;background:rgba(244,166,35,0.07);border-radius:var(--r);border:1px solid rgba(244,166,35,0.2)"><strong style="color:var(--amber)">Process:</strong> Weekly (direction) → Daily (setup) → 4H (entry timing)</div>
-      </div>
-    </div>
-  </div>
-  <div id="ct-psychology" style="display:none">
-    <div class="g2">
-      <div class="card">
-        <div class="card-title">Mistakes to Avoid <div class="nl"></div></div>
-        <div style="font-size:12px;color:var(--text2);line-height:2">
-          <div style="padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--red)">❌ FOMO</span> — Chasing already-moved stocks. Missed = missed.</div>
-          <div style="padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--red)">❌ Revenge Trading</span> — Random trades to recover a loss.</div>
-          <div style="padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--red)">❌ Moving SL</span> — Accept the small loss. Don't move it further.</div>
-          <div style="padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--red)">❌ Overtrading</span> — 1-2 good setups per week beats 10 bad trades daily.</div>
-          <div style="padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--red)">❌ Tips</span> — WhatsApp/Telegram tips will lose you money.</div>
-          <div style="padding:5px 0"><span style="color:var(--red)">❌ Averaging Down</span> — Buying more of a losing stock = doubling mistake.</div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">Winning Habits <div class="nl"></div></div>
-        <div style="font-size:12px;color:var(--text2);line-height:2">
-          <div style="padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--neon)">✅ Journal Everything</span> — Every trade logged = faster improvement.</div>
-          <div style="padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--neon)">✅ Plan Before Entry</span> — Entry, SL, target BEFORE Buy button.</div>
-          <div style="padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--neon)">✅ Respect SL</span> — Always. Every time. Small loss beats large loss.</div>
-          <div style="padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--neon)">✅ Weekly Review</span> — Review all trades every weekend.</div>
-          <div style="padding:5px 0;border-bottom:1px solid var(--border)"><span style="color:var(--neon)">✅ Take Breaks</span> — 3 losses in a row = stop for the day.</div>
-          <div style="padding:5px 0"><span style="color:var(--neon)">✅ Your 2 Setups</span> — Not setup #1 or #2 = not a trade.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div id="ct-analysis" style="display:none">
-    <div style="background:rgba(244,166,35,0.07);border:1px solid rgba(244,166,35,0.2);border-radius:var(--r2);padding:14px;margin-bottom:14px">
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--amber);margin-bottom:6px">📖 Teacher's Note</div>
-      <div style="font-size:12px;color:var(--text2)">These are real historical patterns from actual NSE market events. All descriptions are accurate. Study each — the market repeats these regularly.</div>
-    </div>
-    <div id="pastAnalysisGrid"></div>
-  </div>
-</div>
-
-<!-- JOURNAL -->
-<div class="panel" id="panel-journal">
-  <div class="sec-hdr"><h2>Trade <span>Journal</span></h2><small id="jCount">0 trades</small></div>
-  <div class="zerodha-notice" style="margin-bottom:14px;padding:14px">
-    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:6px">ℹ️ About Zerodha Live Data</div>
-    <div style="font-size:12px;color:var(--text2);line-height:1.7">Real-time Zerodha balance, live P&L, and positions require <strong style="color:var(--text)">Kite Connect API (₹500/month plan)</strong>. See the 🔑 Zerodha API tab for the complete setup guide. For now, log all trades manually here and use Zerodha Kite app for live status.</div>
-  </div>
-  <div class="card" style="margin-bottom:14px">
-    <div class="card-title">Log New Trade <div class="nl"></div></div>
-    <div class="g3">
-      <div class="form-row"><label>Date</label><input type="text" id="jDate" placeholder="DD/MM/YYYY"></div>
-      <div class="form-row"><label>Symbol</label><input type="text" id="jSym" placeholder="RELIANCE"></div>
-      <div class="form-row"><label>Setup</label><select id="jSetup"><option value="">Select</option><option>Breakout</option><option>Pullback</option><option>Paper</option><option>Other</option></select></div>
-      <div class="form-row"><label>Entry ₹</label><input type="number" id="jEntry" placeholder="0"></div>
-      <div class="form-row"><label>Stop Loss ₹</label><input type="number" id="jSL" placeholder="0"></div>
-      <div class="form-row"><label>Target ₹</label><input type="number" id="jTarget" placeholder="0"></div>
-      <div class="form-row"><label>Qty (Shares)</label><input type="number" id="jQty" placeholder="0"></div>
-      <div class="form-row"><label>Exit Price ₹</label><input type="number" id="jExit" placeholder="blank = still open"></div>
-      <div class="form-row"><label>Direction</label><select id="jDir"><option value="Long">Long (Buy)</option><option value="Short">Short (Sell)</option></select></div>
-    </div>
-    <div class="form-row"><label>Notes / Reason</label><textarea id="jNotes" placeholder="Why did you take this trade? What did the chart show?" rows="2" style="resize:vertical"></textarea></div>
-    <div style="display:flex;align-items:center;gap:10px"><button class="btn btn-neon" onclick="logTrade()">+ Log Trade</button><span id="jMsg" style="font-family:var(--mono);font-size:11px"></span></div>
-  </div>
-  <div class="card" style="overflow-x:auto">
-    <table class="j-tbl"><thead><tr><th>Date</th><th>Symbol</th><th>Setup</th><th>Dir</th><th>Entry</th><th>SL</th><th>Target</th><th>Exit</th><th>Qty</th><th>P&L</th><th>R:R</th><th>Status</th><th></th></tr></thead>
-    <tbody id="jBody"><tr><td colspan="13" style="text-align:center;padding:20px;color:var(--text3)">No trades logged yet</td></tr></tbody></table>
-  </div>
-</div>
-
-<!-- P&L -->
-<div class="panel" id="panel-pnl">
-  <div class="sec-hdr"><h2>P&amp;L <span>Tracker</span></h2></div>
-  <div class="stop-alert">
-    <h3 style="color:var(--red);font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">🛑 Stop Trading Analyzer</h3>
-    <div class="stop-level"><div class="stop-dot" id="sd1" style="background:var(--neon)"></div><div id="sl1">Daily losses: ₹0 of ₹500 limit</div></div>
-    <div class="stop-level"><div class="stop-dot" id="sd2" style="background:var(--neon)"></div><div id="sl2">Consecutive losses: 0 of 3 allowed</div></div>
-    <div class="stop-level"><div class="stop-dot" id="sd3" style="background:var(--neon)"></div><div id="sl3">Overall win rate: — (need 5+ trades)</div></div>
-    <div id="stopVerdict" style="margin-top:10px;font-size:12px;font-weight:700"></div>
-  </div>
-  <div class="g4" style="margin-bottom:14px">
-    <div class="metric"><div class="metric-lbl">Total P&L</div><div class="metric-val" id="pnl-total" style="color:var(--neon)">₹0</div><div class="metric-ch" id="pnl-total-pct">0%</div></div>
-    <div class="metric"><div class="metric-lbl">Win Rate</div><div class="metric-val" id="pnl-wr">0%</div><div class="metric-ch" id="pnl-wl">0W / 0L</div></div>
-    <div class="metric"><div class="metric-lbl">Avg Win</div><div class="metric-val" id="pnl-aw" style="color:var(--neon)">₹0</div><div class="metric-ch">per win</div></div>
-    <div class="metric"><div class="metric-lbl">Avg Loss</div><div class="metric-val" id="pnl-al" style="color:var(--red)">₹0</div><div class="metric-ch">per loss</div></div>
-  </div>
-  <div class="card" style="margin-bottom:14px"><div class="card-title">Equity Curve <div class="nl"></div></div><div style="position:relative;height:220px"><canvas id="equityChart"></canvas></div></div>
-  <div class="g2">
-    <div class="card">
-      <div class="card-title">Capital Summary <div class="nl"></div></div>
-      <div class="form-row"><label>Starting Capital ₹</label><input type="number" id="pnlCap" value="10000" onchange="updateCapital()"></div>
-      <div class="risk-result">
-        <div class="risk-row"><span class="k">Starting Capital</span><span class="v" id="ps-start">₹10,000</span></div>
-        <div class="risk-row"><span class="k">Current Capital</span><span class="v g" id="ps-current">₹10,000</span></div>
-        <div class="risk-row"><span class="k">Total Trades</span><span class="v" id="ps-trades">0</span></div>
-        <div class="risk-row"><span class="k">Max Drawdown</span><span class="v r" id="ps-dd">₹0</span></div>
-        <div class="risk-row"><span class="k">Best Trade</span><span class="v g" id="ps-best">₹0</span></div>
-        <div class="risk-row"><span class="k">Worst Trade</span><span class="v r" id="ps-worst">₹0</span></div>
-        <div class="risk-row"><span class="k">Expectancy</span><span class="v a" id="ps-exp">₹0</span></div>
-      </div>
-    </div>
-    <div class="card"><div class="card-title">Insights <div class="nl"></div></div><div id="pnlInsights" style="font-size:12px;color:var(--text2);line-height:2;padding:4px 0">Log trades to see insights.</div></div>
-  </div>
-</div>
-
-<!-- RISK -->
-<div class="panel" id="panel-risk">
-  <div class="sec-hdr"><h2>Risk <span>Management</span></h2></div>
-  <div class="g2">
-    <div class="card">
-      <div class="card-title">Position Size Calculator <div class="nl"></div></div>
-      <div class="form-row"><label>Capital ₹</label><input type="number" id="rCap" value="10000" oninput="calcRisk()"></div>
-      <div class="form-row"><label>Risk %</label><input type="number" id="rPct" value="2" step="0.5" oninput="calcRisk()"></div>
-      <div class="form-row"><label>Entry ₹</label><input type="number" id="rEntry" value="500" oninput="calcRisk()"></div>
-      <div class="form-row"><label>Stop Loss ₹</label><input type="number" id="rSL" value="485" oninput="calcRisk()"></div>
-      <div class="form-row"><label>Target ₹</label><input type="number" id="rTarget" value="530" oninput="calcRisk()"></div>
-      <div class="risk-result">
-        <div class="risk-row"><span class="k">Max Risk</span><span class="v r" id="r-maxrisk">₹200</span></div>
-        <div class="risk-row"><span class="k">SL Distance</span><span class="v" id="r-sldist">₹15</span></div>
-        <div class="risk-row"><span class="k">Shares to Buy</span><span class="v a" id="r-shares">13</span></div>
-        <div class="risk-row"><span class="k">Position Value</span><span class="v" id="r-posval">₹6,500</span></div>
-        <div class="risk-row"><span class="k">Profit Target</span><span class="v g" id="r-profit">₹390</span></div>
-        <div class="risk-row"><span class="k">Actual Risk</span><span class="v r" id="r-actualrisk">₹195</span></div>
-        <div class="risk-row"><span class="k">Risk:Reward</span><span class="v" id="r-rr">1 : 2.0</span></div>
-        <div class="risk-row"><span class="k">VERDICT</span><span class="v" id="r-verdict">—</span></div>
-      </div>
-    </div>
-    <div>
-      <div class="card" style="margin-bottom:12px">
-        <div class="card-title">Rules for ₹10,000 Capital <div class="nl"></div></div>
-        <div style="font-size:12px;color:var(--text2);line-height:2">
-          <div style="padding:5px 0;border-bottom:1px solid var(--border)">Max risk per trade: <strong style="color:var(--red)">₹200-300</strong></div>
-          <div style="padding:5px 0;border-bottom:1px solid var(--border)">Daily max loss: <strong style="color:var(--red)">₹500</strong> (5%)</div>
-          <div style="padding:5px 0;border-bottom:1px solid var(--border)">Minimum target: <strong style="color:var(--neon)">2× your risk</strong></div>
-          <div style="padding:5px 0">Max 1 open position at a time</div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-title">Brokerage Calculator <div class="nl"></div></div>
-        <div class="form-row"><label>Trade Value ₹</label><input type="number" id="brkTrade" value="5000" oninput="calcBrokerage()"></div>
-        <div class="risk-result">
-          <div class="risk-row"><span class="k">Zerodha Buy</span><span class="v" id="brk-buy">₹20</span></div>
-          <div class="risk-row"><span class="k">Zerodha Sell</span><span class="v" id="brk-sell">₹20</span></div>
-          <div class="risk-row"><span class="k">STT + Other</span><span class="v" id="brk-stt">₹5</span></div>
-          <div class="risk-row"><span class="k">Total Round Trip</span><span class="v a" id="brk-total">₹45</span></div>
-          <div class="risk-row"><span class="k">% of Trade</span><span class="v" id="brk-pct">0.9%</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MANUAL -->
-<div class="panel" id="panel-manual">
-  <div class="sec-hdr"><h2>User <span>Manual</span></h2></div>
-  <div class="quote-box"><div class="quote-text" id="manualQuote">Loading...</div><div class="quote-author" id="manualAuthor">—</div></div>
-  <div class="manual-section"><h3>📅 Daily Routine</h3>
-    <div class="manual-item">🌅 <strong>Morning:</strong> Tick Daily Checklist → Read top 3 news → Scan 3 stocks for setups</div>
-    <div class="manual-item">📈 <strong>Market hours (9:15–3:30):</strong> Watch setups. Use Risk Calculator before any trade.</div>
-    <div class="manual-item">🌆 <strong>After market:</strong> Log trades → Review chart → Do 1 quiz</div>
-    <div class="manual-item">📅 <strong>Weekend:</strong> Review all trades → Watch saved videos → Read Phase key terms</div>
-  </div>
-  <div class="manual-section"><h3>▶ YouTube Videos in Learn Tab</h3>
-    <div class="manual-item">Every video row is now a <strong>direct clickable link</strong>. Click anywhere on the row to open the exact recommended video on YouTube. No more searching manually.</div>
-    <div class="manual-item">The amber warning above each section shows: <strong>"Click any row to open directly on YouTube"</strong></div>
-    <div class="manual-item">You can still use <strong>+ Save</strong> to add videos to Watch Later without opening them.</div>
-  </div>
-  <div class="manual-section"><h3>🔑 Zerodha API</h3>
-    <div class="manual-item">The Zerodha API tab has the <strong>complete setup guide</strong> for Kite Connect API. Follow the 4 steps in order.</div>
-    <div class="manual-item">Once set up: real balance, live positions, and today's orders show in the Live Account Data section.</div>
-    <div class="manual-item">Cost: <strong>₹500/month</strong> (Kite Connect plan at developers.kite.trade)</div>
-  </div>
-  <div class="manual-section"><h3>⚠️ Fill These Every Day</h3>
-    <div class="manual-item">1. Tick Daily Checklist on Home tab every morning</div>
-    <div class="manual-item">2. Log every trade in Journal immediately after taking it</div>
-    <div class="manual-item">3. Add exit price when SL or target is hit</div>
-    <div class="manual-item">4. Tick topic checkboxes in Learn as you complete them</div>
-    <div class="manual-item">5. Memorise 3 Key Terms from your current phase every day</div>
-  </div>
-</div>
-
-<div class="panel" id="panel-quiz">
-  <div class="sec-hdr"><h2>🧠 <span>Quiz</span> Centre</h2></div>
-
-  <!-- TAB SELECTOR -->
-  <div class="qz-tab-row">
-    <div class="qz-tab-btn active" id="qztab-phase" onclick="switchQzTab('phase',this)">
-      <div class="qzt-title">📚 Phase Quiz</div>
-      <div class="qzt-sub">Tests all completed phases — cumulative knowledge</div>
-    </div>
-    <div class="qz-tab-btn" id="qztab-today" onclick="switchQzTab('today',this)">
-      <div class="qzt-title">📅 Today's Quiz</div>
-      <div class="qzt-sub">Based on what you ticked & watched today</div>
-    </div>
-  </div>
-
-  <!-- PHASE QUIZ PANEL -->
-  <div class="qz-panel active" id="qzpanel-phase">
-    <div id="qz-phase-start">
-      <div class="qz-scoreboard" id="qz-phase-scoreboard" style="display:none"></div>
-      <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r2);padding:16px;margin-bottom:14px">
-        <div style="font-size:12px;color:var(--text2);line-height:1.8;margin-bottom:12px">
-          <strong style="color:var(--text)">Phase Quiz rules:</strong><br>
-          ✓ 10–15 questions from all phases you have completed<br>
-          ✓ Passing mark: <strong style="color:var(--neon)">90%</strong> (9/10 minimum)<br>
-          ✓ Wrong answers → deep explanation + retest on that topic<br>
-          ✓ Retest: 8–10 scenario questions from your weak topics<br>
-          ✓ Must pass retest to proceed to next phase
-        </div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:14px" id="qz-phase-eligibility">Tick Phase 1 topics to unlock.</div>
-        <button class="btn" id="qz-phase-start-btn" onclick="startPhaseQuiz()" style="width:100%">Start Phase Quiz →</button>
-      </div>
-    </div>
-    <div id="qz-phase-question" style="display:none">
-      <div class="qz-progress-bar"><div class="qz-progress-fill" id="qzp-prog"></div></div>
-      <div style="font-size:10px;font-family:var(--mono);color:var(--text3);margin-bottom:12px" id="qzp-counter">Q1/10</div>
-      <div class="quiz-card">
-        <div style="font-size:9px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px" id="qzp-topic-tag"></div>
-        <div class="quiz-q" id="qzp-q"></div>
-        <div class="quiz-opts" id="qzp-opts"></div>
-        <div class="quiz-expl" id="qzp-expl" style="display:none"></div>
-        <button class="btn btn-ghost" id="qzp-next" onclick="nextPhaseQ()" style="display:none;margin-top:12px">Next Question →</button>
-      </div>
-    </div>
-    <div id="qz-phase-result" style="display:none"></div>
-    <div id="qz-phase-retest" style="display:none">
-      <div class="sec-hdr" style="margin-top:0"><h2>🔁 <span>Retest</span> — Weak Topics</h2></div>
-      <div style="font-size:12px;color:var(--text2);margin-bottom:14px" id="qz-retest-intro"></div>
-      <div class="qz-progress-bar"><div class="qz-progress-fill" id="qzr-prog"></div></div>
-      <div style="font-size:10px;font-family:var(--mono);color:var(--text3);margin-bottom:12px" id="qzr-counter"></div>
-      <div class="quiz-card" id="qz-retest-card" style="display:none">
-        <div style="font-size:9px;font-family:var(--mono);color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px" id="qzr-topic-tag"></div>
-        <div class="quiz-q" id="qzr-q"></div>
-        <div class="quiz-opts" id="qzr-opts"></div>
-        <div class="quiz-expl" id="qzr-expl" style="display:none"></div>
-        <button class="btn btn-ghost" id="qzr-next" onclick="nextRetestQ()" style="display:none;margin-top:12px">Next →</button>
-      </div>
-      <div id="qz-retest-result" style="display:none"></div>
-    </div>
-  </div>
-
-  <!-- TODAY QUIZ PANEL -->
-  <div class="qz-panel" id="qzpanel-today">
-    <div id="qz-today-start">
-      <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:var(--r2);padding:16px;margin-bottom:14px">
-        <div style="font-size:12px;color:var(--text2);line-height:1.8;margin-bottom:12px">
-          <strong style="color:var(--text)">Today's Quiz rules:</strong><br>
-          ✓ Questions ONLY from topics & videos you ticked/watched today<br>
-          ✓ 5–10 questions per session<br>
-          ✓ Passing mark: <strong style="color:var(--neon)">90%</strong><br>
-          ✓ Wrong answers get detailed explanation + retest<br>
-          ✓ Resets every day
-        </div>
-        <div style="font-size:11px;color:var(--text3);margin-bottom:14px" id="qz-today-status">Tick topics or mark videos watched in Learn tab first.</div>
-        <button class="btn" id="qz-today-start-btn" onclick="startTodayQuiz()" style="width:100%">Start Today's Quiz →</button>
-      </div>
-    </div>
-    <div id="qz-today-question" style="display:none">
-      <div class="qz-progress-bar"><div class="qz-progress-fill" id="qzt-prog"></div></div>
-      <div style="font-size:10px;font-family:var(--mono);color:var(--text3);margin-bottom:12px" id="qzt-counter">Q1/5</div>
-      <div class="quiz-card">
-        <div style="font-size:9px;font-family:var(--mono);color:var(--amber);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px" id="qzt-topic-tag"></div>
-        <div class="quiz-q" id="qzt-q"></div>
-        <div class="quiz-opts" id="qzt-opts"></div>
-        <div class="quiz-expl" id="qzt-expl" style="display:none"></div>
-        <button class="btn btn-ghost" id="qzt-next" onclick="nextTodayQ()" style="display:none;margin-top:12px">Next Question →</button>
-      </div>
-    </div>
-    <div id="qz-today-result" style="display:none"></div>
-    <div id="qz-today-retest" style="display:none">
-      <div class="sec-hdr" style="margin-top:0"><h2>🔁 <span>Today's Retest</span></h2></div>
-      <div class="qz-progress-bar"><div class="qz-progress-fill" id="qztr-prog"></div></div>
-      <div style="font-size:10px;font-family:var(--mono);color:var(--text3);margin-bottom:12px" id="qztr-counter"></div>
-      <div class="quiz-card" id="qz-today-retest-card" style="display:none">
-        <div style="font-size:9px;font-family:var(--mono);color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:6px" id="qztr-topic-tag"></div>
-        <div class="quiz-q" id="qztr-q"></div>
-        <div class="quiz-opts" id="qztr-opts"></div>
-        <div class="quiz-expl" id="qztr-expl" style="display:none"></div>
-        <button class="btn btn-ghost" id="qztr-next" onclick="nextTodayRetestQ()" style="display:none;margin-top:12px">Next →</button>
-      </div>
-      <div id="qz-today-retest-result" style="display:none"></div>
-    </div>
-  </div>
-</div>
-
-</div></div>
 <script>
 const S={wl:JSON.parse(localStorage.getItem('ts-wl')||'[]'),favs:JSON.parse(localStorage.getItem('ts-favs')||'[]'),trades:JSON.parse(localStorage.getItem('ts-trades')||'[]'),capital:parseFloat(localStorage.getItem('ts-cap')||'10000'),watchLater:JSON.parse(localStorage.getItem('ts-wl-vids')||'[]'),newsSource:'mc',chartTF:'1W'};
 function save(){localStorage.setItem('ts-wl',JSON.stringify(S.wl));localStorage.setItem('ts-favs',JSON.stringify(S.favs));localStorage.setItem('ts-trades',JSON.stringify(S.trades));localStorage.setItem('ts-cap',S.capital);localStorage.setItem('ts-wl-vids',JSON.stringify(S.watchLater));}
@@ -3502,6 +2343,493 @@ function answerManualQ(btn, chosen) {
 
 
 
+// ════════════════════════════════════════════════════════════
+// PHASE 2 FUNCTIONS
+// ════════════════════════════════════════════════════════════
+
+// ── Study Material Data ──────────────────────────────────────
+var STUDY_DATA = {
+  '1__what_is_the_stock_market__how_': {
+    title: '1. What is the Stock Market? NSE/BSE kya hai?',
+    sections: [
+      { h: 'Stock Market kya hota hai?', body: 'Stock market ek aisi jagah hai jahan companies apne shares (hissa) bechi hain aur investors unhe khareedte hain. Jab tu kisi company ka share khareedta hai, tu us company ka chhota hissa owner ban jaata hai.<br><br><strong>Simple example:</strong> Agar Reliance ke 100 shares hain aur tu 1 share khareedta hai, tu Reliance ka 1% owner ban gaya.' },
+      { h: 'NSE vs BSE — Difference kya hai?', body: '<strong>NSE (National Stock Exchange):</strong> India ka sabse bada exchange — volume zyada, Nifty 50 index iska hai. Zerodha pe NSE default hai.<br><br><strong>BSE (Bombay Stock Exchange):</strong> India ka sabse purana exchange (1875 mein shuru). Sensex index iska hai.<br><br><strong>Practical baat:</strong> 90% traders NSE use karte hain. Same stocks dono pe listed hain, price almost same hoti hai.' },
+      { h: 'Nifty 50 aur Sensex kya hain?', body: '<strong>Nifty 50:</strong> NSE ke top 50 companies ka index — market ki overall health dikhata hai. Agar Nifty up hai, generally market positive hai.<br><br><strong>Sensex:</strong> BSE ke top 30 companies ka index.<br><br>Dono ko thermometer samjho — market ka temperature batate hain.' },
+      { h: 'Practical: Zerodha pe kaise dekhu?', body: '1. Kite app open karo<br>2. "NIFTY 50" search karo<br>3. Chart mein daily movement dekho<br>4. Isse compare karo kisi bhi stock se — agar stock Nifty se zyada bhar raha hai, strong stock hai' }
+    ]
+  },
+  '2__investing_vs_trading_vs_specu': {
+    title: '2. Investing vs Trading vs Speculation',
+    sections: [
+      { h: 'Teen alag approaches', body: '<strong>Investing:</strong> Saalon tak hold karna — fundamentals dekhna (earnings, growth). Warren Buffett style. Risk kam, return steady.<br><br><strong>Trading:</strong> Days se weeks tak hold karna — price action aur charts dekhna. Tu yahi kar raha hai (swing trading).<br><br><strong>Speculation:</strong> "Lagta hai badhega" — bina analysis ke. Gambling ke barabar. Avoid karo.' },
+      { h: 'Trader kaise sochta hai?', body: 'Trader ke liye stock sirf ek price chart hai — company ki value nahi dekhta. Ek trader sochta hai: "Kya is stock ka price meri entry se target tak jaayega meri defined timeframe mein?"<br><br>Har trade mein: Entry + SL + Target + Timeframe pehle se define hona chahiye.' },
+      { h: 'Tere liye kaunsa sahi hai?', body: 'Tu swing trader hai — yeh sabse balanced approach hai shuruat ke liye. Na full-time screen attention chahiye (intraday ki tarah), na saalon ka wait (investing ki tarah).<br><br>2–10 din ka timeframe, daily chart, clear setups — yahi focus kar.' }
+    ]
+  },
+  '3__reading_a_price_chart____ohlc': {
+    title: '3. Price Chart padhna — OHLC kya hai?',
+    sections: [
+      { h: 'OHLC kya hai?', body: '<strong>O — Open:</strong> Uss din market khulne pe price kya thi<br><strong>H — High:</strong> Uss din sabse upar kitni gayi<br><strong>L — Low:</strong> Uss din sabse neeche kitni aayi<br><strong>C — Close:</strong> Market band hote waqt price kya thi<br><br>Yeh charon values ek candlestick mein encode hoti hain.' },
+      { h: 'Chart timeframes — kaunsa use karein?', body: '<strong>1 minute/5 minute:</strong> Intraday traders ke liye — tu ignore kar abhi.<br><br><strong>15 minute/1 hour:</strong> Intraday analysis — abhi nahi.<br><br><strong>Daily chart:</strong> ✅ Swing traders ka primary chart. Ek candle = ek pura trading day.<br><br><strong>Weekly chart:</strong> Bade trend dekhne ke liye — secondary use.' },
+      { h: 'Practical: Zerodha Kite pe chart kaise set karein?', body: '1. Koi bhi stock search karo<br>2. Chart icon pe click karo<br>3. Upar "1D" select karo (Daily timeframe)<br>4. "Candle" chart type select karo (default hota hai mostly)<br>5. Studies mein EMA 20 aur EMA 50 add karo' }
+    ]
+  },
+  '4__candlestick_basics____body__w': {
+    title: '4. Candlestick Basics — Body, Wicks, Colour',
+    sections: [
+      { h: 'Candlestick structure', body: '<strong>Body:</strong> Open aur Close ke beech ka thick part.<br>• Green body = Close > Open (bulls jeete — price upar gayi)<br>• Red body = Close < Open (bears jeete — price neeche gayi)<br><br><strong>Upper Wick (Shadow):</strong> Body se upar ki patli line — High tak. Bears ne price ko wapas neeche kheencha.<br><br><strong>Lower Wick:</strong> Body se neeche ki patli line — Low tak. Bulls ne price ko wapas upar kheencha.' },
+      { h: 'Body size ka matlab?', body: '<strong>Badi body:</strong> Strong move — buyers ya sellers clearly in control the.<br><br><strong>Chhoti body:</strong> Weak move ya indecision — market clear direction mein nahi thi.<br><br><strong>Long wick:</strong> Uss level pe strong rejection — wahan buyers ya sellers bahut active the.' },
+      { h: 'Example: Green candle with long lower wick', body: 'Open: 100, Low: 90, Close: 105, High: 108<br><br>Matlab: Bears ne price 90 tak girayi (lower wick), lekin bulls ne wapas 105 pe close karaya (green body). Bears try kiya but fail hue. Bullish signal.' }
+    ]
+  },
+  '5__key_candlestick_patterns____d': {
+    title: '5. Key Candlestick Patterns — Doji, Hammer, Engulfing',
+    sections: [
+      { h: 'Top 3 patterns jo beginners ko pata hone chahiye', body: '<strong>1. Hammer:</strong> Chhoti body upar + lamba lower wick. Downtrend ke baad = bullish reversal signal. SL hammer ke low ke neeche.<br><br><strong>2. Doji:</strong> Open ≈ Close — cross ya plus sign. Indecision. Akele mat trade karo — context chahiye.<br><br><strong>3. Bullish Engulfing:</strong> Red candle ke baad badi green candle jo puri engulf kare. Downtrend mein = strong buy signal.' },
+      { h: 'Patterns ko kaise use karein?', body: '1. Chart pe trend check karo pehle<br>2. Key support/resistance level identify karo<br>3. Uss level pe agar pattern bane = entry signal<br>4. Volume confirm karo — pattern pe volume average se zyada hona chahiye<br>5. SL pattern ke structure ke neeche lagao' },
+      { h: 'Important warning', body: 'Koi bhi pattern 100% reliable nahi hota. Context king hai:<br>• Pattern kahan bana? (Support ya resistance pe?)<br>• Trend kya hai? (Pattern trend ke against ya saath?)<br>• Volume kya tha?<br><br>Teeno check hoon tabhi trade lo.' }
+    ]
+  },
+  '6__support___resistance____what_': {
+    title: '6. Support & Resistance — Kya hain?',
+    sections: [
+      { h: 'Support kya hai?', body: 'Support ek price level hai jahan price baar baar neeche jaane se ruk jaati hai — buyers wahan active hote hain.<br><br><strong>Simple samajh:</strong> ₹500 pe Infosys teen baar bounce kiya — yeh ₹500 strong support ban gaya. Buyers jaante hain yahan price value mein hai.' },
+      { h: 'Resistance kya hai?', body: 'Resistance ek price level hai jahan price baar baar upar jaane se ruk jaati hai — sellers wahan active hote hain.<br><br><strong>Example:</strong> ₹600 pe teen baar rejection aaya Infosys mein — yeh ₹600 resistance hai. Sellers wahan stock expensive samjhte hain.' },
+      { h: 'Support/Resistance kyun kaam karta hai?', body: 'Psychology ki wajah se: Jinlogon ne ₹500 pe kharida tha, woh phir se wahan khareedna chahte hain. Jinlogon ne ₹600 pe sell kiya tha, woh phir se wahan sell karna chahte hain.<br><br>Ek baar resistance toot jaata hai, woh support ban jaata hai — yeh "role reversal" ek important concept hai.' },
+      { h: 'Example: Trade setup', body: 'Stock ₹500 support pe bounce kar raha hai (hammer candle bana):<br>• Entry: ₹505 (confirmation ke baad)<br>• SL: ₹492 (support ke neeche)<br>• Target: ₹560 (next resistance)<br>• RR: 13 point risk, 55 point reward = 1:4.2 ✅' }
+    ]
+  },
+  '7__how_to_draw_s_r_lines_on_zero': {
+    title: '7. Zerodha Kite pe S&R lines kaise draw karein?',
+    sections: [
+      { h: 'Step by step guide', body: '1. Kite app/web open karo<br>2. Stock ka daily chart open karo<br>3. Left toolbar mein "Horizontal Line" tool select karo (— icon)<br>4. Chart pe click karo wahan jahan price ne multiple times bounce kiya<br>5. Line ko drag karke exact level pe set karo<br>6. Double click karo line pe — color aur label set kar sakte ho' },
+      { h: 'Kahan se draw karein?', body: '<strong>Strong S&R level ki 3 properties:</strong><br>1. <strong>Touches:</strong> Price ne us level ko minimum 2–3 baar touch kiya ho<br>2. <strong>Time:</strong> Purana level zyada reliable — 3 month se zyada purana touch<br>3. <strong>Volume:</strong> S&R touch pe volume average se zyada tha' },
+      { h: 'Common mistakes', body: '• Bahut zyada lines mat kheeencho — sirf 2–3 key levels kaafi<br>• Exact price nahi, zone hoti hai S&R — ₹500 nahi, ₹495–505 zone<br>• Recent levels zyada important hote hain old levels se' }
+    ]
+  },
+  '8__trend_lines____uptrend__downt': {
+    title: '8. Trend Lines — Uptrend, Downtrend, Sideways',
+    sections: [
+      { h: 'Teen types of trends', body: '<strong>Uptrend:</strong> Higher Highs (HH) + Higher Lows (HL). Price seedhi upar nahi jaati — steps mein jaati hai upar.<br><br><strong>Downtrend:</strong> Lower Highs (LH) + Lower Lows (LL). Price steps mein neeche jaati hai.<br><br><strong>Sideways:</strong> No clear direction — price ek range mein bounce karta rehta hai. Swing traders ke liye range ka upper band = resistance, lower band = support.' },
+      { h: 'Trend line kaise draw karein?', body: '<strong>Uptrend line:</strong> Do ya zyada Higher Lows ko connect karo — line support ka kaam karti hai.<br><br><strong>Downtrend line:</strong> Do ya zyada Lower Highs ko connect karo — line resistance ka kaam karti hai.<br><br><strong>Rule:</strong> Minimum 2 points se line draw karo, 3rd touch = confirmation.' },
+      { h: 'Trend mein trade kaise lein?', body: '"Trend is your friend" — hamesha trend ke direction mein trade lo:<br>• Uptrend mein = sirf long (buy) trades<br>• Downtrend mein = sirf short (sell) trades ya sideline<br>• Sideways mein = range boundaries pe trade ya avoid<br><br><strong>Beginner rule:</strong> Agar trend clear nahi, trade mat lo.' }
+    ]
+  },
+  '9__volume_analysis____why_it_val': {
+    title: '9. Volume Analysis — Why it validates price moves',
+    sections: [
+      { h: 'Volume kya hai?', body: 'Volume = uss din kitne shares buy/sell hue. Yeh market ki "conviction" dikhata hai.<br><br><strong>High volume:</strong> Zyada log us move mein involved the — move genuine hai.<br><strong>Low volume:</strong> Kam log involved — move fake ya weak ho sakta hai.' },
+      { h: 'Volume + Price = Powerful signal', body: '<strong>Breakout + High volume = ✅ Genuine breakout</strong> — enter karo<br><strong>Breakout + Low volume = ⚠️ Fake breakout likely</strong> — wait karo<br><br><strong>Price gire + High volume = 🚨 Strong selling</strong> — avoid longs<br><strong>Price gire + Low volume = 🤔 Weak selling</strong> — possibly buying opportunity' },
+      { h: 'Zerodha pe volume kaise dekhu?', body: '1. Daily chart kholo<br>2. Neeche volume bars automatically dikhengi<br>3. Average volume (20-day) ke liye: Studies → Volume MA (20) add karo<br>4. Agar aaj ki bar average se upar hai = above average volume<br><br>Rule: Breakout pe volume should be 1.5x–2x average.' }
+    ]
+  },
+  '10__moving_averages____20_ema_an': {
+    title: '10. Moving Averages — 20 EMA aur 50 EMA',
+    sections: [
+      { h: 'EMA kya hai?', body: 'EMA (Exponential Moving Average) = Last N days ki prices ka weighted average, recent prices ko zyada weight milta hai.<br><br><strong>20 EMA:</strong> Last 20 days ka average — short-term trend<br><strong>50 EMA:</strong> Last 50 days ka average — medium-term trend' },
+      { h: '20 EMA ka use', body: '<strong>Price above 20 EMA = Bullish bias</strong> — longs prefer karo<br><strong>Price below 20 EMA = Bearish bias</strong> — avoid longs<br><br><strong>Swing trade rule:</strong> Price 20 EMA ke upar ho aur 20 EMA bhi upar ja rahi ho — tab hi long setup dhundho.<br><br>20 EMA support ka kaam bhi karta hai uptrend mein — price touch kare aur bounce kare = entry opportunity.' },
+      { h: '20 vs 50 EMA Crossover', body: '<strong>Golden Cross:</strong> 20 EMA, 50 EMA ke upar se cross kare = Bullish signal<br><strong>Death Cross:</strong> 20 EMA, 50 EMA ke neeche se cross kare = Bearish signal<br><br>Crossovers lagging hote hain — direct entry signal nahi, sirf trend confirmation.' },
+      { h: 'Zerodha pe add kaise karein?', body: '1. Chart kholo<br>2. Studies (f(x) icon) click karo<br>3. "EMA" search karo<br>4. Period 20 set karo, green color<br>5. Dobara add karo — period 50, orange color<br>6. Save layout karo' }
+    ]
+  },
+  // Phase 2 topics
+  '1__what_is_consolidation____flat': {
+    title: '1. Consolidation kya hai?',
+    sections: [
+      { h: 'Consolidation kya hota hai?', body: 'Jab price ek tight range mein move kare — na clearly upar na neeche — ise consolidation kehte hain. Price "rest" le rahi hoti hai ek bade move ke baad.<br><br>Chart pe flat rectangle jaisa dikhta hai. Buyers aur sellers equal strength pe hote hain.' },
+      { h: 'Consolidation kyun important hai?', body: 'Consolidation ke baad ek bada move aata hai — ya upar (breakout) ya neeche (breakdown).<br><br>Swing trader ke liye consolidation = opportunity. Jab range tight ho aur breakout aaye, woh entry point hota hai.' },
+      { h: 'Pehchan kaise karein?', body: '1. Price 5–15 din se ek range mein hai<br>2. Highs roughly same level pe<br>3. Lows roughly same level pe<br>4. Volume consolidation mein kam hota hai<br>5. Breakout pe volume bade — wahi genuine move' }
+    ]
+  },
+  '2__real_breakout_vs_fake_breakou': {
+    title: '2. Real Breakout vs Fake Breakout',
+    sections: [
+      { h: 'Real Breakout ki pehchan', body: '<strong>1. Volume:</strong> Breakout candle pe volume average ka 1.5x–2x hona chahiye<br><strong>2. Closing:</strong> Candle resistance ke clearly upar close kare — not just wick<br><strong>3. Retest:</strong> Bahut baar price wapas resistance level ko test karti hai aur wahan se bounce karti hai — yeh confirmation hai<br><strong>4. Market aligned:</strong> Nifty bhi uss din positive ho' },
+      { h: 'Fake Breakout ke signs', body: '<strong>1. Low volume:</strong> Volume average se kam — institutions nahi aaye<br><strong>2. Wick breakout:</strong> Wick resistance ke upar gayi lekin body nahi — rejection<br><strong>3. Same day reversal:</strong> Price resistance ke upar gayi aur wapas neeche aayi same candle mein<br><strong>4. Market against:</strong> Nifty strongly down tha uss din' },
+      { h: 'Fake breakout se kaise bachein?', body: '1. Wait karo — confirmation candle ka wait karo breakout candle ke baad<br>2. Volume check karo hamesha<br>3. Close dekho — wick break nahi, body break chahiye<br>4. Market direction dekho<br><br><strong>Better to miss a trade than to enter a fake breakout.</strong>' }
+    ]
+  },
+  '3__volume_confirmation_on_breako': {
+    title: '3. Volume Confirmation on Breakouts',
+    sections: [
+      { h: 'Volume aur breakout ka relation', body: 'Volume ek breakout ki "strength" dikhata hai. Bina volume ke breakout = bina engine ki gaadi.<br><br><strong>Analogy:</strong> Ek dam bhari rally mein agar sirf 10 logon ne participate kiya, woh rally genuine nahi. Agar 10,000 log aaye, woh real movement hai.' },
+      { h: 'Volume kaise measure karein?', body: '1. 20-day average volume calculate karo (Zerodha mein Volume MA add karo)<br>2. Breakout day ki volume compare karo average se<br>3. 1.5x average = acceptable, 2x+ = strong confirmation<br><br><strong>Example:</strong> TCS ka average volume 20 lakh shares/day. Breakout pe 38 lakh volume = 1.9x = valid breakout.' },
+      { h: 'Special case: Dry up before breakout', body: 'Breakout se pehle ke 2–3 din mein volume bahut kam hona = "volume dry up" = accumulation ho raha hai. Koi bada player quietly khareed raha hai. Yeh bullish sign hai breakout se pehle.' }
+    ]
+  },
+  '4__entry__sl__target_for_breakou': {
+    title: '4. Breakout Setup: Entry, SL, Target',
+    sections: [
+      { h: 'Exact entry kahan lein?', body: '<strong>Option 1 (Aggressive):</strong> Breakout candle ke upar kuch points pe — jaise resistance 500 tha toh 502–503 pe buy.<br><br><strong>Option 2 (Conservative) ✅ Recommended:</strong> Breakout ke baad retest ka wait karo. Price 500 ke upar jaaye, phir wapas 500 pe aaye aur bounce kare — tab entry lo. Yeh safer hai.' },
+      { h: 'SL kahan lagaen?', body: '<strong>Breakout trade mein SL:</strong> Consolidation ke low ke neeche.<br><br><strong>Example:</strong> Stock 480–500 mein consolidate kar raha tha, 500 breakout hua.<br>• Entry: 502<br>• SL: 477 (consolidation low ke neeche ₹3)<br><br>Rationale: Agar price consolidation ke andar wapas jaati hai, breakout fail ho gaya.' },
+      { h: 'Target kahan set karein?', body: '<strong>Method 1:</strong> Agle resistance level tak<br><strong>Method 2:</strong> Consolidation height = target (measured move)<br><br>Example: 480–500 consolidation (₹20 height). Breakout 500 pe. Target = 500 + 20 = 520.<br><br>Minimum RR 1:2 check karo hamesha pehle.' }
+    ]
+  },
+  '5__what_is_a_pullback_and_why_it': {
+    title: '5. Pullback kya hai aur kyun hota hai?',
+    sections: [
+      { h: 'Pullback kya hai?', body: 'Uptrend mein price seedha upar nahi jaati — steps mein jaati hai. Ek strong upar move ke baad price thodi neeche aati hai (pullback/retracement), phir phir upar jaati hai.<br><br>Pullback = temporary counter-trend move within the main trend.' },
+      { h: 'Pullback kyun hota hai?', body: '1. Profit booking: Jinlogon ne neeche se kharida tha woh thoda profit lete hain<br>2. New buyers wait karte hain achhe price ke liye<br>3. Yeh natural market breathing hai — harami sustainable nahi hoti<br><br><strong>Key insight:</strong> Pullback buyers ke liye opportunity hai uptrend mein low-risk entry lene ki.' },
+      { h: 'Pullback vs Reversal — difference?', body: '<strong>Pullback:</strong> Chhota counter-move, trend intact rehta hai. Price phir wapas trend direction mein jaati hai.<br><br><strong>Reversal:</strong> Trend complete change ho jaata hai — new lows/highs banne lagte hain.<br><br>Pehchan: Pullback mein Higher Lows structure intact rehta hai. Reversal mein Lower Low banta hai.' }
+    ]
+  },
+  '6__pullback_to_support_in_uptren': {
+    title: '6. Pullback to Support — Identification',
+    sections: [
+      { h: 'Perfect pullback setup kya hota hai?', body: 'Uptrend mein stock:<br>1. New high banata hai<br>2. Phir pullback karta hai<br>3. Support level pe aake ruk jaata hai (20 EMA ya previous resistance jo ab support ban gayi)<br>4. Wahan reversal candle banata hai (hammer, bullish engulfing)<br>5. Volume pullback mein kam hota hai, bounce pe badhta hai<br><br>Yeh ek high-probability long setup hai.' },
+      { h: 'Support levels jahan pullback ruk sakta hai', body: '<strong>1. 20 EMA:</strong> Strong uptrend mein price 20 EMA pe aake bounce karti hai<br><strong>2. Previous resistance (now support):</strong> Role reversal ke baad<br><strong>3. Trend line support:</strong> Uptrend line pe touch<br><strong>4. Fibonacci 38.2%, 50%, 61.8%:</strong> Common retracement levels<br><br>Zyada support confluence = stronger setup.' },
+      { h: 'Real example (conceptual)', body: 'HDFC Bank:<br>• Uptrend mein tha: 1400 → 1600 (strong rally)<br>• Pullback: 1600 → 1520 (20 EMA level)<br>• 1520 pe hammer candle bana, volume low tha pullback mein<br>• Next day strong green candle = entry signal<br>• Entry: 1535, SL: 1505, Target: 1620<br>• RR: ₹30 risk, ₹85 reward = 1:2.8 ✅' }
+    ]
+  },
+  '7__reversal_candle_confirmation_': {
+    title: '7. Reversal Candle Confirmation at Support',
+    sections: [
+      { h: 'Kyun confirmation zaroori hai?', body: 'Sirf support pe aana kaafi nahi. Price support tod bhi sakti hai. Confirmation candle batata hai ki support hold ho raha hai aur buyers wapas aa rahe hain.<br><br><strong>Rule:</strong> Support pe aao → confirmation candle ka wait karo → phir entry lo.' },
+      { h: 'Best confirmation candles at support', body: '<strong>1. Hammer:</strong> Long lower wick — bears try kiya fail hue<br><strong>2. Bullish Engulfing:</strong> Red candle ke baad badi green — complete sentiment shift<br><strong>3. Dragonfly Doji:</strong> Long lower wick, close near high — powerful<br><strong>4. Morning Star:</strong> Teen candle pattern — most reliable<br><br>Volume confirmation = hamesha zaroori.' },
+      { h: 'Confirmation kaise trade karein?', body: 'Wait: Price support pe aaye<br>Wait: Reversal candle complete ho (candle close hone pe)<br>Enter: Next candle ke open pe ya confirmation candle ke high ke upar<br>SL: Support ke neeche (2–3% neeche)<br>Target: Previous high ya agle resistance<br><br>Patience hi sabse important skill hai.' }
+    ]
+  },
+  '8__entry__sl__target_for_pullbac': {
+    title: '8. Pullback Setup: Entry, SL, Target',
+    sections: [
+      { h: 'Entry strategy', body: '<strong>Conservative (Recommended):</strong> Reversal candle complete hone ke baad next candle ke open pe entry lo.<br><br><strong>Example:</strong> Hammer candle 1520 pe bana (low 1505, high 1530, close 1525).<br>Next day: Entry at 1527 (open pe)<br><br>Alternatively: Hammer candle ke high (1530) ke break pe buy order lagao — breakout style pullback entry.' },
+      { h: 'SL placement', body: '<strong>Pullback trade SL:</strong> Reversal candle ke low ke neeche 1–2%.<br><br><strong>Example:</strong><br>Hammer low: 1505<br>SL: 1497 (hammer low se ₹8 neeche)<br><br><strong>Alternative:</strong> Support zone ke neeche SL lagao — agar 1520 support hai toh SL 1510 pe.' },
+      { h: 'Target calculation', body: '<strong>Target 1 (Conservative):</strong> Previous swing high tak<br><strong>Target 2 (Aggressive):</strong> Measured move (entry se distance = support se target)<br><br>Example:<br>Entry: 1527, SL: 1497 (₹30 risk)<br>Target: 1620 (₹93 reward)<br>RR = 1:3.1 ✅ Excellent<br><br>Trailing SL use karo agar trend strong ho.' }
+    ]
+  },
+  // Phase 3 topics
+  '1__why_risk_management_is_the__1': {
+    title: '1. Risk Management #1 Skill kyun hai?',
+    sections: [
+      { h: 'Ek brutal truth', body: '100 trades mein se 60 winning = achha trader. Lekin agar har loss mein 5% capital gaya aur har win mein 1% aaya, tu bankrupt ho jaayega.<br><br>Trading mein survive karna = profit karna. Jo survive karta hai woh eventually seekh jaata hai. Jo manage nahi karta woh account khaali ho jaata hai.' },
+      { h: 'Math of ruin', body: '10 consecutive losses:<br>• No risk management: ₹10,000 → potentially ₹0<br>• 2% rule: ₹10,000 → ₹8,171 (still in game!)<br><br>2% rule: Kabhi bhi ek trade mein total capital ka 2–3% se zyada risk mat lo.<br><br>₹10,000 capital pe = max ₹200–300 risk per trade.' },
+      { h: 'Risk management ke 3 pillars', body: '<strong>1. Position Sizing:</strong> Qty calculate karo — kitne shares lene hain<br><strong>2. Stop Loss:</strong> PEHLE decide karo — emotional decision nahi<br><strong>3. Daily Loss Limit:</strong> Ek din mein 5% se zyada loss = trading band karo aaj ke liye' }
+    ]
+  },
+  '2__position_sizing____how_many_s': {
+    title: '2. Position Sizing — Kitne Shares Khareedein?',
+    sections: [
+      { h: 'Formula', body: '<strong>Shares = Max Risk Amount ÷ SL Distance per Share</strong><br><br>Step 1: Max risk = Capital × Risk%<br>Step 2: SL distance = Entry price – SL price<br>Step 3: Shares = Step 1 ÷ Step 2' },
+      { h: 'Example', body: 'Capital: ₹10,000<br>Risk per trade: 2% = ₹200<br>Stock: Tata Motors @ ₹700<br>SL: ₹670 (₹30 distance)<br><br>Shares = ₹200 ÷ ₹30 = 6.67 → Round down = 6 shares<br>Position value = 6 × ₹700 = ₹4,200<br>Actual risk = 6 × ₹30 = ₹180 ✅ (under ₹200 limit)' },
+      { h: 'Kya galat karte hain beginners?', body: '❌ "Mujhe lagta hai ye ₹800 tak jaayega, isliye 14 shares le leta hoon"<br>→ No position sizing = emotional bet<br><br>✅ Formula use karo hamesha — feelings se position size mat decide karo.<br><br>Tera Risk Calculator tab pe yahi kaam karta hai — use it every trade.' }
+    ]
+  },
+  '3__the_2_3__rule_for___10_000_ca': {
+    title: '3. 2-3% Rule — ₹10,000 Capital ke liye',
+    sections: [
+      { h: 'Rule kya hai?', body: 'Ek single trade mein apne total capital ka maximum 2–3% hi risk karo.<br><br>₹10,000 capital pe:<br>• 2% rule = ₹200 max risk per trade<br>• 3% rule = ₹300 max risk per trade<br><br><strong>Recommendation:</strong> Shuruat mein 1–2% rakho. Confidence aur track record ke saath badhao.' },
+      { h: 'Kyun 2% — koi aur kyun nahi?', body: 'Agar tu 10 consecutive losses le (jo ho sakta hai initially):<br><br>• 2% rule: ₹10,000 → ₹8,171 (18% drawdown — recover possible)<br>• 5% rule: ₹10,000 → ₹5,987 (40% drawdown — psychologically devastating)<br>• 10% rule: ₹10,000 → ₹3,487 (65% down — almost impossible to recover)<br><br>Small losses = small lessons. Big losses = game over.' },
+      { h: '₹10,000 capital pe practical application', body: '₹200 max risk pe kitne trades?<br><br>• SL ₹5/share → 40 shares max<br>• SL ₹10/share → 20 shares max<br>• SL ₹20/share → 10 shares max<br>• SL ₹50/share → 4 shares max<br><br>Nifty jaise expensive stocks ke liye SL distance ₹50–100+ hoga, isliye qty bahut kam hogi — aur yeh sahi hai.' }
+    ]
+  },
+  '4__correct_stop_loss_placement': {
+    title: '4. Correct Stop Loss Placement',
+    sections: [
+      { h: 'SL placement ke 3 methods', body: '<strong>1. Structure-based (Best):</strong> Previous swing low ke neeche (longs ke liye). Market structure respect karta hai.<br><br><strong>2. Percentage-based:</strong> Entry se 3–5% neeche. Simple but sometimes too tight ya too wide.<br><br><strong>3. ATR-based:</strong> Average True Range se. Advanced — Phase 4 mein seekhoge.' },
+      { h: 'Common SL placement mistakes', body: '❌ Round number pe SL (₹500 pe) — bahut logon ka SL wahan hota hai, market wahan tak jaakti hai<br>❌ Bahut tight SL — noise se hit ho jaata hai<br>❌ Bahut wide SL — risk:reward kharab ho jaata hai<br>❌ SL nahi lagate — worst mistake' },
+      { h: 'Golden rule', body: '<strong>SL pehle decide karo, entry baad mein.</strong><br><br>Process:<br>1. Chart pe setup identify karo<br>2. Natural SL point dhundho (swing low ke neeche)<br>3. SL distance calculate karo<br>4. Position size calculate karo<br>5. Target check karo — RR minimum 1:2 hai?<br>6. Agar sab theek toh entry lo<br><br>Agar RR 1:2 nahi banta → trade skip karo.' }
+    ]
+  },
+  '5__risk_reward_ratio____always_m': {
+    title: '5. Risk-Reward Ratio — Minimum 1:2 kyun?',
+    sections: [
+      { h: 'RR ratio kya hai?', body: 'Risk:Reward = Kitna risk le rahe ho : Kitna reward milega<br><br><strong>Example:</strong><br>Entry: ₹100, SL: ₹95 (₹5 risk), Target: ₹110 (₹10 reward)<br>RR = 1:2 (₹5 risk ke liye ₹10 reward)<br><br>Minimum acceptable RR: 1:2' },
+      { h: 'Math kyun 1:2 compulsory hai', body: 'Agar tera win rate 50% hai (sirf toss) aur RR 1:2 hai:<br><br>10 trades: 5 win × ₹200 = ₹1,000<br>5 loss × ₹100 = ₹500<br><strong>Net profit: +₹500 ✅</strong><br><br>50% win rate bhi profitable ho sakti hai 1:2 RR se.<br><br>Lekin agar RR 1:1 hai aur win rate 50% = breakeven (brokerage ke baad loss).' },
+      { h: 'Practical check', body: 'Har trade ke pehle:<br>1. Entry price note karo<br>2. SL price note karo → Risk = Entry – SL<br>3. Target price note karo → Reward = Target – Entry<br>4. Reward ÷ Risk = RR<br>5. Agar RR < 2 → SKIP TRADE<br><br>Tera Risk Calculator yeh automatically karta hai.' }
+    ]
+  },
+  '6__position_size_formula__maxris': {
+    title: '6. Position Size Formula: MaxRisk ÷ SL Distance',
+    sections: [
+      { h: 'Complete formula with example', body: '<strong>Formula:</strong> Shares = (Capital × Risk%) ÷ SL Distance<br><br>Capital: ₹12,000<br>Risk: 2% = ₹240<br>Entry: ₹450 (some stock)<br>SL: ₹430 (SL distance = ₹20)<br>Target: ₹500 (reward = ₹50)<br>RR: 50/20 = 2.5 ✅<br><br>Shares = ₹240 ÷ ₹20 = <strong>12 shares</strong><br>Position value = 12 × ₹450 = ₹5,400<br>Max loss = 12 × ₹20 = ₹240 ✅' },
+      { h: 'Fractional shares problem', body: 'Formula se 7.3 shares aaye → hamesha round DOWN karo → 7 shares<br><br>Kabhi bhi round UP mat karo — woh risk limit exceed kar dega.<br><br>Agar 1 share bhi risk limit ke andar nahi aata (like Nifty Bees, Reliance etc.) → trade skip karo ya position size wala stock choose karo.' },
+      { h: 'Quick mental calculation', body: 'Field mein fast decide karna ho:<br><br>₹10K capital, 2% risk = ₹200 budget<br>SL ₹10 → 20 shares<br>SL ₹20 → 10 shares<br>SL ₹25 → 8 shares<br>SL ₹40 → 5 shares<br>SL ₹50 → 4 shares<br><br>Practice karo yeh mentally — Risk tab open karo confirmation ke liye.' }
+    ]
+  },
+  '7__trailing_stop_loss____locking': {
+    title: '7. Trailing Stop Loss — Profits Lock Karna',
+    sections: [
+      { h: 'Trailing SL kya hai?', body: 'Normal SL fixed hota hai. Trailing SL move karta hai — price ke saath upar.<br><br>Jaise price badhti hai, SL bhi badhta jaata hai — profit lock hota jaata hai.<br><br><strong>Key benefit:</strong> Downside limited + upside unlimited. Trade khud hi close ho jaata hai jab momentum khatam hota hai.' },
+      { h: 'Trailing SL kaise lagaen?', body: '<strong>Method 1 — Swing based:</strong> Har naya Higher Low bane, SL wahan le aao.<br><br><strong>Method 2 — EMA based:</strong> Jab tak price 20 EMA ke upar hai, hold karo. 20 EMA ke neeche close = exit.<br><br><strong>Method 3 — Percentage based:</strong> Entry se jo profit hua uska 50% lock karo hamesha. (₹200 profit → SL ₹100 profit pe)' },
+      { h: 'Example', body: 'Entry: ₹500, Initial SL: ₹480<br><br>Price → ₹520: Trail SL to ₹500 (entry protect)<br>Price → ₹540: Trail SL to ₹520 (₹20 profit locked)<br>Price → ₹560: Trail SL to ₹540 (₹40 profit locked)<br>Price falls to ₹535: Stop hit → Exit at ₹540<br><br>Result: ₹40 profit instead of original ₹60 target — but caught most of the move ✅' }
+    ]
+  },
+  '8__zerodha_brokerage_impact_on_s': {
+    title: '8. Zerodha Brokerage — ₹10,000 Capital pe Impact',
+    sections: [
+      { h: 'Zerodha charges breakdown', body: '<strong>Equity Delivery (buy and hold overnight):</strong><br>• Brokerage: ZERO ✅<br>• STT: 0.1% on buy + sell both sides<br>• Exchange fee: 0.00325%<br>• GST: 18% on brokerage + exchange fee<br>• SEBI charges: ₹10 per crore<br><br><strong>Intraday:</strong> ₹20 per order (ya 0.03%, whichever lower)' },
+      { h: 'Real example', body: 'Swing trade: Buy ₹5,000 worth shares, Sell ₹5,500 (₹500 profit)<br><br>• Brokerage: ₹0<br>• STT: ₹5 + ₹5.5 = ₹10.5<br>• Exchange fee: ₹0.33 + ₹0.36 = ₹0.69<br>• GST: ₹0.12<br>• SEBI: negligible<br><br>Total charges: ~₹12<br>Net profit: ₹500 – ₹12 = <strong>₹488 ✅</strong><br><br>Swing trading charges negligible hain — ek aur reason swing prefer karein.' },
+      { h: '₹10K capital pe brokerage optimization', body: 'Swing trading mein charges almost negligible hain (delivery = zero brokerage).<br><br>Intraday karo toh ₹20/order lagega — ₹200 risk pe ₹40 charges = 20% risk sirf charges! Isiliye chhote capital ke saath intraday avoid karo.<br><br>Conclusion: ₹10K–15K capital ke saath swing trading only — brokerage mathematics clearly better hai.' }
+    ]
+  }
+};
+
+function openStudy(key) {
+  var data = STUDY_DATA[key];
+  if (!data) {
+    // Try partial match
+    var keys = Object.keys(STUDY_DATA);
+    var match = keys.find(function(k) { return k.startsWith(key.slice(0,15)); });
+    if (match) data = STUDY_DATA[match];
+  }
+  if (!data) {
+    document.getElementById('studyTitle').textContent = 'Content coming soon...';
+    document.getElementById('studyBody').innerHTML = '<p style="color:var(--text3);font-size:12px">Is topic ka detailed material jald aayega.</p>';
+    document.getElementById('studyOverlay').style.display = 'block';
+    return;
+  }
+  document.getElementById('studyTitle').textContent = data.title;
+  document.getElementById('studyBody').innerHTML = data.sections.map(function(s) {
+    return '<div class="study-sec"><h3>' + s.h + '</h3><div>' + s.body + '</div></div>';
+  }).join('');
+  document.getElementById('studyOverlay').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeStudy() {
+  document.getElementById('studyOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// ── Pre-Entry Checklist ───────────────────────────────────────
+function toggleGate(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle('on');
+  el.textContent = el.classList.contains('on') ? '✓' : '';
+  updateGateVerdict();
+}
+
+function updateGateVerdict() {
+  var total = 7;
+  var checked = 0;
+  for (var i = 1; i <= total; i++) {
+    var el = document.getElementById('gc' + i);
+    if (el && el.classList.contains('on')) checked++;
+  }
+  var v = document.getElementById('gateVerdict');
+  if (!v) return;
+  if (checked === total) {
+    v.textContent = '✅ Sab ' + total + '/' + total + ' complete — Trade lene ke liye READY!';
+    v.style.background = 'rgba(0,255,148,0.1)';
+    v.style.color = 'var(--neon)';
+    v.style.border = '1px solid rgba(0,255,148,0.3)';
+  } else {
+    v.textContent = '⬜ ' + checked + '/' + total + ' complete — ' + (total - checked) + ' aur items baaki';
+    v.style.background = 'var(--bg3)';
+    v.style.color = 'var(--text3)';
+    v.style.border = 'none';
+  }
+}
+
+function resetGate() {
+  for (var i = 1; i <= 7; i++) {
+    var el = document.getElementById('gc' + i);
+    if (el) { el.classList.remove('on'); el.textContent = ''; }
+  }
+  updateGateVerdict();
+}
+
+// ── Progress Guidance Engine ──────────────────────────────────
+function updateGuidance() {
+  var msg = document.getElementById('guidanceMsg');
+  var action = document.getElementById('guidanceAction');
+  if (!msg) return;
+
+  var trades = S.trades || [];
+  var closedTrades = trades.filter(function(t) { return t.exit; });
+  var wins = closedTrades.filter(function(t) {
+    var p = (parseFloat(t.exit) - parseFloat(t.entry)) * parseInt(t.qty) * (t.dir === 'SHORT' ? -1 : 1);
+    return p > 0;
+  }).length;
+  var winRate = closedTrades.length > 0 ? (wins / closedTrades.length * 100) : 0;
+
+  // Check phase progress
+  var p1done = document.querySelectorAll('#p1-topics li.done').length;
+  var p1total = document.querySelectorAll('#p1-topics li').length || 10;
+  var p1pct = p1total > 0 ? (p1done / p1total * 100) : 0;
+
+  var p2done = document.querySelectorAll('#p2-topics li.done').length;
+  var p2total = document.querySelectorAll('#p2-topics li').length || 10;
+
+  var guidance, nextAction;
+
+  if (p1pct < 50) {
+    guidance = '📚 Tu Phase 1 ke <strong>' + p1done + '/' + p1total + ' topics</strong> complete kar chuka hai. Foundation strong karo — yeh sabse important phase hai.';
+    nextAction = '→ Aaj ka goal: Phase 1 mein 2 aur topics complete karo. 📖 Read buttons use karo!';
+  } else if (p1pct < 100) {
+    guidance = '🔥 Phase 1 mein <strong>' + p1done + '/' + p1total + '</strong> done! Almost there. Sirf <strong>' + (p1total - p1done) + ' topics</strong> baaki hain.';
+    nextAction = '→ Phase 1 complete karo pehle — phir paper trading shuru.';
+  } else if (closedTrades.length < 5) {
+    guidance = '✅ Phase 1 complete! Ab paper trading time hai. Abhi tak <strong>' + closedTrades.length + ' closed trades</strong> log ki hain.';
+    nextAction = '→ 5 paper trades complete karo → Journal tab mein log karo.';
+  } else if (closedTrades.length < 10) {
+    guidance = '📈 Achha! <strong>' + closedTrades.length + ' paper trades</strong> complete. Win rate: <strong>' + winRate.toFixed(0) + '%</strong>. Phase 2 shuru karo.';
+    nextAction = p2done > 0 ? '→ Phase 2: ' + p2done + '/' + p2total + ' topics done. Continue karo!' : '→ Phase 2 ke topics start karo — Learn tab mein.';
+  } else if (closedTrades.length < 20 || winRate < 55) {
+    guidance = '💪 <strong>' + closedTrades.length + ' trades, ' + winRate.toFixed(0) + '% win rate.</strong> Paper trading continue karo — consistency build karo.';
+    nextAction = winRate < 55 ? '→ Win rate 55%+ achieve karo consistently — tab live trading sochna.' : '→ 20 trades complete karo with consistent results.';
+  } else {
+    guidance = '🚀 <strong>' + closedTrades.length + ' trades, ' + winRate.toFixed(0) + '% win rate!</strong> Paper trading mein consistent ho. Live trading ke baare mein soch sakta hai.';
+    nextAction = '→ Choti position size (1 share) se live trading try karo. Risk management strict rakho.';
+  }
+
+  msg.innerHTML = guidance;
+  if (action) action.textContent = nextAction;
+}
+
+// ── Trending Stocks (Claude AI powered) ──────────────────────
+function loadTrendingStocks() {
+  var body = document.getElementById('trendingBody');
+  if (!body) return;
+  body.innerHTML = '<div style="text-align:center;padding:16px;color:var(--text3);font-size:12px">⟳ Claude AI se trending stocks fetch ho rahe hain...</div>';
+
+  var newsItems = [];
+  try {
+    var store = loadNewsStore();
+    var allSrcs = ['mc','mint','bl','ndtv','bs','geo'];
+    allSrcs.forEach(function(src) {
+      if (store[src]) {
+        var recent = store[src].filter(function(n) {
+          return (Date.now() - (n.storedAt || 0)) < 7 * 86400000;
+        });
+        newsItems = newsItems.concat(recent.slice(0, 10));
+      }
+    });
+  } catch(e) {}
+
+  var prompt = newsItems.length > 0
+    ? 'Based on these recent Indian market news headlines, identify the top 5 NSE stocks most likely to be trending this week. For each stock give: symbol, company name, reason in Hinglish (2 lines max), sentiment (bullish/bearish/neutral). Headlines: ' + newsItems.slice(0,15).map(function(n){ return n.title; }).join(' | ') + '. Respond ONLY as JSON array: [{"sym":"TATAMOTORS","name":"Tata Motors","reason":"...","sent":"bullish"}]'
+    : 'List top 5 NSE stocks likely trending this week based on general market conditions in India June 2025. Include banking, IT, auto sectors. Respond ONLY as JSON array: [{"sym":"SYMBOL","name":"Company Name","reason":"Hinglish reason in 1-2 lines","sent":"bullish/bearish/neutral"}]';
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 600,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  }).then(function(r) { return r.json(); }).then(function(data) {
+    var text = '';
+    if (data.content && data.content[0]) text = data.content[0].text || '';
+    var jsonMatch = text.match(/\[[\s\S]*\]/);
+    if (!jsonMatch) throw new Error('No JSON');
+    var stocks = JSON.parse(jsonMatch[0]);
+    renderTrendingStocks(stocks);
+  }).catch(function() {
+    // Fallback: static trending stocks
+    renderTrendingStocks([
+      { sym: 'HDFCBANK', name: 'HDFC Bank', reason: 'Banking sector mein FII buying ho rahi hai. Rate cut expectations se banking stocks positive.', sent: 'bullish' },
+      { sym: 'INFY', name: 'Infosys', reason: 'Q1 results aane wale hain. IT sector dollar earnings pe focus. Mixed signals.', sent: 'neutral' },
+      { sym: 'TATAMOTORS', name: 'Tata Motors', reason: 'EV segment mein strong volume growth. JLR numbers positive rahe.', sent: 'bullish' },
+      { sym: 'RELIANCE', name: 'Reliance Industries', reason: 'Jio aur Retail segment strong. Telecom tariff hike se revenue boost.', sent: 'bullish' },
+      { sym: 'SUNPHARMA', name: 'Sun Pharma', reason: 'Pharma defensive play. Market uncertain hone pe pharma outperform karta hai.', sent: 'neutral' }
+    ]);
+  });
+}
+
+function renderTrendingStocks(stocks) {
+  var body = document.getElementById('trendingBody');
+  if (!body) return;
+  body.innerHTML = stocks.map(function(s, i) {
+    var sentColor = s.sent === 'bullish' ? 'var(--neon)' : s.sent === 'bearish' ? 'var(--red)' : 'var(--amber)';
+    var sentIcon = s.sent === 'bullish' ? '▲' : s.sent === 'bearish' ? '▼' : '◆';
+    return '<div class="trend-row">' +
+      '<div style="display:flex;align-items:center;gap:10px">' +
+      '<span style="font-size:10px;color:var(--text3);font-family:var(--mono);width:16px">' + (i+1) + '</span>' +
+      '<div><div style="font-weight:700;font-family:var(--mono);font-size:12px">' + s.sym + '</div><div style="font-size:10px;color:var(--text3)">' + s.name + '</div></div>' +
+      '</div>' +
+      '<div style="flex:1;padding:0 12px;font-size:11px;color:var(--text2)">' + s.reason + '</div>' +
+      '<span style="font-size:11px;font-weight:700;color:' + sentColor + ';white-space:nowrap">' + sentIcon + ' ' + s.sent.charAt(0).toUpperCase() + s.sent.slice(1) + '</span>' +
+      '</div>';
+  }).join('');
+}
+
+// ── Claude AI News Impact (per article) ──────────────────────
+function fetchAIImpact(title, desc, boxId) {
+  var box = document.getElementById(boxId);
+  if (!box) return;
+  box.innerHTML = '<span class="ai-load">🤖 Claude AI market impact analyse kar raha hai...</span>';
+  box.style.display = 'block';
+
+  var prompt = 'Ye Indian market news headline ke baare mein CONCISE analysis do Hinglish mein (max 4 lines):\n\nHeadline: ' + title + '\nDetail: ' + (desc || '').slice(0, 200) + '\n\nBatao: 1) Kya hua (1 line) 2) Indian market/stocks pe kya impact hoga (1-2 lines) 3) Trader ke liye kya action (1 line). Direct, specific, no fluff.';
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 300,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  }).then(function(r) { return r.json(); }).then(function(data) {
+    var text = (data.content && data.content[0]) ? (data.content[0].text || '') : '';
+    if (text) {
+      box.innerHTML = '<strong style="color:var(--purple);font-size:10px">🤖 AI IMPACT ANALYSIS</strong><br>' + text.replace(/\n/g, '<br>');
+    } else {
+      box.innerHTML = '<span style="color:var(--text3);font-size:11px">Analysis unavailable.</span>';
+    }
+  }).catch(function() {
+    box.innerHTML = '<span style="color:var(--text3);font-size:11px">AI analysis temporarily unavailable.</span>';
+  });
+}
+
+// ── Patch renderNewsPeriod to add AI impact button ────────────
+var _origRenderNewsPeriod = renderNewsPeriod;
+renderNewsPeriod = function(items, period) {
+  _origRenderNewsPeriod(items, period);
+  // Add AI impact button to each news item after render
+  var container = document.getElementById('newsContainer');
+  if (!container) return;
+  var newsItems = container.querySelectorAll('.news-item');
+  newsItems.forEach(function(item, idx) {
+    var body = item.querySelector('.news-body');
+    if (!body) return;
+    // Check if AI box already exists
+    if (body.querySelector('.ai-box')) return;
+    var aiBox = document.createElement('div');
+    aiBox.className = 'ai-box';
+    aiBox.id = 'aibox-' + idx;
+    aiBox.style.display = 'none';
+    var aiBtn = document.createElement('button');
+    aiBtn.style.cssText = 'margin-top:8px;background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.25);border-radius:10px;padding:4px 10px;font-size:10px;color:#a78bfa;cursor:pointer;font-family:var(--mono)';
+    aiBtn.textContent = '🤖 AI Impact Analysis';
+    var itemData = items[idx];
+    aiBtn.onclick = function(e) {
+      e.stopPropagation();
+      if (aiBox.style.display === 'none') {
+        aiBox.style.display = 'block';
+        if (itemData) fetchAIImpact(itemData.title, itemData.desc, 'aibox-' + idx);
+      } else {
+        aiBox.style.display = 'none';
+      }
+    };
+    body.appendChild(aiBtn);
+    body.appendChild(aiBox);
+  });
+};
+
+// ── Init: call guidance on home tab ──────────────────────────
+var _origShowTab2 = showTab;
+showTab = function(t, btn) {
+  _origShowTab2(t, btn);
+  if (t === 'home') { setTimeout(updateGuidance, 100); }
+};
+
+// Run guidance on page load
+setTimeout(updateGuidance, 500);
+
+
 </script>
+
+<!-- STUDY MATERIAL MODAL -->
+<div class="study-modal-overlay" id="studyOverlay" onclick="if(event.target===this)closeStudy()">
+  <div class="study-modal">
+    <button class="study-close" onclick="closeStudy()">✕</button>
+    <h2 id="studyTitle">—</h2>
+    <div id="studyBody"></div>
+  </div>
+</div>
 </body>
 </html>

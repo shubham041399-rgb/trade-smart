@@ -1,0 +1,184 @@
+<div class="panel" id="panel-journal">
+  <div class="sec-hdr"><h2>Trade <span>Journal</span></h2><small id="jCount">0 trades</small></div>
+  <div class="zerodha-notice" style="margin-bottom:14px;padding:14px">
+    <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--blue);margin-bottom:6px">ℹ️ About Zerodha Live Data</div>
+    <div style="font-size:12px;color:var(--text2);line-height:1.7">Real-time Zerodha balance, live P&L, and positions require <strong style="color:var(--text)">Kite Connect API (₹500/month plan)</strong>. See the 🔑 Zerodha API tab for the complete setup guide. For now, log all trades manually here and use Zerodha Kite app for live status.</div>
+  </div>
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title">Log New Trade <div class="nl"></div></div>
+    <div class="g3">
+      <div class="form-row"><label>Date</label><input type="text" id="jDate" placeholder="DD/MM/YYYY"></div>
+      <div class="form-row"><label>Symbol</label><input type="text" id="jSym" placeholder="RELIANCE"></div>
+      <div class="form-row"><label>Setup</label><select id="jSetup"><option value="">Select</option><option>Breakout</option><option>Pullback</option><option>Paper</option><option>Other</option></select></div>
+      <div class="form-row"><label>Entry ₹</label><input type="number" id="jEntry" placeholder="0"></div>
+      <div class="form-row"><label>Stop Loss ₹</label><input type="number" id="jSL" placeholder="0"></div>
+      <div class="form-row"><label>Target ₹</label><input type="number" id="jTarget" placeholder="0"></div>
+      <div class="form-row"><label>Qty (Shares)</label><input type="number" id="jQty" placeholder="0"></div>
+      <div class="form-row"><label>Exit Price ₹</label><input type="number" id="jExit" placeholder="blank = still open"></div>
+      <div class="form-row"><label>Direction</label><select id="jDir"><option value="Long">Long (Buy)</option><option value="Short">Short (Sell)</option></select></div>
+    </div>
+    <div class="form-row"><label>Notes / Reason</label><textarea id="jNotes" placeholder="Why did you take this trade? What did the chart show?" rows="2" style="resize:vertical"></textarea></div>
+    <div style="display:flex;align-items:center;gap:10px"><button class="btn btn-neon" onclick="logTrade()">+ Log Trade</button><span id="jMsg" style="font-family:var(--mono);font-size:11px"></span></div>
+  </div>
+  <div class="card" style="overflow-x:auto">
+    <table class="j-tbl"><thead><tr><th>Date</th><th>Symbol</th><th>Setup</th><th>Dir</th><th>Entry</th><th>SL</th><th>Target</th><th>Exit</th><th>Qty</th><th>P&L</th><th>R:R</th><th>Status</th><th></th></tr></thead>
+    <tbody id="jBody"><tr><td colspan="13" style="text-align:center;padding:20px;color:var(--text3)">No trades logged yet</td></tr></tbody></table>
+  </div>
+</div>
+
+<!-- P&L -->
+<div class="panel" id="panel-pnl">
+  <div class="sec-hdr"><h2>P&amp;L <span>Tracker</span></h2></div>
+  <div class="stop-alert">
+    <h3 style="color:var(--red);font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">🛑 Stop Trading Analyzer</h3>
+    <div class="stop-level"><div class="stop-dot" id="sd1" style="background:var(--neon)"></div><div id="sl1">Daily losses: ₹0 of ₹500 limit</div></div>
+    <div class="stop-level"><div class="stop-dot" id="sd2" style="background:var(--neon)"></div><div id="sl2">Consecutive losses: 0 of 3 allowed</div></div>
+    <div class="stop-level"><div class="stop-dot" id="sd3" style="background:var(--neon)"></div><div id="sl3">Overall win rate: — (need 5+ trades)</div></div>
+    <div id="stopVerdict" style="margin-top:10px;font-size:12px;font-weight:700"></div>
+  </div>
+  <div class="g4" style="margin-bottom:14px">
+    <div class="metric"><div class="metric-lbl">Total P&L</div><div class="metric-val" id="pnl-total" style="color:var(--neon)">₹0</div><div class="metric-ch" id="pnl-total-pct">0%</div></div>
+    <div class="metric"><div class="metric-lbl">Win Rate</div><div class="metric-val" id="pnl-wr">0%</div><div class="metric-ch" id="pnl-wl">0W / 0L</div></div>
+    <div class="metric"><div class="metric-lbl">Avg Win</div><div class="metric-val" id="pnl-aw" style="color:var(--neon)">₹0</div><div class="metric-ch">per win</div></div>
+    <div class="metric"><div class="metric-lbl">Avg Loss</div><div class="metric-val" id="pnl-al" style="color:var(--red)">₹0</div><div class="metric-ch">per loss</div></div>
+  </div>
+  <div class="card" style="margin-bottom:14px"><div class="card-title">Equity Curve <div class="nl"></div></div><div style="position:relative;height:220px"><canvas id="equityChart"></canvas></div></div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">Capital Summary <div class="nl"></div></div>
+      <div class="form-row"><label>Starting Capital ₹</label><input type="number" id="pnlCap" value="10000" onchange="updateCapital()"></div>
+      <div class="risk-result">
+        <div class="risk-row"><span class="k">Starting Capital</span><span class="v" id="ps-start">₹10,000</span></div>
+        <div class="risk-row"><span class="k">Current Capital</span><span class="v g" id="ps-current">₹10,000</span></div>
+        <div class="risk-row"><span class="k">Total Trades</span><span class="v" id="ps-trades">0</span></div>
+        <div class="risk-row"><span class="k">Max Drawdown</span><span class="v r" id="ps-dd">₹0</span></div>
+        <div class="risk-row"><span class="k">Best Trade</span><span class="v g" id="ps-best">₹0</span></div>
+        <div class="risk-row"><span class="k">Worst Trade</span><span class="v r" id="ps-worst">₹0</span></div>
+        <div class="risk-row"><span class="k">Expectancy</span><span class="v a" id="ps-exp">₹0</span></div>
+      </div>
+    </div>
+    <div class="card"><div class="card-title">Insights <div class="nl"></div></div><div id="pnlInsights" style="font-size:12px;color:var(--text2);line-height:2;padding:4px 0">Log trades to see insights.</div></div>
+  </div>
+</div>
+
+<!-- RISK -->
+<div class="panel" id="panel-risk">
+  <div class="sec-hdr"><h2>Risk <span>Management</span></h2></div>
+  <div class="g2">
+    <div class="card">
+      <div class="card-title">Position Size Calculator <div class="nl"></div></div>
+      <div class="form-row"><label>Capital ₹</label><input type="number" id="rCap" value="10000" oninput="calcRisk()"></div>
+      <div class="form-row"><label>Risk %</label><input type="number" id="rPct" value="2" step="0.5" oninput="calcRisk()"></div>
+      <div class="form-row"><label>Entry ₹</label><input type="number" id="rEntry" value="500" oninput="calcRisk()"></div>
+      <div class="form-row"><label>Stop Loss ₹</label><input type="number" id="rSL" value="485" oninput="calcRisk()"></div>
+      <div class="form-row"><label>Target ₹</label><input type="number" id="rTarget" value="530" oninput="calcRisk()"></div>
+      <div class="risk-result">
+        <div class="risk-row"><span class="k">Max Risk</span><span class="v r" id="r-maxrisk">₹200</span></div>
+        <div class="risk-row"><span class="k">SL Distance</span><span class="v" id="r-sldist">₹15</span></div>
+        <div class="risk-row"><span class="k">Shares to Buy</span><span class="v a" id="r-shares">13</span></div>
+        <div class="risk-row"><span class="k">Position Value</span><span class="v" id="r-posval">₹6,500</span></div>
+        <div class="risk-row"><span class="k">Profit Target</span><span class="v g" id="r-profit">₹390</span></div>
+        <div class="risk-row"><span class="k">Actual Risk</span><span class="v r" id="r-actualrisk">₹195</span></div>
+        <div class="risk-row"><span class="k">Risk:Reward</span><span class="v" id="r-rr">1 : 2.0</span></div>
+        <div class="risk-row"><span class="k">VERDICT</span><span class="v" id="r-verdict">—</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-title">Rules for ₹10,000 Capital <div class="nl"></div></div>
+        <div style="font-size:12px;color:var(--text2);line-height:2">
+          <div style="padding:5px 0;border-bottom:1px solid var(--border)">Max risk per trade: <strong style="color:var(--red)">₹200-300</strong></div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border)">Daily max loss: <strong style="color:var(--red)">₹500</strong> (5%)</div>
+          <div style="padding:5px 0;border-bottom:1px solid var(--border)">Minimum target: <strong style="color:var(--neon)">2× your risk</strong></div>
+          <div style="padding:5px 0">Max 1 open position at a time</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Brokerage Calculator <div class="nl"></div></div>
+        <div class="form-row"><label>Trade Value ₹</label><input type="number" id="brkTrade" value="5000" oninput="calcBrokerage()"></div>
+        <div class="risk-result">
+          <div class="risk-row"><span class="k">Zerodha Buy</span><span class="v" id="brk-buy">₹20</span></div>
+          <div class="risk-row"><span class="k">Zerodha Sell</span><span class="v" id="brk-sell">₹20</span></div>
+          <div class="risk-row"><span class="k">STT + Other</span><span class="v" id="brk-stt">₹5</span></div>
+          <div class="risk-row"><span class="k">Total Round Trip</span><span class="v a" id="brk-total">₹45</span></div>
+          <div class="risk-row"><span class="k">% of Trade</span><span class="v" id="brk-pct">0.9%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MANUAL -->
+<div class="panel" id="panel-manual">
+  <div class="sec-hdr"><h2>User <span>Manual</span></h2></div>
+
+  <!-- TRADING STYLE GUIDE -->
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title">🎯 Trading Style — Kaunsa Sahi Hai Tere Liye? <div class="nl"></div></div>
+
+    <div class="style-card">
+      <h3 style="color:var(--neon)">📊 Swing Trading <span style="font-size:10px;font-weight:400;color:var(--amber)">— RECOMMENDED: Beginners ke liye</span></h3>
+      <div style="font-size:11px;color:var(--text2);line-height:1.9">
+        <strong>Kya hai:</strong> 2–10 din tak stock hold karna. Daily chart dekhna — real-time screen nahi chahiye.<br>
+        <strong>Capital:</strong> ₹10,000–₹25,000 se start. Teri current capital perfect hai.<br>
+        <strong>Time:</strong> Din mein 30–45 min — market close ke baad analysis karo.<br>
+        <strong>Skills needed:</strong> S&amp;R, Trend, Candlesticks, Risk management (Phase 1–3).<br>
+        <strong>Risk:</strong> Overnight gap risk — unexpected news aa jaye toh position against ja sakti hai.<br>
+        <div class="example">✅ Tu abhi Phase 1 mein hai aur ₹10K–15K capital hai — <strong>Swing trading se hi shuru kar.</strong> Poori curriculum isi ke liye bani hai.</div>
+      </div>
+    </div>
+
+    <div class="style-card" style="border-color:rgba(244,166,35,0.3)">
+      <h3 style="color:var(--amber)">⚡ Intraday Trading <span style="font-size:10px;font-weight:400;color:var(--text3)">— Phase 4 complete + 20 paper trades ke baad</span></h3>
+      <div style="font-size:11px;color:var(--text2);line-height:1.9">
+        <strong>Kya hai:</strong> Same day buy + sell — koi overnight position nahi.<br>
+        <strong>Capital:</strong> Minimum ₹50,000+ recommended. Zerodha 5x leverage deta hai intraday.<br>
+        <strong>Time:</strong> 9:15 AM – 3:30 PM full screen attention — koi break nahi.<br>
+        <strong>Skills:</strong> Fast execution, 5-min chart, Level 2 data reading, emotion control.<br>
+        <strong>Risk:</strong> Beginners ke liye sabse risky — emotions bahut fast move karte hain intraday.<br>
+        <div class="example" style="border-left-color:var(--amber);background:rgba(244,166,35,0.06)">⚠️ Abhi nahi: Pehle swing mein 20+ paper trades + 60% win rate achieve karo. Tabhi soch.</div>
+      </div>
+    </div>
+
+    <div class="style-card" style="border-color:rgba(139,92,246,0.3)">
+      <h3 style="color:var(--purple)">🎭 Options Trading <span style="font-size:10px;font-weight:400;color:var(--text3)">— Phase 5 complete ke baad only</span></h3>
+      <div style="font-size:11px;color:var(--text2);line-height:1.9">
+        <strong>Kya hai:</strong> Derivatives — CE (Call) = bullish bet, PE (Put) = bearish bet. Expiry pe value milti hai.<br>
+        <strong>Capital:</strong> 1 lot NIFTY ≈ ₹5,000–8,000 premium. Pura premium kho sakte ho.<br>
+        <strong>Time:</strong> Expiry Thursday pe bahut volatile — full attention zaroori.<br>
+        <strong>Skills:</strong> Greeks (Delta, Theta, IV), OI data, NIFTY levels, 6+ months experience.<br>
+        <strong>Risk:</strong> ₹10,000 ki position 30 minutes mein ₹0 ho sakti hai — literally.<br>
+        <div class="example" style="border-left-color:var(--purple);background:rgba(139,92,246,0.06)">🔒 Locked: 90%+ beginners options mein paisa gawaate hain. Pehle swing mein 6+ months consistent profit — phir soch.</div>
+      </div>
+    </div>
+
+    <div style="padding:10px 12px;background:var(--bg3);border-radius:var(--r);font-size:11px;color:var(--text2)">
+      📌 <strong>Golden Rule:</strong> Ek style mein consistently profitable bano — phir doosra seekho. Teeno ek saath = teeno mein lose karna.
+    </div>
+  </div>
+  <div class="quote-box"><div class="quote-text" id="manualQuote">Loading...</div><div class="quote-author" id="manualAuthor">—</div></div>
+  <div class="manual-section"><h3>📅 Daily Routine</h3>
+    <div class="manual-item">🌅 <strong>Morning:</strong> Tick Daily Checklist → Read top 3 news → Scan 3 stocks for setups</div>
+    <div class="manual-item">📈 <strong>Market hours (9:15–3:30):</strong> Watch setups. Use Risk Calculator before any trade.</div>
+    <div class="manual-item">🌆 <strong>After market:</strong> Log trades → Review chart → Do 1 quiz</div>
+    <div class="manual-item">📅 <strong>Weekend:</strong> Review all trades → Watch saved videos → Read Phase key terms</div>
+  </div>
+  <div class="manual-section"><h3>▶ YouTube Videos in Learn Tab</h3>
+    <div class="manual-item">Every video row is now a <strong>direct clickable link</strong>. Click anywhere on the row to open the exact recommended video on YouTube. No more searching manually.</div>
+    <div class="manual-item">The amber warning above each section shows: <strong>"Click any row to open directly on YouTube"</strong></div>
+    <div class="manual-item">You can still use <strong>+ Save</strong> to add videos to Watch Later without opening them.</div>
+  </div>
+  <div class="manual-section"><h3>🔑 Zerodha API</h3>
+    <div class="manual-item">The Zerodha API tab has the <strong>complete setup guide</strong> for Kite Connect API. Follow the 4 steps in order.</div>
+    <div class="manual-item">Once set up: real balance, live positions, and today's orders show in the Live Account Data section.</div>
+    <div class="manual-item">Cost: <strong>₹500/month</strong> (Kite Connect plan at developers.kite.trade)</div>
+  </div>
+  <div class="manual-section"><h3>⚠️ Fill These Every Day</h3>
+    <div class="manual-item">1. Tick Daily Checklist on Home tab every morning</div>
+    <div class="manual-item">2. Log every trade in Journal immediately after taking it</div>
+    <div class="manual-item">3. Add exit price when SL or target is hit</div>
+    <div class="manual-item">4. Tick topic checkboxes in Learn as you complete them</div>
+    <div class="manual-item">5. Memorise 3 Key Terms from your current phase every day</div>
+  </div>
+</div>
+
