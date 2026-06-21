@@ -494,6 +494,7 @@ label{font-family:var(--mono);font-size:9px;letter-spacing:1px;text-transform:up
   <button class="nav-btn" onclick="showTab('sectors',this)">🏭 Sectors</button>
   <button class="nav-btn" onclick="showTab('watchlist',this)">👁 Watchlist</button>
   <button class="nav-btn" onclick="showTab('news',this)">📰 News</button>
+<button class="nav-btn" onclick="showTab('trending',this)">📈 Trending</button>
   <button class="nav-btn" onclick="showTab('charts',this)">🕯 Charts</button>
   <button class="nav-btn" onclick="showTab('journal',this)">📓 Journal</button>
   <button class="nav-btn" onclick="showTab('pnl',this)">💰 P&L</button>
@@ -584,7 +585,7 @@ function showTab(t,btn){
   if(t==='quiz'){refreshPhaseQuizStart();updateTodayQuizStatus();}
   if(t==='learn'){if(document.getElementById('quizQ')&&document.getElementById('quizQ').textContent==='Loading...')nextQ();}
   if(t==='market'){var mU=document.getElementById('mktUpdate');if(mU&&mU.textContent==='⟳ Fetching...')refreshAll();}
-  if(t==='news'){var _stored=getNewsForPeriod(S.newsSource,currentNewsPeriod);if(_stored.length)renderNewsPeriod(_stored,currentNewsPeriod);else fetchNews();}
+  if(t==='news'){fetchNews();}
 
 }
 function showSubTab(g,id,btn){document.querySelectorAll(`[id^="${g}-"]`).forEach(el=>el.style.display='none');document.getElementById(g+'-'+id).style.display='block';document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
