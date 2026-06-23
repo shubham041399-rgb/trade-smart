@@ -909,9 +909,9 @@ function showNewsPeriod(period, btn) {
   else fetchNews();
 }
 function fetchNews() {
-  var src = S.newsSource;
+  var src = S.newsSource || 'mc';
   var container = document.getElementById('newsContainer');
-  if (container) container.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);font-size:12px">⟳ Loading news...</div>';
+  if (container) container.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text3);font-size:12px">⟳ News load ho rahi hai...</div>';
 
   var FEED_URLS = {
     mc:   'https://www.moneycontrol.com/rss/latestnews.xml',
@@ -923,45 +923,89 @@ function fetchNews() {
   };
 
   var feedUrl = FEED_URLS[src] || FEED_URLS.mc;
-  // rss2json: free public API, browser-side, no CORS
-  var apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feedUrl) + '&count=20';
+  var encodedUrl = encodeURIComponent(feedUrl);
 
-  var xhr = new XMLHttpRequest();
-  xhr.timeout = 12000;
-  xhr.open('GET', apiUrl, true);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState !== 4) return;
-    if (xhr.status === 200) {
-      try {
-        var data = JSON.parse(xhr.responseText);
-        if (data.status === 'ok' && data.items && data.items.length) {
-          var items = data.items.map(function(item) {
-            return processNewsItem(
-              item.title || '',
-              item.description || item.content || '',
-              item.link || '#',
-              item.pubDate || ''
-            );
-          }).filter(function(n) { return n.title.length > 5; });
-          storeNewsItems(src, items);
-          renderNewsPeriod(items, currentNewsPeriod);
-          var mt = document.getElementById('macroTime');
-          if (mt) mt.textContent = new Date().toLocaleTimeString('en-IN', {hour:'2-digit', minute:'2-digit'});
-          return;
-        }
-      } catch(e) {}
+  // Try 3 proxies in sequence — first success wins
+  var proxies = [
+    'https://api.rss2json.com/v1/api.json?rss_url=' + encodedUrl + '&count=20',
+    'https://api.allorigins.win/get?url=' + encodedUrl,
+    'https://corsproxy.io/?' + feedUrl
+  ];
+
+  function parseRss2json(text) {
+    var d = JSON.parse(text);
+    if (d.status !== 'ok' || !d.items || !d.items.length) throw new Error('bad');
+    return d.items.map(function(item) {
+      return processNewsItem(item.title||'', item.description||item.content||'', item.link||'#', item.pubDate||'');
+    }).filter(function(n){ return n.title.length > 5; });
+  }
+
+  function parseAllorigins(text) {
+    var d = JSON.parse(text);
+    var xml = d.contents;
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(xml, 'text/xml');
+    var items = doc.querySelectorAll('item');
+    if (!items.length) throw new Error('bad');
+    return Array.prototype.map.call(items, function(item) {
+      var title = (item.querySelector('title')||{}).textContent||'';
+      var desc = (item.querySelector('description')||{}).textContent||'';
+      var link = (item.querySelector('link')||{}).textContent||'#';
+      var pubDate = (item.querySelector('pubDate')||{}).textContent||'';
+      return processNewsItem(title, desc, link, pubDate);
+    }).filter(function(n){ return n.title.length > 5; });
+  }
+
+  function parseCorsproxy(text) {
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(text, 'text/xml');
+    var items = doc.querySelectorAll('item');
+    if (!items.length) throw new Error('bad');
+    return Array.prototype.map.call(items, function(item) {
+      var title = (item.querySelector('title')||{}).textContent||'';
+      var desc = (item.querySelector('description')||{}).textContent||'';
+      var link = (item.querySelector('link')||{}).textContent||'#';
+      var pubDate = (item.querySelector('pubDate')||{}).textContent||'';
+      return processNewsItem(title, desc, link, pubDate);
+    }).filter(function(n){ return n.title.length > 5; });
+  }
+
+  var parsers = [parseRss2json, parseAllorigins, parseCorsproxy];
+  var tried = 0;
+
+  function tryProxy(i) {
+    if (i >= proxies.length) {
+      // All proxies failed — show stored news or fallback
+      var stored = getNewsForPeriod(src, currentNewsPeriod);
+      if (stored.length) { renderNewsPeriod(stored, currentNewsPeriod); }
+      else { showNewsFallback(); }
+      return;
     }
-    // rss2json failed — show stored or fallback
-    var stored = getNewsForPeriod(src, currentNewsPeriod);
-    if (stored.length) renderNewsPeriod(stored, currentNewsPeriod);
-    else showNewsFallback();
-  };
-  xhr.ontimeout = function() {
-    var stored = getNewsForPeriod(src, currentNewsPeriod);
-    if (stored.length) renderNewsPeriod(stored, currentNewsPeriod);
-    else showNewsFallback();
-  };
-  xhr.send();
+    var xhr = new XMLHttpRequest();
+    xhr.timeout = 10000;
+    xhr.open('GET', proxies[i], true);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState !== 4) return;
+      if (xhr.status === 200) {
+        try {
+          var items = parsers[i](xhr.responseText);
+          if (items.length) {
+            storeNewsItems(src, items);
+            renderNewsPeriod(items, currentNewsPeriod);
+            var mt = document.getElementById('macroTime');
+            if (mt) mt.textContent = new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+            return;
+          }
+        } catch(e) {}
+      }
+      tryProxy(i + 1);
+    };
+    xhr.ontimeout = function() { tryProxy(i + 1); };
+    xhr.onerror = function() { tryProxy(i + 1); };
+    xhr.send();
+  }
+
+  tryProxy(0);
 }
 function renderNewsPeriod(items, period) {
   var container = document.getElementById('newsContainer');
