@@ -641,7 +641,7 @@ async function fetchCrypto(){
     const r=await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,solana,binancecoin&price_change_percentage=24h,7d',{signal:AbortSignal.timeout(8000)});
     const d=await r.json();if(!d||!d.length)throw new Error();
     const sm={bitcoin:'BTC',ethereum:'ETH',solana:'SOL',binancecoin:'BNB'};
-    document.getElementById('cryptoTable').innerHTML=d.map(c=>{
+    var _ct=document.getElementById('cryptoTable'); if(_ct) _ct.innerHTML=d.map(c=>{
       const ch24=c.price_change_percentage_24h||0,ch7=c.price_change_percentage_7d_in_currency||0;
       if(c.id==='bitcoin'){const p='$'+Math.round(c.current_price).toLocaleString();['hm-btc','m-btc'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=p;});['hm-btc-c','m-btc-c'].forEach(id=>{const el=document.getElementById(id);if(el){el.textContent=(ch24>=0?'▲':'▼')+Math.abs(ch24).toFixed(2)+'%';el.style.color=ch24>=0?'var(--neon)':'var(--red)';}});const mb=document.getElementById('macroBTC');if(mb)mb.innerHTML=`<span style="color:${ch24>=0?'var(--neon)':'var(--red)'}">${p}</span>`;}
       return `<tr><td class="sym">${sm[c.id]||c.symbol.toUpperCase()}</td><td>$${c.current_price.toLocaleString()}</td><td class="${ch24>=0?'up':'down'}">${ch24>=0?'+':''}${ch24.toFixed(2)}%</td><td class="${ch7>=0?'up':'down'}">${ch7>=0?'+':''}${ch7.toFixed(2)}%</td></tr>`;
@@ -658,7 +658,7 @@ async function fetchForex(){
     const d=await r.json();if(d.result!=='success')throw new Error();
     const rates=d.rates;
     const pairs=[{s:'USD/INR',r:1/rates.USD},{s:'EUR/INR',r:1/rates.EUR},{s:'GBP/INR',r:1/rates.GBP},{s:'JPY/INR',r:1/rates.JPY},{s:'AED/INR',r:1/rates.AED},{s:'SGD/INR',r:1/rates.SGD}];
-    document.getElementById('forexTable').innerHTML=pairs.map(p=>`<tr><td class="sym">${p.s}</td><td>₹${p.r.toFixed(p.s.includes('JPY')?4:2)}</td></tr>`).join('');
+    var _ft=document.getElementById('forexTable'); if(_ft) _ft.innerHTML=pairs.map(p=>`<tr><td class="sym">${p.s}</td><td>₹${p.r.toFixed(p.s.includes('JPY')?4:2)}</td></tr>`).join('');
     const usd=(1/rates.USD).toFixed(2);const hmU=document.getElementById('hm-usd');if(hmU)hmU.textContent='₹'+usd;const mU=document.getElementById('macroUSD');if(mU)mU.textContent='₹'+usd;const mt=document.getElementById('macroTime');if(mt)mt.textContent=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
   }catch(e){document.getElementById('forexTable').innerHTML='<tr><td colspan="2" style="text-align:center;padding:12px;color:var(--text3)">Retry in 3min</td></tr>';}
 }
@@ -718,7 +718,7 @@ async function fetchNSE(){
   const bnc=document.getElementById('m-bnifty-c');if(bnc){bnc.textContent=bnArr+Math.abs(bn.change).toFixed(2)+'%';bnc.style.color=bnCls;}
 
   // NSE Stocks table
-  document.getElementById('nseTable').innerHTML = LIVE_STOCKS.map(s=>{
+  var _nseT = document.getElementById('nseTable'); if(_nseT) _nseT.innerHTML = LIVE_STOCKS.map(s=>{
     const arr=s.change>=0?'▲':'▼';
     const cls=s.change>=0?'up':'down';
     return `<tr><td class="sym">${s.symbol}</td><td>₹${s.price.toLocaleString('en-IN')}</td><td class="${cls}">${arr}${Math.abs(s.change).toFixed(2)}%</td><td><button class="vid-save-btn" onclick="addToWatchlist('${s.symbol}',${s.price})">+WL</button></td></tr>`;
@@ -761,7 +761,7 @@ async function fetchNSE(){
         const bnc2=document.getElementById('m-bnifty-c');if(bnc2){bnc2.textContent=(bni.change>=0?'▲':'▼')+Math.abs(bni.change).toFixed(2)+'%';bnc2.style.color=bni.change>=0?'var(--neon)':'var(--red)';}
       }
       if(d.stocks&&d.stocks.length){
-        document.getElementById('nseTable').innerHTML=d.stocks.map(s=>{
+        var _nseT2 = document.getElementById('nseTable'); if(_nseT2) _nseT2.innerHTML=d.stocks.map(s=>{
           const arr=s.change>=0?'▲':'▼';const cls=s.change>=0?'up':'down';
           return `<tr><td class="sym">${s.symbol}</td><td>₹${(s.price||0).toLocaleString('en-IN')}</td><td class="${cls}">${arr}${Math.abs(s.change||0).toFixed(2)}%</td><td><button class="vid-save-btn" onclick="addToWatchlist('${s.symbol}',${s.price||0})">+WL</button></td></tr>`;
         }).join('');
@@ -773,7 +773,7 @@ async function fetchNSE(){
     // Silent fail — static data already showing, no UI disruption
   }
 }
-async function refreshAll(){await Promise.all([fetchCrypto(),fetchForex(),fetchNSE()]);}
+async async function refreshAll(){try{await Promise.all([fetchCrypto(),fetchForex(),fetchNSE()]);}catch(e){}}
 refreshAll();
 setInterval(refreshAll,3*60*1000);
 drawNiftyMiniChart();
@@ -924,7 +924,7 @@ function fetchNews() {
 
   var feedUrl = FEED_URLS[src] || FEED_URLS.mc;
   // rss2json: free public API, browser-side, no CORS
-  var apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feedUrl) + '&api_key=jlvmuqtprmzehv4yq9svfx5gdedkthmr0yd9b5nb&count=25';
+  var apiUrl = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(feedUrl) + '&count=20';
 
   var xhr = new XMLHttpRequest();
   xhr.timeout = 12000;
