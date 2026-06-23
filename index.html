@@ -773,7 +773,7 @@ async function fetchNSE(){
     // Silent fail — static data already showing, no UI disruption
   }
 }
-async async function refreshAll(){try{await Promise.all([fetchCrypto(),fetchForex(),fetchNSE()]);}catch(e){}}
+async function refreshAll(){try{await Promise.all([fetchCrypto(),fetchForex(),fetchNSE()]);}catch(e){}}
 refreshAll();
 setInterval(refreshAll,3*60*1000);
 drawNiftyMiniChart();
