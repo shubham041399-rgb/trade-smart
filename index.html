@@ -585,7 +585,7 @@ function showTab(t,btn){
   if(t==='quiz'){refreshPhaseQuizStart();updateTodayQuizStatus();}
   if(t==='learn'){if(document.getElementById('quizQ')&&document.getElementById('quizQ').textContent==='Loading...')nextQ();}
   if(t==='market'){var mU=document.getElementById('mktUpdate');if(mU&&mU.textContent==='⟳ Fetching...')refreshAll();}
-  if(t==='news'){fetchNews();}
+  if(t==='news'){var _ns=getNewsForPeriod(S.newsSource||'mc',currentNewsPeriod);if(_ns.length)renderNewsPeriod(_ns,currentNewsPeriod);else fetchNews();}
 
 }
 function showSubTab(g,id,btn){document.querySelectorAll(`[id^="${g}-"]`).forEach(el=>el.style.display='none');document.getElementById(g+'-'+id).style.display='block';document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
@@ -975,10 +975,14 @@ function fetchNews() {
 
   function tryProxy(i) {
     if (i >= proxies.length) {
-      // All proxies failed — show stored news or fallback
+      // All proxies failed — show stored news silently, only show error if truly nothing
       var stored = getNewsForPeriod(src, currentNewsPeriod);
       if (stored.length) { renderNewsPeriod(stored, currentNewsPeriod); }
-      else { showNewsFallback(); }
+      else {
+        var allStored = getNewsForPeriod(src, '1y');
+        if (allStored.length) { renderNewsPeriod(allStored, '1y'); }
+        else { showNewsFallback(); }
+      }
       return;
     }
     var xhr = new XMLHttpRequest();
